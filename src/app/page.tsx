@@ -1,27 +1,18 @@
 // src/app/page.tsx
-// Fruit Bats-style landing: full-bleed centered photo, logo top-left, no extra copy.
+// Temporary main-branch homepage: stacked "coming / soon" that opens galaxisok.hu.
 
-import Image from "next/image";
+import { LIVE_SITE_URL } from "@/lib/site";
 
-import { SiteHeader } from "@/components/site-header";
-import { SocialLinks } from "@/components/social-links";
-
-export default function HomePage() {
+export default function ComingSoonPage() {
   return (
-    <main className="relative h-dvh w-full overflow-hidden bg-black">
-      <Image
-        src="/hero.png"
-        alt="Szabó Benedek és a Galaxisok"
-        fill
-        priority
-        sizes="100vw"
-        className="object-cover object-center"
-      />
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-black/35 via-transparent to-black/20" />
-      <SiteHeader showBlog />
-      <div className="absolute right-5 bottom-5 z-20 sm:right-8 sm:bottom-8">
-        <SocialLinks />
-      </div>
+    <main className="flex min-h-dvh flex-col items-center justify-center bg-background text-foreground">
+      <p className="text-sm tracking-[0.4em] uppercase">coming</p>
+      <a
+        href={LIVE_SITE_URL}
+        className="mt-2 text-sm tracking-[0.4em] uppercase underline-offset-4 hover:underline"
+      >
+        soon
+      </a>
     </main>
   );
 }
