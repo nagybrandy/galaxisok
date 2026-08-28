@@ -1,9 +1,15 @@
 // src/lib/wordpress.ts
-// Headless WordPress REST client. Posts are authored at admin.galaxisok.hu.
+// Headless WordPress REST client: posts, authors, categories, concerts, gallery.
+
+import {
+  HEARTS_PER_VISITOR,
+  type HeartsPayload,
+  type PlacedHeart,
+} from "@/lib/hearts";
 
 const DEFAULT_WORDPRESS_URL = "https://admin.galaxisok.hu";
 
-export const WORDPRESS_CACHE_TAG = "wordpress-posts";
+export const WORDPRESS_CACHE_TAG = "wordpress";
 
 type WpRendered = {
   rendered: string;
@@ -19,7 +25,28 @@ type WpMedia = {
   };
 };
 
-export type WpPost = {
+type WpAuthor = {
+  id: number;
+  name: string;
+  slug: string;
+  avatar_urls?: Record<string, string>;
+};
+
+type WpTerm = {
+  id: number;
+  name: string;
+  slug: string;
+  taxonomy: string;
+  count?: number;
+};
+
+type WpYoast = {
+  title?: string;
+  description?: string;
+  og_image?: { url?: string }[];
+};
+
+type WpPost = {
   id: number;
   date: string;
   modified: string;
@@ -29,9 +56,35 @@ export type WpPost = {
   excerpt: WpRendered;
   content: WpRendered;
   featured_media: number;
+  categories?: number[];
+  yoast_head_json?: WpYoast;
   _embedded?: {
+    author?: WpAuthor[];
     "wp:featuredmedia"?: WpMedia[];
+    "wp:term"?: WpTerm[][];
   };
+};
+
+type WpConcert = WpPost & {
+  meta?: {
+    helyszin?: string;
+    idopont?: string;
+    jegy_url?: string;
+  };
+};
+
+export type BlogAuthor = {
+  id: number;
+  name: string;
+  slug: string;
+  avatar: string | null;
+};
+
+export type BlogCategory = {
+  id: number;
+  name: string;
+  slug: string;
+  count: number;
 };
 
 export type BlogPost = {
@@ -41,12 +94,35 @@ export type BlogPost = {
   excerpt: string;
   content: string;
   date: string;
+  author: BlogAuthor | null;
+  categories: BlogCategory[];
+  seoTitle?: string;
+  seoDescription?: string;
   image: {
     src: string;
     alt: string;
     width: number;
     height: number;
   } | null;
+};
+
+export type Concert = {
+  id: number;
+  slug: string;
+  title: string;
+  description: string;
+  venue: string;
+  startsAt: string | null;
+  ticketUrl: string | null;
+};
+
+export type GalleryImage = {
+  id: number;
+  title: string;
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
 };
 
 function wordpressUrl(): string {
@@ -74,7 +150,6 @@ export function stripHtml(html: string): string {
   return decodeEntities(html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim());
 }
 
-// Drops script/event handlers so WP HTML can be rendered in the blog.
 export function sanitizeWpHtml(html: string): string {
   return html
     .replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, "")
@@ -82,24 +157,81 @@ export function sanitizeWpHtml(html: string): string {
     .replace(/\son\w+\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi, "");
 }
 
+function mapImage(media: WpMedia | undefined, fallbackAlt: string) {
+  if (!media?.source_url) {
+    return null;
+  }
+
+  return {
+    src: media.source_url,
+    alt: media.alt_text || fallbackAlt,
+    width: media.media_details?.width ?? 1600,
+    height: media.media_details?.height ?? 900,
+  };
+}
+
+function mapAuthor(author: WpAuthor | undefined): BlogAuthor | null {
+  if (!author) {
+    return null;
+  }
+
+  const avatar =
+    author.avatar_urls?.["96"] ??
+    author.avatar_urls?.["48"] ??
+    Object.values(author.avatar_urls ?? {})[0] ??
+    null;
+
+  return {
+    id: author.id,
+    name: author.name,
+    slug: author.slug,
+    avatar,
+  };
+}
+
+function mapCategories(post: WpPost): BlogCategory[] {
+  const groups = post._embedded?.["wp:term"] ?? [];
+  return groups
+    .flat()
+    .filter((term) => term.taxonomy === "category" && term.slug !== "uncategorized")
+    .map((term) => ({
+      id: term.id,
+      name: decodeEntities(term.name),
+      slug: term.slug,
+      count: term.count ?? 0,
+    }));
+}
+
+function longerExcerpt(post: WpPost): string {
+  const excerpt = stripHtml(post.excerpt.rendered);
+  const content = stripHtml(post.content.rendered);
+  const text = excerpt.length >= 180 ? excerpt : content || excerpt;
+  if (text.length <= 520) {
+    return text;
+  }
+  return `${text.slice(0, 519).replace(/\s+\S*$/, "")}…`;
+}
+
 function mapPost(post: WpPost): BlogPost {
+  const title = decodeEntities(stripHtml(post.title.rendered));
   const media = post._embedded?.["wp:featuredmedia"]?.[0];
 
   return {
     id: post.id,
     slug: post.slug,
-    title: decodeEntities(stripHtml(post.title.rendered)),
-    excerpt: stripHtml(post.excerpt.rendered),
+    title,
+    excerpt: longerExcerpt(post),
     content: sanitizeWpHtml(post.content.rendered),
     date: post.date,
-    image: media?.source_url
-      ? {
-          src: media.source_url,
-          alt: media.alt_text || decodeEntities(stripHtml(post.title.rendered)),
-          width: media.media_details?.width ?? 1600,
-          height: media.media_details?.height ?? 900,
-        }
-      : null,
+    author: mapAuthor(post._embedded?.author?.[0]),
+    categories: mapCategories(post),
+    seoTitle: post.yoast_head_json?.title
+      ? decodeEntities(stripHtml(post.yoast_head_json.title))
+      : undefined,
+    seoDescription: post.yoast_head_json?.description
+      ? decodeEntities(stripHtml(post.yoast_head_json.description))
+      : undefined,
+    image: mapImage(media, title),
   };
 }
 
@@ -114,6 +246,7 @@ async function wpFetch<T>(path: string): Promise<T | null> {
       },
       headers: {
         Accept: "application/json",
+        "User-Agent": "Galaxisok/1.0",
       },
     });
 
@@ -127,9 +260,56 @@ async function wpFetch<T>(path: string): Promise<T | null> {
   }
 }
 
-export async function getPosts(): Promise<BlogPost[]> {
+export async function getCategories(): Promise<BlogCategory[]> {
+  const terms = await wpFetch<WpTerm[]>(
+    "/wp-json/wp/v2/categories?per_page=50&hide_empty=true",
+  );
+
+  if (!terms) {
+    return [];
+  }
+
+  return terms
+    .filter((term) => term.slug !== "uncategorized")
+    .map((term) => ({
+      id: term.id,
+      name: decodeEntities(term.name),
+      slug: term.slug,
+      count: term.count ?? 0,
+    }));
+}
+
+export const BLOG_PAGE_SIZE = 5;
+
+export type BlogPostPage = {
+  posts: BlogPost[];
+  page: number;
+  total: number;
+  totalPages: number;
+};
+
+async function categoryQuery(categorySlug?: string): Promise<string | null> {
+  if (!categorySlug) {
+    return "";
+  }
+
+  const categories = await getCategories();
+  const match = categories.find((category) => category.slug === categorySlug);
+  if (!match) {
+    return null;
+  }
+
+  return `&categories=${match.id}`;
+}
+
+export async function getPosts(categorySlug?: string): Promise<BlogPost[]> {
+  const extra = await categoryQuery(categorySlug);
+  if (extra === null) {
+    return [];
+  }
+
   const posts = await wpFetch<WpPost[]>(
-    "/wp-json/wp/v2/posts?_embed=1&per_page=20&status=publish",
+    `/wp-json/wp/v2/posts?_embed=1&per_page=100&status=publish${extra}`,
   );
 
   if (!posts) {
@@ -137,6 +317,53 @@ export async function getPosts(): Promise<BlogPost[]> {
   }
 
   return posts.map(mapPost);
+}
+
+export async function getPostsPage(
+  categorySlug?: string,
+  page = 1,
+): Promise<BlogPostPage> {
+  const extra = await categoryQuery(categorySlug);
+  const safePage = Number.isFinite(page) && page > 0 ? Math.floor(page) : 1;
+
+  if (extra === null) {
+    return { posts: [], page: 1, total: 0, totalPages: 0 };
+  }
+
+  const url = `${wordpressUrl()}/wp-json/wp/v2/posts?_embed=1&per_page=${BLOG_PAGE_SIZE}&page=${safePage}&status=publish${extra}`;
+
+  try {
+    const response = await fetch(url, {
+      next: {
+        revalidate: 60,
+        tags: [WORDPRESS_CACHE_TAG],
+      },
+      headers: {
+        Accept: "application/json",
+        "User-Agent": "Galaxisok/1.0",
+      },
+    });
+
+    if (!response.ok) {
+      return { posts: [], page: safePage, total: 0, totalPages: 0 };
+    }
+
+    const rows = (await response.json()) as WpPost[];
+    const total = Number(response.headers.get("X-WP-Total") ?? rows.length);
+    const totalPages = Number(
+      response.headers.get("X-WP-TotalPages") ??
+        Math.max(1, Math.ceil(total / BLOG_PAGE_SIZE)),
+    );
+
+    return {
+      posts: rows.map(mapPost),
+      page: safePage,
+      total,
+      totalPages,
+    };
+  } catch {
+    return { posts: [], page: safePage, total: 0, totalPages: 0 };
+  }
 }
 
 export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
@@ -151,10 +378,183 @@ export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
   return mapPost(posts[0]);
 }
 
+export async function getConcerts(): Promise<Concert[]> {
+  const rows = await wpFetch<WpConcert[]>(
+    "/wp-json/wp/v2/koncertek?per_page=50&status=publish",
+  );
+
+  if (!rows) {
+    return [];
+  }
+
+  return rows
+    .map((row) => {
+      const startsAt = row.meta?.idopont?.trim() || null;
+
+      return {
+        id: row.id,
+        slug: row.slug,
+        title: decodeEntities(stripHtml(row.title.rendered)),
+        description: stripHtml(row.content.rendered || row.excerpt.rendered),
+        venue: row.meta?.helyszin?.trim() || "",
+        startsAt,
+        ticketUrl: row.meta?.jegy_url?.trim() || null,
+      };
+    })
+    .sort((a, b) => {
+      const aTime = a.startsAt ? new Date(a.startsAt).getTime() : Number.MAX_SAFE_INTEGER;
+      const bTime = b.startsAt ? new Date(b.startsAt).getTime() : Number.MAX_SAFE_INTEGER;
+      return aTime - bTime;
+    });
+}
+
+function mapGalleryRow(row: WpPost): GalleryImage[] {
+  const title = decodeEntities(stripHtml(row.title.rendered));
+  const image = mapImage(row._embedded?.["wp:featuredmedia"]?.[0], title);
+  if (!image) {
+    return [];
+  }
+
+  return [
+    {
+      id: row.id,
+      title,
+      ...image,
+    },
+  ];
+}
+
+function mapGalleryMedia(media: WpMedia & { id?: number; title?: WpRendered }): GalleryImage[] {
+  const title = media.title?.rendered
+    ? decodeEntities(stripHtml(media.title.rendered))
+    : "Galaxisok";
+  const image = mapImage(media, title);
+  if (!image || (image.width > 0 && image.width < 400)) {
+    return [];
+  }
+
+  return [
+    {
+      id: media.id ?? 0,
+      title,
+      ...image,
+    },
+  ];
+}
+
+export async function getGalleryImages(): Promise<GalleryImage[]> {
+  const rows = await wpFetch<WpPost[]>(
+    "/wp-json/wp/v2/galeria?_embed=1&per_page=40&status=publish",
+  );
+  const fromCpt = (rows ?? []).flatMap(mapGalleryRow);
+
+  if (fromCpt.length > 0) {
+    return fromCpt;
+  }
+
+  const media = await wpFetch<(WpMedia & { id?: number; title?: WpRendered })[]>(
+    "/wp-json/wp/v2/media?per_page=40&media_type=image",
+  );
+
+  return (media ?? []).flatMap(mapGalleryMedia);
+}
+
 export function formatHuDate(isoDate: string): string {
   return new Intl.DateTimeFormat("hu-HU", {
     year: "numeric",
     month: "long",
     day: "numeric",
   }).format(new Date(isoDate));
+}
+
+export function formatHuDateTime(value: string): string {
+  const naive = value.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/);
+  if (naive) {
+    const [, year, month, day, hour, minute] = naive;
+    const months = [
+      "január",
+      "február",
+      "március",
+      "április",
+      "május",
+      "június",
+      "július",
+      "augusztus",
+      "szeptember",
+      "október",
+      "november",
+      "december",
+    ];
+    const monthName = months[Number(month) - 1];
+    return `${year}. ${monthName} ${Number(day)}. ${hour}:${minute}`;
+  }
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return value.replace("T", " ");
+  }
+
+  return new Intl.DateTimeFormat("hu-HU", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZone: "Europe/Budapest",
+  }).format(date);
+}
+
+function emptyHearts(): HeartsPayload {
+  return {
+    hearts: [],
+    canAdd: true,
+    remaining: HEARTS_PER_VISITOR,
+  };
+}
+
+function mapHeartsPayload(data: {
+  hearts?: PlacedHeart[];
+  canAdd?: boolean;
+  remaining?: number;
+}): HeartsPayload {
+  const hearts = Array.isArray(data.hearts) ? data.hearts : [];
+  const remaining =
+    typeof data.remaining === "number"
+      ? data.remaining
+      : data.canAdd
+        ? HEARTS_PER_VISITOR
+        : 0;
+
+  return {
+    hearts,
+    canAdd: remaining > 0,
+    remaining,
+  };
+}
+
+export async function getPostHearts(
+  postId: number,
+  visitorIp = "",
+): Promise<HeartsPayload> {
+  try {
+    const response = await fetch(
+      `${wordpressUrl()}/wp-json/galaxisok/v1/hearts/${postId}`,
+      {
+        cache: "no-store",
+        headers: {
+          Accept: "application/json",
+          "User-Agent": "Galaxisok/1.0",
+          ...(visitorIp ? { "X-Client-IP": visitorIp } : {}),
+        },
+      },
+    );
+
+    if (!response.ok) {
+      return emptyHearts();
+    }
+
+    return mapHeartsPayload((await response.json()) as HeartsPayload);
+  } catch {
+    return emptyHearts();
+  }
 }

@@ -5,6 +5,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
+    minimumCacheTTL: 60 * 60 * 24 * 14,
     remotePatterns: [
       {
         protocol: "https",
@@ -21,6 +22,22 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "i2.wp.com",
+      },
+      {
+        protocol: "https",
+        hostname: "secure.gravatar.com",
+      },
+      {
+        protocol: "https",
+        hostname: "0.gravatar.com",
+      },
+      {
+        protocol: "https",
+        hostname: "1.gravatar.com",
+      },
+      {
+        protocol: "https",
+        hostname: "2.gravatar.com",
       },
     ],
   },

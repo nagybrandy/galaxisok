@@ -1,10 +1,15 @@
 // src/app/layout.tsx
-// Root chrome: fonts, Hungarian metadata, and a dark cinematic default.
+// Root chrome: poster-like display face, hero as default SEO image.
 
 import type { Metadata } from "next";
-import { Geist, Syne } from "next/font/google";
+import { Geist, Oswald } from "next/font/google";
 
-import { SITE_DESCRIPTION, SITE_FULL_NAME, SITE_NAME } from "@/lib/site";
+import { CookieConsent } from "@/components/cookie-consent";
+import { LogoCursor } from "@/components/logo-cursor";
+import { NightAtmosphere } from "@/components/night-atmosphere";
+import { PageFade } from "@/components/page-fade";
+import { PersistentFooter, PersistentHeader } from "@/components/persistent-chrome";
+import { HERO_IMAGE, SITE_DESCRIPTION, SITE_NAME, siteUrl } from "@/lib/site";
 
 import "./globals.css";
 
@@ -13,26 +18,42 @@ const geistSans = Geist({
   subsets: ["latin", "latin-ext"],
 });
 
-const syne = Syne({
-  variable: "--font-logo",
+const oswald = Oswald({
+  variable: "--font-display",
   subsets: ["latin", "latin-ext"],
-  weight: ["600", "700"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://galaxisok.vercel.app"),
+  metadataBase: new URL(siteUrl()),
   title: {
     default: SITE_NAME,
     template: `%s · ${SITE_NAME}`,
   },
   description: SITE_DESCRIPTION,
-  applicationName: SITE_FULL_NAME,
+  applicationName: SITE_NAME,
+  icons: {
+    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
+    apple: [{ url: "/apple-icon.png" }],
+  },
   openGraph: {
-    title: SITE_FULL_NAME,
+    title: SITE_NAME,
     description: SITE_DESCRIPTION,
     locale: "hu_HU",
     type: "website",
-    images: [{ url: "/hero.png" }],
+    siteName: SITE_NAME,
+    images: [
+      {
+        url: HERO_IMAGE,
+        alt: SITE_NAME,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+    images: [HERO_IMAGE],
   },
 };
 
@@ -40,10 +61,18 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="hu"
-      className={`${geistSans.variable} ${syne.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${oswald.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col bg-background font-sans text-foreground">
-        {children}
+      <head>
+        <link rel="preload" href={HERO_IMAGE} as="image" type="image/jpeg" />
+      </head>
+      <body className="relative flex min-h-full flex-col bg-[#050b1c] font-sans text-white">
+        <NightAtmosphere />
+        <LogoCursor />
+        <PersistentHeader />
+        <PageFade>{children}</PageFade>
+        <PersistentFooter />
+        <CookieConsent />
       </body>
     </html>
   );

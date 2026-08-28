@@ -34,6 +34,9 @@ yarn-error.log*
 .env*
 !.env.example
 
+# local secrets / later WP work — never commit
+HANDOFF.local.md
+
 # vercel
 .vercel
 

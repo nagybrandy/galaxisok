@@ -28,6 +28,8 @@ export async function POST(request: Request) {
   revalidateTag(WORDPRESS_CACHE_TAG, "max");
   revalidatePath("/blog");
   revalidatePath("/blog/[slug]", "page");
+  revalidatePath("/koncertek");
+  revalidatePath("/rolunk");
 
   return NextResponse.json({ ok: true, revalidated: true });
 }

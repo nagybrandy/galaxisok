@@ -15,7 +15,8 @@ export function SocialIcon({ kind, className }: SocialIconProps) {
         <svg viewBox="0 0 24 24" aria-hidden className={className}>
           <path
             fill="currentColor"
-            d="M8 3h8a5 5 0 0 1 5 5v8a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5V8a5 5 0 0 1 5-5Zm8 1.8H8A3.2 3.2 0 0 0 4.8 8v8A3.2 3.2 0 0 0 8 19.2h8A3.2 3.2 0 0 0 19.2 16V8A3.2 3.2 0 0 0 16 4.8ZM12 8.2A3.8 3.8 0 1 1 8.2 12 3.8 3.8 0 0 1 12 8.2Zm0 1.6A2.2 2.2 0 1 0 14.2 12 2.2 2.2 0 0 0 12 9.8Zm4.55-2.85a.95.95 0 1 1-.95.95.95.95 0 0 1 .95-.95Z"
+            fillRule="evenodd"
+            d="M7.2 2.2h9.6A5 5 0 0 1 21.8 7.2v9.6a5 5 0 0 1-5 5H7.2a5 5 0 0 1-5-5V7.2a5 5 0 0 1 5-5ZM12 7.35A4.65 4.65 0 1 0 16.65 12 4.65 4.65 0 0 0 12 7.35Zm4.9-2.2a1.1 1.1 0 1 0 1.1 1.1 1.1 1.1 0 0 0-1.1-1.1Z"
           />
         </svg>
       );
@@ -24,7 +25,7 @@ export function SocialIcon({ kind, className }: SocialIconProps) {
         <svg viewBox="0 0 24 24" aria-hidden className={className}>
           <path
             fill="currentColor"
-            d="M14.6 8.5V6.8c0-.7.5-1.1 1.2-1.1h1.5V3h-2.1C12.4 3 11 4.5 11 6.6v1.9H9v2.7h2V21h3.6v-9.8h2.4l.5-2.7h-2.9Z"
+            d="M13.6 8.4V6.8c0-.7.5-1.1 1.2-1.1H16V3h-2.1C11.4 3 10 4.5 10 6.6v1.8H8v2.7h2V21h3.6v-9.9h2.4l.5-2.7h-2.9Z"
           />
         </svg>
       );

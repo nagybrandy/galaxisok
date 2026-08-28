@@ -10,6 +10,20 @@ export type SocialKind =
   | "bandcamp"
   | "deezer";
 
+const SOCIAL_KINDS: SocialKind[] = [
+  "instagram",
+  "facebook",
+  "youtube",
+  "spotify",
+  "apple",
+  "bandcamp",
+  "deezer",
+];
+
+export function isSocialKind(value: string): value is SocialKind {
+  return SOCIAL_KINDS.includes(value as SocialKind);
+}
+
 export type SocialLink = {
   kind: SocialKind;
   label: string;
@@ -43,14 +57,14 @@ export const SOCIALS: SocialLink[] = [
     href: "https://music.apple.com/hu/artist/galaxisok/1458523130",
   },
   {
-    kind: "bandcamp",
-    label: "Bandcamp",
-    href: "https://galaxisok.bandcamp.com",
-  },
-  {
     kind: "deezer",
     label: "Deezer",
     href: "https://www.deezer.com/artist/6206150",
+  },
+  {
+    kind: "bandcamp",
+    label: "Bandcamp",
+    href: "https://galaxisok.bandcamp.com/music",
   },
 ];
 

@@ -1,34 +1,30 @@
 // src/components/site-header.tsx
-// Overlay header: logo top-left, blog link only on inner pages.
+// Same transparent menu on every page. It sits at the top and scrolls away.
 
-import Link from "next/link";
-
-import { cn } from "@/lib/utils";
+import { NAV_LINKS, type NavLink } from "@/lib/site";
 
 import { Logo } from "./logo";
+import { MobileMenu } from "./mobile-menu";
+import { SiteNav } from "./site-nav";
+import { SocialLinks } from "./social-links";
 
 type SiteHeaderProps = {
   tone?: "light" | "dark";
-  showBlog?: boolean;
+  links?: NavLink[];
 };
 
-export function SiteHeader({ tone = "light", showBlog = false }: SiteHeaderProps) {
+export function SiteHeader({
+  tone = "light",
+  links = NAV_LINKS,
+}: SiteHeaderProps) {
   return (
-    <header className="pointer-events-none absolute inset-x-0 top-0 z-20 flex items-start justify-between p-5 sm:p-8">
-      <Logo tone={tone} className="pointer-events-auto" />
-      {showBlog ? (
-        <nav className="pointer-events-auto">
-          <Link
-            href="/blog"
-            className={cn(
-              "text-[11px] font-medium tracking-[0.28em] uppercase",
-              tone === "light" ? "text-white/90" : "text-foreground/80",
-            )}
-          >
-            Blog
-          </Link>
-        </nav>
-      ) : null}
+    <header className="pointer-events-none absolute inset-x-0 top-0 z-[60] flex items-start justify-between gap-4 px-5 py-5 sm:px-8 sm:py-7">
+      <Logo tone={tone} className="pointer-events-auto shrink-0" />
+      <div className="pointer-events-auto flex min-w-0 flex-col items-end gap-3 sm:flex-row sm:items-center sm:gap-5">
+        <MobileMenu links={links} />
+        <SiteNav tone={tone} links={links} className="hidden sm:flex" />
+        <SocialLinks tone={tone} className="hidden sm:flex" />
+      </div>
     </header>
   );
 }
