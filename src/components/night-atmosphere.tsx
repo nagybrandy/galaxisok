@@ -1,5 +1,5 @@
 // src/components/night-atmosphere.tsx
-// Bottom-left field glow only. Poster type stays off the page.
+// Fixed, viewport-sized lights crop. Same size on every page.
 
 import Image from "next/image";
 
@@ -7,7 +7,7 @@ export function NightAtmosphere() {
   return (
     <div
       aria-hidden
-      className="night-atmosphere pointer-events-none absolute inset-0 z-0 overflow-hidden"
+      className="night-atmosphere pointer-events-none fixed inset-0 z-0 overflow-hidden"
     >
       <div className="night-atmosphere-wash" />
       <div className="night-atmosphere-photo">
@@ -15,7 +15,7 @@ export function NightAtmosphere() {
           src="/atmosphere-lights.jpg"
           alt=""
           fill
-          sizes="100vw"
+          sizes="(max-width: 52rem) 78vw, 52rem"
           className="object-cover object-left-bottom"
         />
       </div>

@@ -79,6 +79,15 @@ export function LogoCursor() {
     const onMove = (event: PointerEvent) => {
       posRef.current.x = event.clientX;
       posRef.current.y = event.clientY;
+      const target = event.target;
+      const overUi =
+        target instanceof Element &&
+        Boolean(
+          target.closest(
+            "a, button, summary, [role='button'], input, textarea, label",
+          ),
+        );
+      lens.classList.toggle("is-solid", overUi);
       if (frameRef.current) {
         return;
       }

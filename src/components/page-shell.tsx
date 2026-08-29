@@ -15,7 +15,7 @@ export function PageShell({ children, flush = false }: PageShellProps) {
     <div
       className={cn(
         "relative z-[1] flex min-h-dvh flex-col text-white",
-        !flush && "pt-20",
+        !flush && "pt-[max(5rem,calc(env(safe-area-inset-top)+3.75rem))]",
       )}
     >
       {children}

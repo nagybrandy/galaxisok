@@ -18,7 +18,6 @@ import {
   hasCalendarEvent,
   type CalendarConcert,
 } from "@/lib/calendar";
-import { siteUrl } from "@/lib/site";
 
 type ConcertCalendarProviderProps = {
   children: ReactNode;
@@ -40,15 +39,17 @@ export function AddAllConcertsLink({ concerts }: AddAllConcertsLinkProps) {
     return null;
   }
 
-  const href = googleCalendarSubscribeUrl(`${siteUrl()}/api/calendar`);
+  function openGoogleCalendar() {
+    const icsUrl = `webcal://${window.location.host}/galaxisok-koncertek.ics`;
+    window.open(googleCalendarSubscribeUrl(icsUrl), "_blank", "noreferrer");
+  }
 
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <a
-          href={href}
-          target="_blank"
-          rel="noreferrer noopener"
+        <button
+          type="button"
+          onClick={openGoogleCalendar}
           className="concerts-all-link"
           aria-label="Összes koncert hozzáadása a Google Naptárhoz"
         >
@@ -56,7 +57,7 @@ export function AddAllConcertsLink({ concerts }: AddAllConcertsLinkProps) {
             <CalendarDays className="concerts-all-icon-back" strokeWidth={1.6} />
             <CalendarPlus className="concerts-all-icon-front" strokeWidth={1.6} />
           </span>
-        </a>
+        </button>
       </TooltipTrigger>
       <TooltipContent side="bottom" sideOffset={6}>
         Összes koncert hozzáadása a Google Naptárhoz

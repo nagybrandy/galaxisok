@@ -9,12 +9,27 @@ import {
   ConcertCalendarProvider,
 } from "@/components/concert-calendar";
 import { PageShell } from "@/components/page-shell";
-import { formatHuDateTime, getConcerts } from "@/lib/wordpress";
+import { formatHuDateTimeParts, getConcerts } from "@/lib/wordpress";
 
 export const metadata: Metadata = {
   title: "Koncertek",
   description: "A Galaxisok közelgő koncertjei.",
 };
+
+function ConcertWhen({ value }: { value: string }) {
+  const parts = formatHuDateTimeParts(value);
+  if (!parts) {
+    return <>{value.replace("T", " ")}</>;
+  }
+
+  return (
+    <span className="flex flex-col">
+      <span>{parts.year}</span>
+      <span>{parts.day}</span>
+      <span>{parts.time}</span>
+    </span>
+  );
+}
 
 export default async function KoncertekPage() {
   const concerts = await getConcerts();
@@ -43,17 +58,19 @@ export default async function KoncertekPage() {
               {concerts.map((concert) => (
                 <li
                   key={concert.id}
-                  className="grid gap-3 py-7 sm:grid-cols-[12rem_minmax(0,1fr)_auto] sm:items-center"
+                  className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-2 py-7 sm:grid-cols-[12rem_minmax(0,1fr)_auto] sm:gap-3"
                 >
                   <time
                     dateTime={concert.startsAt ?? undefined}
-                    className="text-left text-sm tracking-[0.08em] text-white/70"
+                    className="col-start-1 row-start-1 text-left text-sm leading-6 tracking-[0.08em] text-white/70"
                   >
-                    {concert.startsAt
-                      ? formatHuDateTime(concert.startsAt)
-                      : "Időpont később"}
+                    {concert.startsAt ? (
+                      <ConcertWhen value={concert.startsAt} />
+                    ) : (
+                      "Időpont később"
+                    )}
                   </time>
-                  <div className="min-w-0">
+                  <div className="col-start-1 row-start-2 min-w-0 sm:col-start-2 sm:row-start-1">
                     <h2 className="text-xl font-medium tracking-tight">
                       {concert.title}
                     </h2>
@@ -66,7 +83,7 @@ export default async function KoncertekPage() {
                       </p>
                     ) : null}
                   </div>
-                  <div className="flex flex-row items-center justify-end gap-2">
+                  <div className="col-start-2 row-start-1 row-span-2 flex flex-row items-center justify-end gap-2 sm:col-start-3 sm:row-start-1 sm:row-span-1">
                     {concert.ticketUrl ? (
                       <a
                         href={concert.ticketUrl}

@@ -33,16 +33,19 @@ export function SkeletonImage({
   unoptimized = false,
   onClick,
 }: SkeletonImageProps) {
-  const [ready, setReady] = useState(false);
+  const [ready, setReady] = useState(priority);
   const imageRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
-    setReady(false);
     const image = imageRef.current;
     if (image?.complete && image.naturalWidth > 0) {
       setReady(true);
+      return;
     }
-  }, [src]);
+    if (!priority) {
+      setReady(false);
+    }
+  }, [src, priority]);
 
   const markReady = (event: SyntheticEvent<HTMLImageElement>) => {
     if (event.currentTarget.naturalWidth > 0) {

@@ -33,7 +33,6 @@ export function SiteNav({ links = NAV_LINKS, className }: SiteNavProps) {
 
         const label = (
           <>
-            <span className="hover-spark-halo" aria-hidden />
             <span className="hover-spark-dots" aria-hidden />
             {link.label}
           </>

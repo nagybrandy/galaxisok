@@ -1,7 +1,7 @@
 // src/app/layout.tsx
 // Root chrome: poster-like display face, hero as default SEO image.
 
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Oswald } from "next/font/google";
 
 import { CookieConsent } from "@/components/cookie-consent";
@@ -9,6 +9,7 @@ import { LogoCursor } from "@/components/logo-cursor";
 import { NightAtmosphere } from "@/components/night-atmosphere";
 import { PageFade } from "@/components/page-fade";
 import { PersistentFooter, PersistentHeader } from "@/components/persistent-chrome";
+import { PersistentHero } from "@/components/persistent-hero";
 import { HERO_IMAGE, SITE_DESCRIPTION, SITE_NAME, siteUrl } from "@/lib/site";
 
 import "./globals.css";
@@ -57,6 +58,10 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  viewportFit: "cover",
+};
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
@@ -70,6 +75,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <NightAtmosphere />
         <LogoCursor />
         <PersistentHeader />
+        <PersistentHero />
         <PageFade>{children}</PageFade>
         <PersistentFooter />
         <CookieConsent />

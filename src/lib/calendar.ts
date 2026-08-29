@@ -143,10 +143,7 @@ export function googleCalendarUrl(concert: CalendarConcert): string | null {
 }
 
 export function googleCalendarSubscribeUrl(icsUrl: string): string {
-  const webcal = icsUrl
-    .replace(/^https:\/\//, "webcal://")
-    .replace(/^http:\/\//, "webcal://");
-  return `https://calendar.google.com/calendar/r?cid=${encodeURIComponent(webcal)}`;
+  return `https://calendar.google.com/calendar/r?cid=${encodeURIComponent(icsUrl)}`;
 }
 
 function icsEscape(value: string): string {
@@ -226,7 +223,12 @@ export function concertsToIcs(concerts: CalendarConcert[]): string {
     "PRODID:-//Galaxisok//Koncertek//HU",
     "CALSCALE:GREGORIAN",
     "METHOD:PUBLISH",
-    "X-WR-CALNAME:Galaxisok koncertek",
+    "X-WR-CALNAME:Galaxisok Koncertek",
+    "X-WR-CALDESC:A Galaxisok közelgő koncertjei",
+    "NAME:Galaxisok Koncertek",
+    "X-WR-TIMEZONE:Europe/Budapest",
+    "X-PUBLISHED-TTL:PT1H",
+    "REFRESH-INTERVAL;VALUE=DURATION:PT1H",
     ...events,
     "END:VCALENDAR",
     "",

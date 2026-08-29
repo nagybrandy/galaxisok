@@ -4,6 +4,14 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  async rewrites() {
+    return [
+      {
+        source: "/galaxisok-koncertek.ics",
+        destination: "/api/calendar",
+      },
+    ];
+  },
   images: {
     minimumCacheTTL: 60 * 60 * 24 * 14,
     remotePatterns: [

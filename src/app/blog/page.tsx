@@ -48,7 +48,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                     {posts.map((post) => (
                       <li key={post.id}>
                         <Link href={`/blog/${post.slug}`} className="blog-post-teaser block">
-                          <div className="flex flex-row items-start gap-3 sm:gap-5">
+                          <div className="flex flex-row items-stretch gap-3 sm:gap-5">
                             {post.image ? (
                               <PostCover
                                 src={post.image.src}
@@ -57,7 +57,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                                 height={post.image.height}
                               />
                             ) : null}
-                            <div className="min-w-0 flex-1">
+                            <div className="flex min-w-0 flex-1 flex-col">
                               <div className="flex items-center gap-3">
                                 {post.author?.avatar ? (
                                   <Image
@@ -85,12 +85,10 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                                 </div>
                               </div>
                               <h2 className="blog-post-title mt-2 text-lg font-medium tracking-tight sm:mt-4 sm:text-2xl">
-                                <span className="hover-spark-halo" aria-hidden />
-                                <span className="hover-spark-dots" aria-hidden />
-                                <span className="relative">{post.title}</span>
+                                {post.title}
                               </h2>
                               {post.excerpt ? (
-                                <p className="mt-2 line-clamp-5 max-w-2xl text-sm leading-6 text-white/60 sm:mt-3 sm:line-clamp-6 sm:text-base">
+                                <p className="mt-auto pt-2 line-clamp-5 max-w-2xl text-sm leading-6 text-white/60 sm:pt-3 sm:line-clamp-6 sm:text-base">
                                   {post.excerpt}
                                 </p>
                               ) : null}

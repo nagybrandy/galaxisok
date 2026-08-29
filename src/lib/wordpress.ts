@@ -467,41 +467,85 @@ export function formatHuDate(isoDate: string): string {
   }).format(new Date(isoDate));
 }
 
-export function formatHuDateTime(value: string): string {
+const HU_MONTHS = [
+  "január",
+  "február",
+  "március",
+  "április",
+  "május",
+  "június",
+  "július",
+  "augusztus",
+  "szeptember",
+  "október",
+  "november",
+  "december",
+] as const;
+
+export type HuDateTimeParts = {
+  year: string;
+  day: string;
+  time: string;
+};
+
+export function formatHuDateTimeParts(value: string): HuDateTimeParts | null {
   const naive = value.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/);
   if (naive) {
     const [, year, month, day, hour, minute] = naive;
-    const months = [
-      "január",
-      "február",
-      "március",
-      "április",
-      "május",
-      "június",
-      "július",
-      "augusztus",
-      "szeptember",
-      "október",
-      "november",
-      "december",
-    ];
-    const monthName = months[Number(month) - 1];
-    return `${year}. ${monthName} ${Number(day)}. ${hour}:${minute}`;
+    const monthName = HU_MONTHS[Number(month) - 1];
+    if (!monthName) {
+      return null;
+    }
+    return {
+      year,
+      day: `${monthName} ${Number(day)}.`,
+      time: `${hour}:${minute}`,
+    };
   }
 
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) {
-    return value.replace("T", " ");
+    return null;
   }
 
-  return new Intl.DateTimeFormat("hu-HU", {
-    year: "numeric",
-    month: "long",
+  const monthIndex = Number(
+    new Intl.DateTimeFormat("en-US", {
+      month: "numeric",
+      timeZone: "Europe/Budapest",
+    }).format(date),
+  );
+  const monthName = HU_MONTHS[monthIndex - 1];
+  if (!monthName) {
+    return null;
+  }
+
+  const day = new Intl.DateTimeFormat("en-US", {
     day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
     timeZone: "Europe/Budapest",
   }).format(date);
+  const time = new Intl.DateTimeFormat("hu-HU", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+    timeZone: "Europe/Budapest",
+  }).format(date);
+
+  return {
+    year: new Intl.DateTimeFormat("en-US", {
+      year: "numeric",
+      timeZone: "Europe/Budapest",
+    }).format(date),
+    day: `${monthName} ${day}.`,
+    time,
+  };
+}
+
+export function formatHuDateTime(value: string): string {
+  const parts = formatHuDateTimeParts(value);
+  if (parts) {
+    return `${parts.year} ${parts.day} ${parts.time}`;
+  }
+  return value.replace("T", " ");
 }
 
 function emptyHearts(): HeartsPayload {

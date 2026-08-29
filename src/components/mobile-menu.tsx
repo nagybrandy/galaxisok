@@ -50,7 +50,7 @@ export function MobileMenu({ links = NAV_LINKS }: MobileMenuProps) {
     <div className="sm:hidden">
       <button
         type="button"
-        className="relative z-[1] flex size-10 items-center justify-end text-white"
+        className="relative z-10 flex size-10 items-center justify-end text-white"
         aria-expanded={open}
         aria-controls="mobile-menu"
         aria-label={open ? "Menü bezárása" : "Menü"}
@@ -66,7 +66,7 @@ export function MobileMenu({ links = NAV_LINKS }: MobileMenuProps) {
       {open ? (
         <div
           id="mobile-menu"
-          className="mobile-menu fixed inset-0 z-[55] flex flex-col text-white"
+          className="mobile-menu fixed inset-0 z-0 flex flex-col text-white"
           role="dialog"
           aria-modal="true"
           aria-label="Menü"
@@ -85,7 +85,7 @@ export function MobileMenu({ links = NAV_LINKS }: MobileMenuProps) {
             <div className="absolute inset-0 bg-[rgba(12,36,110,0.52)]" />
           </div>
 
-          <nav className="relative z-[1] flex min-h-0 flex-1 flex-col justify-center gap-5 overflow-y-auto px-5 pt-20 pb-6">
+          <nav className="relative z-[1] flex min-h-0 flex-1 flex-col justify-center gap-5 overflow-y-auto px-5 pt-[max(5.5rem,calc(env(safe-area-inset-top)+4.25rem))] pb-6">
             {links.map((link) => {
               const active =
                 !link.external &&

@@ -19,7 +19,7 @@ function isStaticAsset(pathname: string): boolean {
     pathname === "/icon.svg" ||
     pathname === "/apple-icon.png" ||
     pathname === "/hero.jpg" ||
-    /\.(?:avif|gif|ico|jpe?g|png|svg|webp|woff2?)$/i.test(pathname)
+    /\.(?:avif|gif|ico|ics|jpe?g|png|svg|webp|woff2?)$/i.test(pathname)
   );
 }
 

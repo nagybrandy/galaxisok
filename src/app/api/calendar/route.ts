@@ -1,5 +1,5 @@
 // src/app/api/calendar/route.ts
-// Live ICS of upcoming concerts so Google Calendar can subscribe.
+// Public ICS of upcoming concerts. Google Calendar subscribes by URL.
 
 import { NextResponse } from "next/server";
 
@@ -15,6 +15,7 @@ export async function GET() {
       "Content-Type": "text/calendar; charset=utf-8",
       "Content-Disposition": 'inline; filename="galaxisok-koncertek.ics"',
       "Cache-Control": "public, max-age=60",
+      "Access-Control-Allow-Origin": "*",
     },
   });
 }

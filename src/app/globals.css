@@ -189,8 +189,31 @@ html.home-lock body {
 }
 
 html.home-lock .page-fade {
-  height: 100%;
+  flex: 0 0 0;
+  height: 0;
+  min-height: 0;
   overflow: hidden;
+}
+
+html.hero-from-home,
+html.hero-from-home body {
+  height: 100%;
+  height: 100dvh;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+html.hero-from-home .rolunk-copy {
+  opacity: 0;
+  transform: translateY(2.25rem);
+}
+
+html.hero-from-home.hero-copy-in .rolunk-copy {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 800ms ease 280ms,
+    transform 920ms cubic-bezier(0.22, 1, 0.36, 1) 280ms;
 }
 
 .blog-list-fade {
@@ -524,6 +547,8 @@ html.home-lock .page-fade {
 
 .nav-link:hover .hover-spark-dots,
 .nav-link:focus-visible .hover-spark-dots,
+.site-logo:hover .hover-spark-dots,
+.site-logo:focus-visible .hover-spark-dots,
 .blog-post-teaser:hover .hover-spark-dots,
 .blog-post-teaser:focus-visible .hover-spark-dots {
   opacity: 1;
@@ -619,8 +644,17 @@ html.home-lock .page-fade {
   mix-blend-mode: difference;
 }
 
+.logo-cursor-lens.is-solid,
+.logo-cursor-lens.has-glyph:not(.is-heart) {
+  mix-blend-mode: normal;
+  background: #fff;
+}
+
 .logo-cursor-art {
   z-index: 81;
+  overflow: visible;
+  isolation: isolate;
+  mix-blend-mode: normal;
 }
 
 .logo-cursor-players {
@@ -631,6 +665,7 @@ html.home-lock .page-fade {
   width: 30px;
   height: 30px;
   border-radius: 50%;
+  background: #fff;
   transform: translate(-50%, -50%);
   transition: opacity 160ms ease;
 }
@@ -667,8 +702,24 @@ html.home-lock .page-fade {
   transform: scale(1) rotate(0deg);
 }
 
-.logo-cursor.has-glyph .logo-cursor-players,
-.logo-cursor.has-glyph .logo-cursor-dot {
+.logo-cursor.has-glyph:not(.is-heart) .logo-cursor-glyph {
+  inset: auto;
+  right: -2px;
+  bottom: -2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #050b1c;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.85);
+}
+
+.logo-cursor.has-glyph:not(.is-heart) .logo-cursor-glyph svg {
+  width: 11px;
+  height: 11px;
+}
+
+.logo-cursor.is-heart .logo-cursor-players,
+.logo-cursor.is-heart .logo-cursor-dot {
   opacity: 0;
 }
 
@@ -717,11 +768,12 @@ html.home-lock .page-fade {
 }
 
 .bandcamp-exit {
-  position: fixed;
-  bottom: 1.25rem;
-  left: 1.25rem;
+  position: absolute;
+  top: 0.85rem;
+  right: 0.85rem;
   z-index: 40;
   display: inline-flex;
+  flex-direction: row-reverse;
   align-items: center;
   gap: 0;
   height: 2.75rem;
@@ -764,7 +816,7 @@ html.home-lock .page-fade {
 .bandcamp-exit:hover,
 .bandcamp-exit:focus-visible {
   height: 3.25rem;
-  padding: 0 1.1rem 0 1rem;
+  padding: 0 1rem 0 1.1rem;
   gap: 0.75rem;
   background: #0a1228;
   border-color: rgba(255, 255, 255, 0.55);
@@ -796,8 +848,9 @@ html.home-lock .page-fade {
   .logo-cursor-glyph,
   .logo-cursor-hint,
   .menu-mark span,
-  .rolunk-hero,
+  .persistent-hero,
   .rolunk-copy,
+  html.hero-from-home.hero-copy-in .rolunk-copy,
   .bandcamp-exit,
   .bandcamp-exit-icon,
   .bandcamp-exit-label {
@@ -1149,6 +1202,9 @@ html.home-lock .page-fade {
   justify-content: center;
   width: 2.35rem;
   height: 2.35rem;
+  padding: 0;
+  border: none;
+  background: transparent;
   color: rgba(255, 255, 255, 0.72);
   transition:
     color 160ms ease,
@@ -1188,31 +1244,50 @@ html.home-lock .page-fade {
   height: 1.15rem;
 }
 
-.rolunk-hero {
-  height: min(38dvh, 18rem);
-  min-height: 12rem;
-  transition: height 900ms cubic-bezier(0.22, 1, 0.36, 1);
+.persistent-hero {
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
 }
 
-html.from-home-about .rolunk-hero {
+.persistent-hero.is-home {
   height: 100dvh;
-  min-height: 32rem;
 }
 
-html.from-home-about-settle .rolunk-hero {
-  height: min(38dvh, 18rem);
-  min-height: 12rem;
+.persistent-hero.is-about {
+  height: min(42dvh, 22rem);
 }
 
-.rolunk-copy {
-  transition:
-    opacity 700ms ease 160ms,
-    transform 700ms cubic-bezier(0.22, 1, 0.36, 1) 160ms;
+.persistent-hero.is-hidden {
+  height: 0;
 }
 
-html.from-home-about:not(.from-home-about-settle) .rolunk-copy {
-  opacity: 0;
-  transform: translateY(1.4rem);
+.persistent-hero.is-animated {
+  transition: height 1.05s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: height;
+}
+
+.persistent-hero-frame {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #000;
+}
+
+.persistent-hero.is-about .persistent-hero-frame {
+  mask-image: linear-gradient(to bottom, #000 58%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 58%, transparent 100%);
+}
+
+.site-logo {
+  overflow: visible;
+}
+
+.site-logo .hover-spark-dots {
+  z-index: 0;
 }
 
 .rolunk-hero-bleed {

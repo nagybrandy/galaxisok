@@ -40,8 +40,8 @@ export function PostCover({
   return (
     <div
       className={cn(
-        "relative shrink-0 overflow-hidden rounded-xl bg-black/40",
-        "aspect-[5/4] w-28 sm:w-44 lg:w-52",
+        "relative min-h-[6.5rem] w-28 shrink-0 self-stretch overflow-hidden rounded-xl bg-black/40",
+        "sm:min-h-[8rem] sm:w-44 lg:w-52",
       )}
     >
       <SkeletonImage
@@ -51,6 +51,7 @@ export function PostCover({
         sizes="(min-width: 1024px) 13rem, (min-width: 640px) 11rem, 7rem"
         className="object-cover object-[center_28%]"
       />
+      <span className="teaser-cover-sparks" aria-hidden />
     </div>
   );
 }
