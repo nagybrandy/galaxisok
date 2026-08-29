@@ -105,6 +105,7 @@ export function MobileMenu({ links = NAV_LINKS }: MobileMenuProps) {
                     target="_blank"
                     rel="noreferrer noopener"
                     className={itemClass}
+                    onClick={() => setOpen(false)}
                   >
                     {link.label}
                   </a>

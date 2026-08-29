@@ -1,13 +1,10 @@
 // src/app/webshop/page.tsx
-// Bandcamp merch is mounted in the layout so cookie consent can persist.
+// Old in-site merch URL. The menu opens Bandcamp in a new tab.
 
-import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 
-export const metadata: Metadata = {
-  title: "Merch",
-  description: "Galaxisok merch a Bandcampen.",
-};
+import { BANDCAMP_MERCH_URL } from "@/lib/site";
 
 export default function WebshopPage() {
-  return null;
+  redirect(BANDCAMP_MERCH_URL);
 }

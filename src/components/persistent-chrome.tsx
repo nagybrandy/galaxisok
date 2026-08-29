@@ -5,8 +5,6 @@
 
 import { usePathname } from "next/navigation";
 
-import { isIframePage } from "@/lib/site";
-
 import { InnerFooter } from "./inner-footer";
 import { SiteHeader } from "./site-header";
 
@@ -23,7 +21,7 @@ export function PersistentHeader() {
 export function PersistentFooter() {
   const pathname = usePathname();
 
-  if (pathname === "/" || pathname === "/kapu" || isIframePage(pathname)) {
+  if (pathname === "/" || pathname === "/kapu") {
     return null;
   }
 

@@ -27,7 +27,7 @@ export default function AszfPage() {
       <h2>A weboldal</h2>
       <p>
         Az oldal híreket, koncertlistát, galériát és hírlevél-feliratkozást
-        mutat. A zene és a merch a Bandcamp felületéről érkezik, beágyazva.
+        mutat. A zene és a merch a Bandcamp saját oldalán nyílik meg.
       </p>
       <h2>Vásárlás</h2>
       <p>

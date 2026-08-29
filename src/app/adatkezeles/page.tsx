@@ -23,8 +23,8 @@ export default function AdatkezelesPage() {
       <h2>Milyen adatot kezelünk</h2>
       <p>
         A böngészéshez technikai adat kell (IP, böngésző, a megnyitott oldal).
-        Ha feliratkozol a hírlevélre, az e-mail-címed a Mailchimphez kerül. A
-        zene és a webshop oldal a Bandcampet mutatja; ott a Bandcamp is
+        Ha feliratkozol a hírlevélre, az e-mail-címed a Mailchimphez kerül.
+        A zene és a merch a Bandcamp saját oldalára visz; ott a Bandcamp
         láthat sütiket és technikai adatot.
         A blogot WordPressből olvassuk ({WORDPRESS_PUBLIC_URL}), a nyilvános
         bejegyzésekhez tartozó szerzői adatok ott tárolódnak.
@@ -36,10 +36,9 @@ export default function AdatkezelesPage() {
       </p>
       <h2>Sütik</h2>
       <p>
-        Szükséges sütik: a tesztoldal belépése és a süti-választásod. A zene
-        és a webshop Bandcamp beágyazása az oldal része. Opcionális: hírlevél
-        iframe és későbbi statisztika. A választást a láblécben a Sütik linken
-        bármikor átírhatod.
+        Szükséges sütik: a tesztoldal belépése és a süti-választásod.
+        Opcionális: hírlevél iframe és későbbi statisztika. A választást a
+        láblécben a Sütik linken bármikor átírhatod.
       </p>
       <h2>Továbbítás</h2>
       <p>

@@ -2,12 +2,12 @@
 // About copy and gallery. The shrinking photo lives in the layout.
 
 import type { Metadata } from "next";
-import Link from "next/link";
 
 import { GalleryMasonry } from "@/components/gallery-masonry";
 import { PageShell } from "@/components/page-shell";
 import { SkeletonImage } from "@/components/skeleton-image";
 import { ABOUT_BODY, ABOUT_LEAD } from "@/lib/about";
+import { BANDCAMP_MUSIC_URL } from "@/lib/site";
 import { getGalleryImages } from "@/lib/wordpress";
 
 export const dynamic = "force-dynamic";
@@ -36,12 +36,14 @@ export default async function RolunkPage() {
               {ABOUT_BODY.map((paragraph) => (
                 <p key={paragraph}>{paragraph}</p>
               ))}
-              <Link
-                href="/zene"
+              <a
+                href={BANDCAMP_MUSIC_URL}
+                target="_blank"
+                rel="noreferrer noopener"
                 className="mt-2 inline-block text-[11px] tracking-[0.28em] text-white/80 uppercase hover:text-white"
               >
                 Hallgasd a lemezeket
-              </Link>
+              </a>
             </div>
           </div>
           {side ? (

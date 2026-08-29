@@ -3,7 +3,7 @@
 
 "use client";
 
-import { useEffect, useRef, useState, type MouseEvent } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type MouseEvent } from "react";
 
 import { HeartMark } from "@/components/heart-mark";
 import { setCursorHeart } from "@/lib/cursor-glyph";
@@ -52,6 +52,7 @@ export function PostHearts({ postId }: PostHeartsProps) {
 
   const canAdd = remaining > 0;
   const open = hovered || placing;
+  const heartAccent = { "--heart-accent": color } as CSSProperties;
 
   useEffect(() => {
     if (!placing) {
@@ -156,7 +157,11 @@ export function PostHearts({ postId }: PostHeartsProps) {
   }
 
   return (
-    <div ref={stageRef} className="pointer-events-none absolute inset-0 z-[2]">
+    <div
+      ref={stageRef}
+      className="pointer-events-none absolute inset-0 z-[2]"
+      style={heartAccent}
+    >
       {hearts.map((heart) => (
         <span
           key={heart.id}

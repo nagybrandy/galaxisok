@@ -1,45 +1,31 @@
 // src/components/logo-cursor.tsx
-// Invert ring with footballers on a solid disc so the cursor stays visible on icons.
+// One inverted circle. The footballers sit inside and invert with the page.
 
 "use client";
 
-import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
 
 import { HeartMark } from "@/components/heart-mark";
 import { useCursorGlyph } from "@/lib/cursor-glyph";
-import { isIframePage } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 export function LogoCursor() {
-  const pathname = usePathname();
   const glyph = useCursorGlyph();
-  const native = isIframePage(pathname);
-  const lensRef = useRef<HTMLDivElement>(null);
-  const artRef = useRef<HTMLDivElement>(null);
+  const cursorRef = useRef<HTMLDivElement>(null);
   const hintRef = useRef<HTMLDivElement>(null);
   const frameRef = useRef(0);
   const posRef = useRef({ x: -80, y: -80 });
 
   useEffect(() => {
-    document.documentElement.classList.toggle("native-cursor", native);
-    return () => document.documentElement.classList.remove("native-cursor");
-  }, [native]);
-
-  useEffect(() => {
-    const lens = lensRef.current;
-    const art = artRef.current;
+    const cursor = cursorRef.current;
     const hint = hintRef.current;
-    if (!lens || !art || native) {
+    if (!cursor) {
       return;
     }
 
-    const nodes = [lens, art];
     const media = window.matchMedia("(hover: hover) and (pointer: fine)");
     const syncMedia = () => {
-      for (const node of nodes) {
-        node.classList.toggle("is-fine", media.matches);
-      }
+      cursor.classList.toggle("is-fine", media.matches);
       hint?.classList.toggle("is-fine", media.matches);
     };
     syncMedia();
@@ -48,11 +34,8 @@ export function LogoCursor() {
     const draw = () => {
       frameRef.current = 0;
       const { x, y } = posRef.current;
-      const transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%)`;
-      for (const node of nodes) {
-        node.style.transform = transform;
-        node.classList.add("is-on");
-      }
+      cursor.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%)`;
+      cursor.classList.add("is-on");
       if (hint) {
         hint.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, 26px)`;
         hint.classList.add("is-on");
@@ -69,38 +52,30 @@ export function LogoCursor() {
     };
 
     window.addEventListener("pointermove", onMove, { passive: true });
+    window.addEventListener("pointerdown", onMove, { passive: true });
 
     return () => {
       media.removeEventListener("change", syncMedia);
       window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerdown", onMove);
       window.cancelAnimationFrame(frameRef.current);
     };
-  }, [native]);
-
-  if (native) {
-    return null;
-  }
+  }, []);
 
   const isHeart = glyph?.kind === "heart";
 
   return (
     <>
       <div
-        ref={lensRef}
+        ref={cursorRef}
         aria-hidden
-        className={cn("logo-cursor logo-cursor-lens", isHeart && "is-heart")}
-      />
-      <div
-        ref={artRef}
-        aria-hidden
-        className={cn("logo-cursor logo-cursor-art", isHeart && "is-heart")}
+        className={cn("logo-cursor", isHeart && "is-heart")}
       >
-        <span className="logo-cursor-disc" />
         <img
           src="/cursor-players.png?v=3"
           alt=""
-          width={30}
-          height={30}
+          width={44}
+          height={44}
           draggable={false}
           className="logo-cursor-players"
         />
@@ -109,7 +84,6 @@ export function LogoCursor() {
             <HeartMark color={glyph.color} className="size-7" />
           ) : null}
         </span>
-        <span className="logo-cursor-dot" />
       </div>
       <div
         ref={hintRef}

@@ -1,13 +1,10 @@
 // src/app/zene/page.tsx
-// Bandcamp catalogue is mounted in the layout so cookie consent can persist.
+// Old in-site music URL. The menu opens Bandcamp in a new tab.
 
-import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 
-export const metadata: Metadata = {
-  title: "Zene",
-  description: "A Galaxisok lemezei Bandcampen.",
-};
+import { BANDCAMP_MUSIC_URL } from "@/lib/site";
 
 export default function ZenePage() {
-  return null;
+  redirect(BANDCAMP_MUSIC_URL);
 }

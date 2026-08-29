@@ -63,8 +63,7 @@ export function CookieConsent() {
         <div className="fixed inset-x-0 bottom-0 z-50 border-t border-white/15 bg-[#050b1c]/95 px-5 py-4 backdrop-blur-md sm:px-8">
           <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 md:flex-row md:items-center md:justify-between md:gap-8">
             <p className="min-w-0 text-sm leading-6 text-white/70 md:max-w-xl">
-              Sütiket használunk a belépéshez. A zene és a webshop Bandcamp
-              oldala a tartalom része; a hírlevél beágyazásához külön
+              Sütiket használunk a belépéshez. A hírlevél beágyazásához külön
               engedély kell.{" "}
               <a href="/adatkezeles" className="underline underline-offset-4">
                 Részletek
@@ -111,7 +110,7 @@ export function CookieConsent() {
               <li className="flex items-start justify-between gap-4">
                 <div>
                   <p className="text-white">Beágyazások</p>
-                  <p className="mt-1">Bandcamp lejátszó, merch és hírlevél iframe.</p>
+                  <p className="mt-1">Hírlevél iframe. A zene és a merch a Bandcamp saját oldalán nyílik.</p>
                 </div>
                 <input
                   type="checkbox"

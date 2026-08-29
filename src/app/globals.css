@@ -137,22 +137,6 @@
     summary {
       cursor: none;
     }
-
-    html.native-cursor,
-    html.native-cursor body,
-    html.native-cursor a,
-    html.native-cursor button,
-    html.native-cursor input,
-    html.native-cursor textarea,
-    html.native-cursor summary {
-      cursor: auto;
-    }
-
-    html.native-cursor a,
-    html.native-cursor button,
-    html.native-cursor summary {
-      cursor: pointer;
-    }
   }
 }
 
@@ -639,81 +623,35 @@ html.hero-from-home.hero-copy-in .rolunk-copy {
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 9999;
   display: none;
   width: 44px;
   height: 44px;
   overflow: hidden;
   pointer-events: none;
   border-radius: 50%;
+  background: #fff;
+  mix-blend-mode: difference;
   opacity: 0;
   will-change: transform;
   transform: translate3d(-80px, -80px, 0);
 }
 
-.logo-cursor-lens {
-  z-index: 9998;
-  background: #fff;
-  mix-blend-mode: difference;
-}
-
-.logo-cursor-art {
-  z-index: 9999;
-  overflow: visible;
-  isolation: isolate;
-  mix-blend-mode: normal;
-  background: transparent;
-}
-
-.logo-cursor-disc {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  z-index: 0;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: #fff;
-  box-shadow: 0 0 0 1px #050b1c;
-  transform: translate(-50%, -50%);
-}
-
 .logo-cursor-players {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  z-index: 1;
   display: block;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: #fff;
-  mix-blend-mode: normal;
-  transform: translate(-50%, -50%);
-  transition: opacity 160ms ease;
-}
-
-.logo-cursor-dot {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  z-index: 2;
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: #050b1c;
-  box-shadow: 0 0 0 1px #fff;
-  transform: translate(-50%, -50%);
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+  filter: invert(1);
   transition: opacity 160ms ease;
 }
 
 .logo-cursor-glyph {
   position: absolute;
   inset: 0;
-  z-index: 3;
   display: flex;
   align-items: center;
   justify-content: center;
-  mix-blend-mode: normal;
   opacity: 0;
   transform: scale(0.4) rotate(-14deg);
   transition:
@@ -726,21 +664,8 @@ html.hero-from-home.hero-copy-in .rolunk-copy {
   transform: scale(1) rotate(0deg);
 }
 
-.logo-cursor.is-heart .logo-cursor-players,
-.logo-cursor.is-heart .logo-cursor-dot,
-.logo-cursor.is-heart .logo-cursor-disc {
+.logo-cursor.is-heart .logo-cursor-players {
   opacity: 0;
-}
-
-.logo-cursor.is-heart {
-  border-radius: 0;
-  overflow: visible;
-  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='white' d='M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z'/%3E%3C/svg%3E");
-  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='white' d='M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z'/%3E%3C/svg%3E");
-  -webkit-mask-size: 100% 100%;
-  mask-size: 100% 100%;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
 }
 
 .logo-cursor.is-fine {
@@ -776,113 +701,6 @@ html.hero-from-home.hero-copy-in .rolunk-copy {
   opacity: 1;
 }
 
-.persistent-bandcamp {
-  position: fixed;
-  inset: 0;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  padding-top: max(5rem, calc(env(safe-area-inset-top) + 3.75rem));
-  pointer-events: none;
-  visibility: hidden;
-}
-
-@media (min-width: 640px) {
-  .persistent-bandcamp {
-    padding-top: max(6rem, calc(env(safe-area-inset-top) + 4.5rem));
-  }
-}
-
-.persistent-bandcamp.is-on {
-  pointer-events: auto;
-  visibility: visible;
-}
-
-.persistent-bandcamp-frame {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  border: 0;
-  background: #111;
-  pointer-events: none;
-  visibility: hidden;
-  opacity: 0;
-}
-
-.persistent-bandcamp-frame.is-active {
-  pointer-events: auto;
-  visibility: visible;
-  opacity: 1;
-}
-
-.bandcamp-exit {
-  position: absolute;
-  right: 0.85rem;
-  bottom: max(0.85rem, env(safe-area-inset-bottom));
-  z-index: 40;
-  display: inline-flex;
-  flex-direction: row-reverse;
-  align-items: center;
-  gap: 0;
-  height: 2.75rem;
-  padding: 0 0.85rem;
-  overflow: hidden;
-  color: #fff;
-  background: #050b1c;
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  transition:
-    height 200ms ease,
-    padding 200ms ease,
-    gap 200ms ease,
-    border-color 200ms ease,
-    background-color 200ms ease;
-}
-
-.bandcamp-exit-icon {
-  width: 15px;
-  height: 15px;
-  flex-shrink: 0;
-  transition:
-    width 200ms ease,
-    height 200ms ease;
-}
-
-.bandcamp-exit-label {
-  max-width: 0;
-  overflow: hidden;
-  font-size: 11px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  opacity: 0;
-  transition:
-    max-width 220ms ease,
-    opacity 180ms ease,
-    margin 220ms ease;
-}
-
-.bandcamp-exit:hover,
-.bandcamp-exit:focus-visible {
-  height: 3.25rem;
-  padding: 0 1rem 0 1.1rem;
-  gap: 0.75rem;
-  background: #0a1228;
-  border-color: rgba(255, 255, 255, 0.55);
-}
-
-.bandcamp-exit:hover .bandcamp-exit-icon,
-.bandcamp-exit:focus-visible .bandcamp-exit-icon {
-  width: 20px;
-  height: 20px;
-}
-
-.bandcamp-exit:hover .bandcamp-exit-label,
-.bandcamp-exit:focus-visible .bandcamp-exit-label {
-  max-width: 18rem;
-  opacity: 1;
-}
-
 @media (prefers-reduced-motion: reduce) {
   .page-fade,
   .blog-list-fade,
@@ -899,10 +717,7 @@ html.hero-from-home.hero-copy-in .rolunk-copy {
   .menu-mark span,
   .persistent-hero,
   .rolunk-copy,
-  html.hero-from-home.hero-copy-in .rolunk-copy,
-  .bandcamp-exit,
-  .bandcamp-exit-icon,
-  .bandcamp-exit-label {
+  html.hero-from-home.hero-copy-in .rolunk-copy {
     transition: none;
   }
 }
@@ -1043,7 +858,7 @@ html.hero-from-home.hero-copy-in .rolunk-copy {
   align-items: center;
   gap: 0.05rem;
   padding: 0.2rem 0.3rem;
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  border: 1px solid var(--heart-accent, rgba(255, 255, 255, 0.28));
   background: rgba(5, 11, 28, 0.72);
   backdrop-filter: blur(10px);
 }
@@ -1065,6 +880,10 @@ html.hero-from-home.hero-copy-in .rolunk-copy {
 .heart-swatch.is-active {
   opacity: 1;
   transform: scale(1.08);
+}
+
+.heart-swatch.is-active {
+  box-shadow: 0 0 0 1px var(--heart-accent, #fff);
 }
 
 .heart-fab {
@@ -1089,10 +908,10 @@ html.hero-from-home.hero-copy-in .rolunk-copy {
 .heart-fab:focus-visible,
 .heart-fab.is-placing {
   transform: scale(1.06);
-  border-color: rgba(255, 255, 255, 0.55);
+  border-color: var(--heart-accent, rgba(255, 255, 255, 0.55));
   box-shadow:
     0 6px 18px rgba(0, 0, 0, 0.35),
-    0 0 16px rgba(255, 255, 255, 0.18);
+    0 0 16px color-mix(in srgb, var(--heart-accent, #fff) 45%, transparent);
 }
 
 .heart-fab:active {
@@ -1135,7 +954,8 @@ html.hero-from-home.hero-copy-in .rolunk-copy {
   content: "";
   position: absolute;
   inset: 0.65rem;
-  border: 1px dashed rgba(255, 255, 255, 0.32);
+  border: 1px dashed var(--heart-accent, #fff);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--heart-accent, #fff) 22%, transparent);
   pointer-events: none;
   animation: heart-place-pulse 1.8s ease-in-out infinite;
 }

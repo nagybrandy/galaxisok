@@ -20,16 +20,12 @@ export type NavLink = {
 export const NAV_LINKS: NavLink[] = [
   { href: "/rolunk", label: "Rólunk" },
   { href: "/blog", label: "Blog" },
-  { href: "/zene", label: "Zene" },
+  { href: BANDCAMP_MUSIC_URL, label: "Zene", external: true },
   { href: "/koncertek", label: "Koncertek" },
-  { href: "/webshop", label: "Merch" },
+  { href: BANDCAMP_MERCH_URL, label: "Merch", external: true },
   { href: "/hirlevel", label: "Hírlevél" },
 ];
 
 export function siteUrl(): string {
   return process.env.NEXT_PUBLIC_SITE_URL ?? DEV_SITE_URL;
-}
-
-export function isIframePage(pathname: string): boolean {
-  return pathname === "/zene" || pathname === "/webshop";
 }

@@ -13,7 +13,7 @@ import {
   readHeroPath,
   writeHeroPath,
 } from "@/lib/hero-nav";
-import { HERO_IMAGE, isIframePage } from "@/lib/site";
+import { HERO_IMAGE } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 type HeroPhase = "home" | "about" | "hidden";
@@ -50,7 +50,7 @@ export function PersistentHero() {
     const next = phaseFor(pathname);
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    if (pathname === "/kapu" || isIframePage(pathname)) {
+    if (pathname === "/kapu") {
       setAnimated(false);
       setPhase("hidden");
       clearHeroNavClasses();
@@ -85,7 +85,7 @@ export function PersistentHero() {
     setPhase(next);
   }, [pathname]);
 
-  if (pathname === "/kapu" || isIframePage(pathname)) {
+  if (pathname === "/kapu") {
     return null;
   }
 

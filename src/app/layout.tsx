@@ -8,7 +8,6 @@ import { CookieConsent } from "@/components/cookie-consent";
 import { LogoCursor } from "@/components/logo-cursor";
 import { NightAtmosphere } from "@/components/night-atmosphere";
 import { PageFade } from "@/components/page-fade";
-import { PersistentBandcamp } from "@/components/persistent-bandcamp";
 import { PersistentFooter, PersistentHeader } from "@/components/persistent-chrome";
 import { PersistentHero } from "@/components/persistent-hero";
 import { HERO_IMAGE, SITE_DESCRIPTION, SITE_NAME, siteUrl } from "@/lib/site";
@@ -77,7 +76,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <LogoCursor />
         <PersistentHeader />
         <PersistentHero />
-        <PersistentBandcamp />
         <PageFade>{children}</PageFade>
         <PersistentFooter />
         <CookieConsent />
