@@ -43,7 +43,10 @@ export function proxy(request: NextRequest) {
   const kapu = request.nextUrl.clone();
   kapu.pathname = "/kapu";
   kapu.search = "";
-  return NextResponse.redirect(kapu);
+  const redirect = NextResponse.redirect(kapu);
+  redirect.headers.set("Cache-Control", "no-store, no-cache, must-revalidate");
+  redirect.headers.set("x-middleware-cache", "no-cache");
+  return redirect;
 }
 
 export const proxyConfig = {

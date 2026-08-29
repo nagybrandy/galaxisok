@@ -13,6 +13,8 @@ import { PostCover } from "@/components/post-cover";
 import { parseBlogPage } from "@/lib/blog";
 import { formatHuDate, getCategories, getPostsPage } from "@/lib/wordpress";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Blog",
   description: "Hírek és bejegyzések a Galaxisoktól.",
@@ -47,7 +49,11 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                   <ul className="flex flex-col gap-8 sm:gap-10">
                     {posts.map((post) => (
                       <li key={post.id}>
-                        <Link href={`/blog/${post.slug}`} className="blog-post-teaser block">
+                        <Link
+                          href={`/blog/${post.slug}`}
+                          prefetch={false}
+                          className="blog-post-teaser block"
+                        >
                           <div className="flex h-[11.5rem] flex-row items-stretch gap-3 overflow-hidden sm:h-[13rem] sm:gap-5">
                             {post.image ? (
                               <PostCover

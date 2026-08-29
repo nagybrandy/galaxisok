@@ -121,9 +121,17 @@ export type GalleryImage = {
   height: number;
 };
 
+const WP_FETCH_ATTEMPTS = 3;
+
 function wordpressUrl(): string {
   const raw = process.env.WORDPRESS_URL ?? DEFAULT_WORDPRESS_URL;
   return raw.replace(/\/$/, "");
+}
+
+function sleep(ms: number) {
+  return new Promise<void>((resolve) => {
+    setTimeout(resolve, ms);
+  });
 }
 
 function decodeEntities(value: string): string {
@@ -231,29 +239,41 @@ function mapPost(post: WpPost): BlogPost {
   };
 }
 
-async function wpFetch<T>(path: string): Promise<T | null> {
+async function wpRequest(path: string): Promise<Response | null> {
   const url = `${wordpressUrl()}${path}`;
 
-  try {
-    const response = await fetch(url, {
-      next: {
-        revalidate: 60,
-        tags: [WORDPRESS_CACHE_TAG],
-      },
-      headers: {
-        Accept: "application/json",
-        "User-Agent": "Galaxisok/1.0",
-      },
-    });
+  for (let attempt = 0; attempt < WP_FETCH_ATTEMPTS; attempt += 1) {
+    try {
+      const response = await fetch(url, {
+        cache: "no-store",
+        headers: {
+          Accept: "application/json",
+          "User-Agent": "Galaxisok/1.0",
+        },
+      });
 
-    if (!response.ok) {
-      return null;
+      if (response.ok) {
+        return response;
+      }
+    } catch {
+      // The first WordPress hit is often cold; retry instead of caching empty.
     }
 
-    return (await response.json()) as T;
-  } catch {
+    if (attempt < WP_FETCH_ATTEMPTS - 1) {
+      await sleep(300 * (attempt + 1));
+    }
+  }
+
+  return null;
+}
+
+async function wpFetch<T>(path: string): Promise<T | null> {
+  const response = await wpRequest(path);
+  if (!response) {
     return null;
   }
+
+  return (await response.json()) as T;
 }
 
 export async function getCategories(): Promise<BlogCategory[]> {
@@ -326,40 +346,27 @@ export async function getPostsPage(
     return { posts: [], page: 1, total: 0, totalPages: 0 };
   }
 
-  const url = `${wordpressUrl()}/wp-json/wp/v2/posts?_embed=1&per_page=${BLOG_PAGE_SIZE}&page=${safePage}&status=publish${extra}`;
+  const response = await wpRequest(
+    `/wp-json/wp/v2/posts?_embed=1&per_page=${BLOG_PAGE_SIZE}&page=${safePage}&status=publish${extra}`,
+  );
 
-  try {
-    const response = await fetch(url, {
-      next: {
-        revalidate: 60,
-        tags: [WORDPRESS_CACHE_TAG],
-      },
-      headers: {
-        Accept: "application/json",
-        "User-Agent": "Galaxisok/1.0",
-      },
-    });
-
-    if (!response.ok) {
-      return { posts: [], page: safePage, total: 0, totalPages: 0 };
-    }
-
-    const rows = (await response.json()) as WpPost[];
-    const total = Number(response.headers.get("X-WP-Total") ?? rows.length);
-    const totalPages = Number(
-      response.headers.get("X-WP-TotalPages") ??
-        Math.max(1, Math.ceil(total / BLOG_PAGE_SIZE)),
-    );
-
-    return {
-      posts: rows.map(mapPost),
-      page: safePage,
-      total,
-      totalPages,
-    };
-  } catch {
+  if (!response) {
     return { posts: [], page: safePage, total: 0, totalPages: 0 };
   }
+
+  const rows = (await response.json()) as WpPost[];
+  const total = Number(response.headers.get("X-WP-Total") ?? rows.length);
+  const totalPages = Number(
+    response.headers.get("X-WP-TotalPages") ??
+      Math.max(1, Math.ceil(total / BLOG_PAGE_SIZE)),
+  );
+
+  return {
+    posts: rows.map(mapPost),
+    page: safePage,
+    total,
+    totalPages,
+  };
 }
 
 export async function getPostBySlug(slug: string): Promise<BlogPost | null> {

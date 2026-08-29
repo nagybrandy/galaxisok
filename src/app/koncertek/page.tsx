@@ -11,6 +11,8 @@ import {
 import { PageShell } from "@/components/page-shell";
 import { formatHuDateTimeParts, getConcerts } from "@/lib/wordpress";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Koncertek",
   description: "A Galaxisok közelgő koncertjei.",

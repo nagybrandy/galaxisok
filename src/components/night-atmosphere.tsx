@@ -15,6 +15,8 @@ export function NightAtmosphere() {
           src="/atmosphere-lights.jpg"
           alt=""
           fill
+          priority
+          unoptimized
           sizes="(max-width: 52rem) 78vw, 52rem"
           className="object-cover object-left-bottom"
         />

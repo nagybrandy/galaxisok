@@ -575,6 +575,7 @@ html.hero-from-home.hero-copy-in .rolunk-copy {
 .image-skeleton {
   position: absolute;
   inset: 0;
+  z-index: 1;
   overflow: hidden;
   pointer-events: none;
   background: rgba(255, 255, 255, 0.045);
@@ -601,11 +602,6 @@ html.hero-from-home.hero-copy-in .rolunk-copy {
 }
 
 .image-skeleton-photo {
-  opacity: 0;
-  transition: opacity 640ms ease;
-}
-
-.image-skeleton-photo.is-ready {
   opacity: 1;
 }
 

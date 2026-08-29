@@ -53,7 +53,7 @@ export function SiteNav({ links = NAV_LINKS, className }: SiteNavProps) {
         }
 
         return (
-          <Link key={link.href} href={link.href} className={itemClass}>
+          <Link key={link.href} href={link.href} prefetch={false} className={itemClass}>
             {label}
           </Link>
         );

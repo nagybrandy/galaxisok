@@ -1,10 +1,10 @@
 // src/components/skeleton-image.tsx
-// Transparent shimmer while a photo arrives, then the image fades in.
+// Shimmer overlay while a photo arrives. The img stays visible so the browser loads it.
 
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState, type MouseEventHandler, type SyntheticEvent } from "react";
+import { useLayoutEffect, useRef, useState, type MouseEventHandler, type SyntheticEvent } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -33,19 +33,18 @@ export function SkeletonImage({
   unoptimized = false,
   onClick,
 }: SkeletonImageProps) {
-  const [ready, setReady] = useState(priority);
+  const [ready, setReady] = useState(false);
   const imageRef = useRef<HTMLImageElement>(null);
+  const skipOptimize = unoptimized || /^https?:\/\//.test(src);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const image = imageRef.current;
     if (image?.complete && image.naturalWidth > 0) {
       setReady(true);
       return;
     }
-    if (!priority) {
-      setReady(false);
-    }
-  }, [src, priority]);
+    setReady(false);
+  }, [src]);
 
   const markReady = (event: SyntheticEvent<HTMLImageElement>) => {
     if (event.currentTarget.naturalWidth > 0) {
@@ -67,9 +66,11 @@ export function SkeletonImage({
         height={fill ? undefined : height}
         sizes={sizes}
         priority={priority}
-        unoptimized={unoptimized}
+        loading="eager"
+        unoptimized={skipOptimize}
         ref={imageRef}
         onLoad={markReady}
+        onError={() => setReady(true)}
         onClick={onClick}
         className={cn("image-skeleton-photo", ready && "is-ready", className)}
       />

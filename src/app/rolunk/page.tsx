@@ -10,7 +10,7 @@ import { SkeletonImage } from "@/components/skeleton-image";
 import { ABOUT_BODY, ABOUT_LEAD } from "@/lib/about";
 import { getGalleryImages } from "@/lib/wordpress";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Rólunk",
