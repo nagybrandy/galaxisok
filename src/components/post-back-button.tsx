@@ -34,9 +34,9 @@ export function PostBackButton({ href }: PostBackButtonProps) {
     <button
       type="button"
       onClick={goBack}
-      className="crumb-link inline-flex items-center gap-2 text-[11px] tracking-[0.24em] text-white/55 uppercase"
+      className="post-back inline-flex h-8 shrink-0 items-center gap-2 border border-white/25 px-3 font-[family-name:var(--font-display)] text-[11px] tracking-[0.2em] text-white/80 uppercase"
     >
-      <ArrowLeft className="size-3.5" strokeWidth={1.6} aria-hidden />
+      <ArrowLeft className="size-3.5" strokeWidth={1.75} aria-hidden />
       Vissza
     </button>
   );

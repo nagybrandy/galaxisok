@@ -48,7 +48,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                     {posts.map((post) => (
                       <li key={post.id}>
                         <Link href={`/blog/${post.slug}`} className="blog-post-teaser block">
-                          <div className="flex flex-row items-stretch gap-3 sm:gap-5">
+                          <div className="flex h-[11.5rem] flex-row items-stretch gap-3 overflow-hidden sm:h-[13rem] sm:gap-5">
                             {post.image ? (
                               <PostCover
                                 src={post.image.src}
@@ -56,8 +56,13 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                                 width={post.image.width}
                                 height={post.image.height}
                               />
-                            ) : null}
-                            <div className="flex min-w-0 flex-1 flex-col">
+                            ) : (
+                              <div
+                                className="h-full w-28 shrink-0 rounded-xl bg-white/5 sm:w-44 lg:w-52"
+                                aria-hidden
+                              />
+                            )}
+                            <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
                               <div className="flex items-center gap-3">
                                 {post.author?.avatar ? (
                                   <Image
@@ -84,14 +89,12 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                                   </time>
                                 </div>
                               </div>
-                              <h2 className="blog-post-title mt-2 text-lg font-medium tracking-tight sm:mt-4 sm:text-2xl">
+                              <h2 className="blog-post-title mt-2 line-clamp-2 text-lg font-medium tracking-tight sm:mt-3 sm:text-2xl">
                                 {post.title}
                               </h2>
-                              {post.excerpt ? (
-                                <p className="mt-auto pt-2 line-clamp-5 max-w-2xl text-sm leading-6 text-white/60 sm:pt-3 sm:line-clamp-6 sm:text-base">
-                                  {post.excerpt}
-                                </p>
-                              ) : null}
+                              <p className="mt-auto pt-2 line-clamp-3 text-sm leading-6 text-white/60 sm:text-base">
+                                {post.excerpt || "\u00a0"}
+                              </p>
                             </div>
                           </div>
                         </Link>

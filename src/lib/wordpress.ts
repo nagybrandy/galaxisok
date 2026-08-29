@@ -1,11 +1,7 @@
 // src/lib/wordpress.ts
 // Headless WordPress REST client: posts, authors, categories, concerts, gallery.
 
-import {
-  HEARTS_PER_VISITOR,
-  type HeartsPayload,
-  type PlacedHeart,
-} from "@/lib/hearts";
+import { parseHeartsPayload, type HeartsPayload } from "@/lib/hearts";
 
 const DEFAULT_WORDPRESS_URL = "https://admin.galaxisok.hu";
 
@@ -165,8 +161,8 @@ function mapImage(media: WpMedia | undefined, fallbackAlt: string) {
   return {
     src: media.source_url,
     alt: media.alt_text || fallbackAlt,
-    width: media.media_details?.width ?? 1600,
-    height: media.media_details?.height ?? 900,
+    width: media.media_details?.width || 1600,
+    height: media.media_details?.height || 900,
   };
 }
 
@@ -497,7 +493,7 @@ export function formatHuDateTimeParts(value: string): HuDateTimeParts | null {
       return null;
     }
     return {
-      year,
+      year: `${year}.`,
       day: `${monthName} ${Number(day)}.`,
       time: `${hour}:${minute}`,
     };
@@ -531,10 +527,10 @@ export function formatHuDateTimeParts(value: string): HuDateTimeParts | null {
   }).format(date);
 
   return {
-    year: new Intl.DateTimeFormat("en-US", {
+    year: `${new Intl.DateTimeFormat("en-US", {
       year: "numeric",
       timeZone: "Europe/Budapest",
-    }).format(date),
+    }).format(date)}.`,
     day: `${monthName} ${day}.`,
     time,
   };
@@ -549,31 +545,7 @@ export function formatHuDateTime(value: string): string {
 }
 
 function emptyHearts(): HeartsPayload {
-  return {
-    hearts: [],
-    canAdd: true,
-    remaining: HEARTS_PER_VISITOR,
-  };
-}
-
-function mapHeartsPayload(data: {
-  hearts?: PlacedHeart[];
-  canAdd?: boolean;
-  remaining?: number;
-}): HeartsPayload {
-  const hearts = Array.isArray(data.hearts) ? data.hearts : [];
-  const remaining =
-    typeof data.remaining === "number"
-      ? data.remaining
-      : data.canAdd
-        ? HEARTS_PER_VISITOR
-        : 0;
-
-  return {
-    hearts,
-    canAdd: remaining > 0,
-    remaining,
-  };
+  return parseHeartsPayload(null);
 }
 
 export async function getPostHearts(
@@ -597,7 +569,7 @@ export async function getPostHearts(
       return emptyHearts();
     }
 
-    return mapHeartsPayload((await response.json()) as HeartsPayload);
+    return parseHeartsPayload(await response.json());
   } catch {
     return emptyHearts();
   }

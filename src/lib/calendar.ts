@@ -107,13 +107,24 @@ export function concertWindow(startsAt: string | null): {
   return { start, end: new Date(start.getTime() + DEFAULT_DURATION_MS) };
 }
 
+export const CALENDAR_EVENT_TITLE = "Galaxisok Koncert";
+
+export function eventTitle(): string {
+  return CALENDAR_EVENT_TITLE;
+}
+
+export function eventLocation(concert: CalendarConcert): string {
+  return concert.venue.trim() || concert.title.trim();
+}
+
 export function eventDetails(concert: CalendarConcert): string {
   const parts: string[] = [];
+  const clubName = concert.title.trim();
+  if (clubName) {
+    parts.push(clubName);
+  }
   if (concert.description.trim()) {
     parts.push(concert.description.trim());
-  }
-  if (concert.venue.trim()) {
-    parts.push(concert.venue.trim());
   }
   if (concert.ticketUrl) {
     parts.push(concert.ticketUrl);
@@ -133,10 +144,10 @@ export function googleCalendarUrl(concert: CalendarConcert): string | null {
 
   const params = new URLSearchParams({
     action: "TEMPLATE",
-    text: concert.title,
+    text: eventTitle(),
     dates: `${toUtcStamp(window.start)}/${toUtcStamp(window.end)}`,
     details: eventDetails(concert),
-    location: concert.venue,
+    location: eventLocation(concert),
   });
 
   return `https://calendar.google.com/calendar/render?${params.toString()}`;
@@ -201,12 +212,13 @@ export function concertsToIcs(concerts: CalendarConcert[]): string {
       `DTSTAMP:${now}`,
       `DTSTART:${toUtcStamp(window.start)}`,
       `DTEND:${toUtcStamp(window.end)}`,
-      icsLine("SUMMARY", concert.title),
+      icsLine("SUMMARY", eventTitle()),
       icsLine("DESCRIPTION", eventDetails(concert)),
     ];
 
-    if (concert.venue.trim()) {
-      lines.push(icsLine("LOCATION", concert.venue.trim()));
+    const location = eventLocation(concert);
+    if (location) {
+      lines.push(icsLine("LOCATION", location));
     }
 
     if (concert.ticketUrl) {

@@ -1,5 +1,5 @@
 // src/components/post-hearts.tsx
-// Pick a heart, then click anywhere on the page to drop it. Save is background.
+// Collapsed heart chip. Hover opens colors; click places on the article.
 
 "use client";
 
@@ -11,24 +11,47 @@ import {
   HEART_PRESETS,
   HEARTS_PER_VISITOR,
   clampPercent,
-  type HeartsPayload,
+  parseHeartsPayload,
   type PlacedHeart,
 } from "@/lib/hearts";
 import { cn } from "@/lib/utils";
 
 type PostHeartsProps = {
   postId: number;
-  initial: HeartsPayload;
 };
 
-export function PostHearts({ postId, initial }: PostHeartsProps) {
+export function PostHearts({ postId }: PostHeartsProps) {
   const stageRef = useRef<HTMLDivElement>(null);
-  const [hearts, setHearts] = useState<PlacedHeart[]>(initial.hearts);
-  const [remaining, setRemaining] = useState(initial.remaining);
+  const [hearts, setHearts] = useState<PlacedHeart[]>([]);
+  const [remaining, setRemaining] = useState(HEARTS_PER_VISITOR);
   const [color, setColor] = useState<string>(HEART_PRESETS[1]);
   const [placing, setPlacing] = useState(false);
+  const [hovered, setHovered] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    fetch(`/api/hearts?postId=${postId}`)
+      .then((response) => response.json())
+      .then((data) => {
+        if (cancelled) {
+          return;
+        }
+        const payload = parseHeartsPayload(data);
+        setHearts(payload.hearts);
+        setRemaining(payload.remaining);
+      })
+      .catch(() => {
+        /* keep the empty local state */
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [postId]);
 
   const canAdd = remaining > 0;
+  const open = hovered || placing;
 
   useEffect(() => {
     if (!placing) {
@@ -87,9 +110,9 @@ export function PostHearts({ postId, initial }: PostHeartsProps) {
           color,
         }),
       });
-      const payload = (await response.json()) as HeartsPayload & { ok?: boolean };
+      const payload = parseHeartsPayload(await response.json());
 
-      if (!response.ok || !payload.ok) {
+      if (!response.ok) {
         setHearts((current) => current.filter((heart) => heart.id !== localId));
         setRemaining((value) => Math.min(HEARTS_PER_VISITOR, value + 1));
         return;
@@ -122,6 +145,16 @@ export function PostHearts({ postId, initial }: PostHeartsProps) {
     void dropHeartAt(x, y);
   }
 
+  function hintText(): string {
+    if (!canAdd) {
+      return "Már kitetted a két szíved";
+    }
+    if (placing) {
+      return "Kattints a cikk köré · Esc: mégsem";
+    }
+    return "Válassz színt, majd tedd a cikk köré";
+  }
+
   return (
     <div ref={stageRef} className="pointer-events-none absolute inset-0 z-[2]">
       {hearts.map((heart) => (
@@ -145,39 +178,22 @@ export function PostHearts({ postId, initial }: PostHeartsProps) {
         <button
           type="button"
           className="heart-place-layer pointer-events-auto"
-          aria-label="Tedd le valahova"
+          aria-label="Tedd le a szívet a cikk köré"
           onClick={onPlace}
         />
       ) : null}
 
-      <div className="pointer-events-auto fixed right-3 bottom-3 z-[4] sm:right-5 sm:bottom-5">
-        <div className="heart-composer">
-          <div className="heart-composer-tray" role="group" aria-label="Szív színe">
-            {HEART_PRESETS.map((preset) => (
-              <button
-                key={preset}
-                type="button"
-                aria-label="Szín"
-                aria-pressed={color === preset}
-                className={cn(
-                  "heart-swatch",
-                  color === preset && "is-active",
-                )}
-                onClick={() => {
-                  setColor(preset);
-                  if (canAdd) {
-                    setPlacing(true);
-                  }
-                }}
-              >
-                <HeartMark color={preset} className="size-5" />
-              </button>
-            ))}
-          </div>
+      <div
+        className="pointer-events-auto fixed right-3 bottom-3 z-[4] sm:right-5 sm:bottom-5"
+        onPointerEnter={() => setHovered(true)}
+        onPointerLeave={() => setHovered(false)}
+      >
+        <div className={cn("heart-composer", open && "is-open", placing && "is-placing")}>
           <button
             type="button"
             disabled={!canAdd}
             aria-pressed={placing}
+            aria-expanded={open}
             aria-label={
               !canAdd
                 ? "Már raktál szívet"
@@ -193,8 +209,33 @@ export function PostHearts({ postId, initial }: PostHeartsProps) {
               setPlacing((value) => !value);
             }}
           >
-            <HeartMark color={canAdd ? color : "rgba(255,255,255,0.35)"} className="size-6" />
+            <HeartMark color={canAdd ? color : "rgba(255,255,255,0.35)"} className="size-5" />
+            {canAdd ? (
+              <span className="heart-fab-count">{remaining}</span>
+            ) : null}
           </button>
+          <div className="heart-composer-panel">
+            <p className="heart-composer-hint">{hintText()}</p>
+            {canAdd ? (
+              <div className="heart-composer-tray" role="group" aria-label="Szív színe">
+                {HEART_PRESETS.map((preset) => (
+                  <button
+                    key={preset}
+                    type="button"
+                    aria-label="Szín"
+                    aria-pressed={color === preset}
+                    className={cn("heart-swatch", color === preset && "is-active")}
+                    onClick={() => {
+                      setColor(preset);
+                      setPlacing(true);
+                    }}
+                  >
+                    <HeartMark color={preset} className="size-5" />
+                  </button>
+                ))}
+              </div>
+            ) : null}
+          </div>
         </div>
       </div>
     </div>

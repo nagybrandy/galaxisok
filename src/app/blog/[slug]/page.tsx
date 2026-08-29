@@ -2,7 +2,6 @@
 // Single WordPress post with cover image and padding-placed hearts.
 
 import type { Metadata } from "next";
-import { headers } from "next/headers";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
@@ -13,11 +12,13 @@ import { PostBreadcrumb } from "@/components/post-breadcrumb";
 import { PostCover } from "@/components/post-cover";
 import { PostHearts } from "@/components/post-hearts";
 import { blogListHref } from "@/lib/blog";
-import { formatHuDate, getPostBySlug, getPostHearts, getPosts } from "@/lib/wordpress";
+import { formatHuDate, getPostBySlug, getPosts } from "@/lib/wordpress";
 
 type BlogPostPageProps = {
   params: Promise<{ slug: string }>;
 };
+
+export const dynamic = "force-static";
 
 export async function generateStaticParams() {
   const posts = await getPosts();
@@ -54,12 +55,6 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   }
 
   const category = post.categories[0];
-  const headerList = await headers();
-  const visitorIp =
-    headerList.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-    headerList.get("x-real-ip") ||
-    "";
-  const initialHearts = await getPostHearts(post.id, visitorIp);
 
   return (
     <PageShell>
@@ -68,9 +63,11 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           data-post-article
           className="relative z-[1] mx-auto w-full max-w-3xl py-12"
         >
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+          <div className="flex items-start justify-between gap-4">
+            <div className="min-w-0 flex-1">
+              <PostBreadcrumb title={post.title} category={category} />
+            </div>
             <PostBackButton href={blogListHref(category?.slug)} />
-            <PostBreadcrumb title={post.title} category={category} />
           </div>
           <h1 className="mt-6 font-[family-name:var(--font-display)] text-4xl tracking-[0.12em] text-glow uppercase sm:text-5xl">
             {post.title}
@@ -112,7 +109,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           </div>
         </article>
         <div className="heart-shelf mx-auto mb-10 h-24 max-w-3xl sm:h-12" aria-hidden />
-        <PostHearts postId={post.id} initial={initialHearts} />
+        <PostHearts postId={post.id} />
       </div>
     </PageShell>
   );

@@ -119,8 +119,8 @@ export function MobileMenu({ links = NAV_LINKS }: MobileMenuProps) {
             })}
           </nav>
 
-          <div className="relative z-[1] px-3 pb-8">
-            <SocialLinks />
+          <div className="relative z-[1] px-5 pb-[max(2rem,env(safe-area-inset-bottom))] pt-2">
+            <SocialLinks layout="menu" />
           </div>
         </div>
       ) : null}

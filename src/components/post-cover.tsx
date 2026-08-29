@@ -16,22 +16,19 @@ type PostCoverProps = {
 export function PostCover({
   src,
   alt,
-  width,
-  height,
   priority = false,
   variant = "list",
 }: PostCoverProps) {
   if (variant === "hero") {
     return (
-      <div className="relative mt-8 overflow-hidden rounded-xl bg-black/40">
+      <div className="relative mt-8 aspect-[16/10] max-h-[46dvh] overflow-hidden rounded-xl bg-black/40 sm:max-h-[58dvh]">
         <SkeletonImage
           src={src}
           alt={alt}
-          width={width}
-          height={height}
+          fill
           priority={priority}
           sizes="(min-width: 768px) 48rem, 100vw"
-          className="max-h-[46dvh] w-full object-cover object-[center_28%] sm:max-h-[58dvh]"
+          className="object-cover object-[center_28%]"
         />
       </div>
     );
@@ -40,8 +37,8 @@ export function PostCover({
   return (
     <div
       className={cn(
-        "relative min-h-[6.5rem] w-28 shrink-0 self-stretch overflow-hidden rounded-xl bg-black/40",
-        "sm:min-h-[8rem] sm:w-44 lg:w-52",
+        "relative h-full w-28 shrink-0 self-stretch overflow-hidden rounded-xl bg-black/40",
+        "sm:w-44 lg:w-52",
       )}
     >
       <SkeletonImage

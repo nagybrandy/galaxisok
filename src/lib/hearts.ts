@@ -37,3 +37,28 @@ export function clampPercent(value: number): number {
   }
   return Math.min(98, Math.max(2, value));
 }
+
+export function parseHeartsPayload(data: unknown): HeartsPayload {
+  if (!data || typeof data !== "object") {
+    return { hearts: [], canAdd: true, remaining: HEARTS_PER_VISITOR };
+  }
+
+  const row = data as {
+    hearts?: PlacedHeart[];
+    canAdd?: boolean;
+    remaining?: number;
+  };
+  const hearts = Array.isArray(row.hearts) ? row.hearts : [];
+  const remaining =
+    typeof row.remaining === "number"
+      ? row.remaining
+      : row.canAdd
+        ? HEARTS_PER_VISITOR
+        : 0;
+
+  return {
+    hearts,
+    canAdd: remaining > 0,
+    remaining,
+  };
+}

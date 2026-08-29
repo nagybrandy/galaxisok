@@ -1,10 +1,7 @@
 // src/app/zene/page.tsx
-// Bandcamp catalogue stays on this site inside an iframe.
+// Bandcamp catalogue is mounted in the layout so cookie consent can persist.
 
 import type { Metadata } from "next";
-
-import { BandcampFrame } from "@/components/bandcamp-frame";
-import { BANDCAMP_MUSIC_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Zene",
@@ -12,5 +9,5 @@ export const metadata: Metadata = {
 };
 
 export default function ZenePage() {
-  return <BandcampFrame src={BANDCAMP_MUSIC_URL} title="Galaxisok — Zene" />;
+  return null;
 }

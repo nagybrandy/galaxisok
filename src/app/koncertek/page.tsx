@@ -24,8 +24,10 @@ function ConcertWhen({ value }: { value: string }) {
 
   return (
     <span className="flex flex-col">
-      <span>{parts.year}</span>
-      <span>{parts.day}</span>
+      <span className="flex flex-row flex-wrap items-baseline gap-x-1.5 sm:flex-col sm:items-start sm:gap-x-0">
+        <span>{parts.year}</span>
+        <span>{parts.day}</span>
+      </span>
       <span>{parts.time}</span>
     </span>
   );
@@ -89,9 +91,9 @@ export default async function KoncertekPage() {
                         href={concert.ticketUrl}
                         target="_blank"
                         rel="noreferrer noopener"
-                        className="inline-flex h-9 items-center justify-center bg-white px-5 text-[11px] tracking-[0.22em] text-[#050b1c] uppercase hover:bg-white/90"
+                        className="concert-ticket"
                       >
-                        Jegy
+                        <span>Jegy</span>
                       </a>
                     ) : (
                       <span className="inline-flex h-9 items-center justify-center text-[11px] tracking-[0.22em] text-white/35 uppercase">

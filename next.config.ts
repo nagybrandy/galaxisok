@@ -21,6 +21,14 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
+        hostname: "galaxisok.hu",
+      },
+      {
+        protocol: "https",
+        hostname: "www.galaxisok.hu",
+      },
+      {
+        protocol: "https",
         hostname: "i0.wp.com",
       },
       {

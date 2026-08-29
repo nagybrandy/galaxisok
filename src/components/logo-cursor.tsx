@@ -1,5 +1,5 @@
 // src/components/logo-cursor.tsx
-// Invert lens with a tiny black hotspot. Hovered icons appear inside the lens.
+// Invert ring with footballers on a solid disc so the cursor stays visible on icons.
 
 "use client";
 
@@ -7,26 +7,9 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
 
 import { HeartMark } from "@/components/heart-mark";
-import { SocialIcon } from "@/components/social-icon";
 import { useCursorGlyph } from "@/lib/cursor-glyph";
 import { isIframePage } from "@/lib/site";
 import { cn } from "@/lib/utils";
-
-function CursorGlyphMark({
-  glyph,
-}: {
-  glyph: ReturnType<typeof useCursorGlyph>;
-}) {
-  if (!glyph) {
-    return null;
-  }
-
-  if (glyph.kind === "heart") {
-    return <HeartMark color={glyph.color} className="size-7" />;
-  }
-
-  return <SocialIcon kind={glyph.kind} className="size-5 text-white" />;
-}
 
 export function LogoCursor() {
   const pathname = usePathname();
@@ -79,15 +62,6 @@ export function LogoCursor() {
     const onMove = (event: PointerEvent) => {
       posRef.current.x = event.clientX;
       posRef.current.y = event.clientY;
-      const target = event.target;
-      const overUi =
-        target instanceof Element &&
-        Boolean(
-          target.closest(
-            "a, button, summary, [role='button'], input, textarea, label",
-          ),
-        );
-      lens.classList.toggle("is-solid", overUi);
       if (frameRef.current) {
         return;
       }
@@ -107,7 +81,6 @@ export function LogoCursor() {
     return null;
   }
 
-  const hasGlyph = glyph !== null;
   const isHeart = glyph?.kind === "heart";
 
   return (
@@ -115,31 +88,26 @@ export function LogoCursor() {
       <div
         ref={lensRef}
         aria-hidden
-        className={cn(
-          "logo-cursor logo-cursor-lens",
-          hasGlyph && "has-glyph",
-          isHeart && "is-heart",
-        )}
+        className={cn("logo-cursor logo-cursor-lens", isHeart && "is-heart")}
       />
       <div
         ref={artRef}
         aria-hidden
-        className={cn(
-          "logo-cursor logo-cursor-art",
-          hasGlyph && "has-glyph",
-          isHeart && "is-heart",
-        )}
+        className={cn("logo-cursor logo-cursor-art", isHeart && "is-heart")}
       >
+        <span className="logo-cursor-disc" />
         <img
-          src="/cursor-players.png?v=2"
+          src="/cursor-players.png?v=3"
           alt=""
           width={30}
           height={30}
           draggable={false}
           className="logo-cursor-players"
         />
-        <span className={cn("logo-cursor-glyph", hasGlyph && "is-on")}>
-          <CursorGlyphMark glyph={glyph} />
+        <span className={cn("logo-cursor-glyph", isHeart && "is-on")}>
+          {glyph?.kind === "heart" ? (
+            <HeartMark color={glyph.color} className="size-7" />
+          ) : null}
         </span>
         <span className="logo-cursor-dot" />
       </div>

@@ -1,10 +1,7 @@
 // src/app/webshop/page.tsx
-// Bandcamp merch stays on this site inside an iframe.
+// Bandcamp merch is mounted in the layout so cookie consent can persist.
 
 import type { Metadata } from "next";
-
-import { BandcampFrame } from "@/components/bandcamp-frame";
-import { BANDCAMP_MERCH_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Merch",
@@ -12,5 +9,5 @@ export const metadata: Metadata = {
 };
 
 export default function WebshopPage() {
-  return <BandcampFrame src={BANDCAMP_MERCH_URL} title="Galaxisok — Merch" />;
+  return null;
 }
