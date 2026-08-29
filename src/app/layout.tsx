@@ -3,6 +3,7 @@
 
 import type { Metadata, Viewport } from "next";
 import { Geist, Oswald } from "next/font/google";
+import { Suspense } from "react";
 
 import { CookieConsent } from "@/components/cookie-consent";
 import { LogoCursor } from "@/components/logo-cursor";
@@ -10,6 +11,7 @@ import { NightAtmosphere } from "@/components/night-atmosphere";
 import { PageFade } from "@/components/page-fade";
 import { PersistentFooter, PersistentHeader } from "@/components/persistent-chrome";
 import { PersistentHero } from "@/components/persistent-hero";
+import { ScrollToTop } from "@/components/scroll-to-top";
 import { HERO_IMAGE, SITE_DESCRIPTION, SITE_NAME, siteUrl } from "@/lib/site";
 
 import "./globals.css";
@@ -77,6 +79,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <LogoCursor />
         <PersistentHeader />
         <PersistentHero />
+        <Suspense fallback={null}>
+          <ScrollToTop />
+        </Suspense>
         <PageFade>{children}</PageFade>
         <PersistentFooter />
         <CookieConsent />

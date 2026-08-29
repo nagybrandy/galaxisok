@@ -95,7 +95,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                                   </time>
                                 </div>
                               </div>
-                              <h2 className="blog-post-title mt-2 line-clamp-2 text-lg font-medium tracking-tight sm:mt-3 sm:text-2xl">
+                              <h2 className="blog-post-title mt-2 line-clamp-2 text-lg font-semibold tracking-tight sm:mt-3 sm:text-2xl">
                                 {post.title}
                               </h2>
                               <p className="mt-auto pt-2 line-clamp-3 text-sm leading-6 text-white/60 sm:text-base">

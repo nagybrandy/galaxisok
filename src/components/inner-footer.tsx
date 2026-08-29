@@ -1,5 +1,5 @@
 // src/components/inner-footer.tsx
-// Legal links, cookie settings, and copyright. Socials stay in the header.
+// Legal links and copyright stay on one row, even on a narrow phone.
 
 "use client";
 
@@ -11,24 +11,30 @@ export function InnerFooter() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="relative z-[1] mt-auto border-t border-white/10 px-5 py-6 sm:px-8">
-      <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 text-[11px] tracking-[0.2em] text-white/45 uppercase">
-        <nav className="flex flex-wrap items-center gap-2">
-          <Link href="/aszf" className="inline-flex min-h-9 items-center px-2 hover:text-white">
+    <footer className="relative z-[1] mt-auto border-t border-white/10 px-4 py-4 sm:px-8 sm:py-6">
+      <div className="flex flex-nowrap items-center justify-between gap-x-2 text-[10px] tracking-normal text-white/45 uppercase sm:gap-x-6 sm:text-[11px] sm:tracking-[0.2em]">
+        <nav className="flex min-w-0 items-center gap-x-3 sm:gap-x-1">
+          <Link
+            href="/aszf"
+            className="inline-flex h-8 items-center hover:text-white sm:h-9 sm:px-2"
+          >
             ÁSZF
           </Link>
-          <Link href="/adatkezeles" className="inline-flex min-h-9 items-center px-2 hover:text-white">
+          <Link
+            href="/adatkezeles"
+            className="inline-flex h-8 items-center hover:text-white sm:h-9 sm:px-2"
+          >
             Adatkezelés
           </Link>
           <button
             type="button"
-            className="inline-flex min-h-9 items-center px-2 uppercase hover:text-white"
+            className="inline-flex h-8 items-center uppercase hover:text-white sm:h-9 sm:px-2"
             onClick={openCookieSettings}
           >
             Sütik
           </button>
         </nav>
-        <p>© {year} Galaxisok</p>
+        <p className="shrink-0 whitespace-nowrap leading-none">© {year} Galaxisok</p>
       </div>
     </footer>
   );

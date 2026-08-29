@@ -43,9 +43,7 @@ export default async function KoncertekPage() {
       <main className="mx-auto w-full max-w-4xl flex-1 px-5 py-12 sm:px-8">
         {concerts.length === 0 ? (
           <>
-            <h1 className="font-[family-name:var(--font-display)] text-4xl tracking-[0.22em] text-glow uppercase sm:text-5xl">
-              Koncertek
-            </h1>
+            <h1 className="page-title page-title-lg text-glow">Koncertek</h1>
             <p className="mt-10 text-white/55">
               Itt jelennek meg a WordPressben felvitt koncertek.
             </p>
@@ -53,9 +51,7 @@ export default async function KoncertekPage() {
         ) : (
           <ConcertCalendarProvider>
             <div className="flex items-center gap-3">
-              <h1 className="font-[family-name:var(--font-display)] text-4xl leading-none tracking-[0.22em] text-glow uppercase sm:text-5xl">
-                Koncertek
-              </h1>
+              <h1 className="page-title page-title-lg text-glow">Koncertek</h1>
               <AddAllConcertsLink concerts={concerts} />
             </div>
             <ul className="mt-12 divide-y divide-white/10">

@@ -64,9 +64,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           </div>
           <PostBackButton href={blogListHref(category?.slug)} />
         </div>
-        <h1 className="mt-6 font-[family-name:var(--font-display)] text-4xl tracking-[0.12em] text-glow uppercase sm:text-5xl">
-          {post.title}
-        </h1>
+        <h1 className="page-title page-title-lg mt-6 text-glow">{post.title}</h1>
         <div className="mt-6 flex items-center gap-3">
           {post.author?.avatar ? (
             <Image

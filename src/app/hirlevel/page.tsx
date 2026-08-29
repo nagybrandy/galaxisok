@@ -17,9 +17,7 @@ export default function HirlevelPage() {
   return (
     <PageShell>
       <main className="mx-auto flex w-full max-w-xl flex-1 flex-col items-center justify-center px-5 py-12 text-center sm:px-8">
-        <h1 className="font-[family-name:var(--font-display)] text-4xl tracking-[0.22em] text-glow uppercase sm:text-5xl">
-          Hírlevél
-        </h1>
+        <h1 className="page-title page-title-lg text-glow">Hírlevél</h1>
         <p className="mt-5 text-white/60">
           Koncertek, lemezek, hírek — csak akkor írunk, ha van mit.
         </p>

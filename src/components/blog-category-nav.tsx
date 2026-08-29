@@ -51,9 +51,7 @@ type CategoryBarProps = {
 function CategoryBar({ categories, active }: CategoryBarProps) {
   return (
     <header className="lg:sticky lg:top-24">
-      <h1 className="font-[family-name:var(--font-display)] text-3xl tracking-[0.22em] text-glow uppercase sm:text-4xl">
-        Blog
-      </h1>
+      <h1 className="page-title text-glow">Blog</h1>
       <nav aria-label="Kategóriák" className="mt-6">
         <ul className="flex flex-wrap items-center gap-x-5 gap-y-2 lg:flex-col lg:items-start lg:gap-2.5">
           <li>
