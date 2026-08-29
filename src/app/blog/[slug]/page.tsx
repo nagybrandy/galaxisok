@@ -1,5 +1,5 @@
 // src/app/blog/[slug]/page.tsx
-// Single WordPress post with cover image and padding-placed hearts.
+// Single WordPress post with cover image.
 
 import type { Metadata } from "next";
 import Image from "next/image";
@@ -10,7 +10,6 @@ import { PostBackButton } from "@/components/post-back-button";
 import { PostBody } from "@/components/post-body";
 import { PostBreadcrumb } from "@/components/post-breadcrumb";
 import { PostCover } from "@/components/post-cover";
-import { PostHearts } from "@/components/post-hearts";
 import { blogListHref } from "@/lib/blog";
 import { formatHuDate, getPostBySlug, getPosts } from "@/lib/wordpress";
 
@@ -58,59 +57,52 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
   return (
     <PageShell>
-      <div className="post-stage relative mx-auto w-full max-w-6xl flex-1 px-4 sm:px-8">
-        <article
-          data-post-article
-          className="relative z-[1] mx-auto w-full max-w-3xl py-12"
-        >
-          <div className="flex items-start justify-between gap-4">
-            <div className="min-w-0 flex-1">
-              <PostBreadcrumb title={post.title} category={category} />
-            </div>
-            <PostBackButton href={blogListHref(category?.slug)} />
+      <article className="relative z-[1] mx-auto w-full max-w-3xl flex-1 px-5 py-12 sm:px-8">
+        <div className="flex items-start justify-between gap-4">
+          <div className="min-w-0 flex-1">
+            <PostBreadcrumb title={post.title} category={category} />
           </div>
-          <h1 className="mt-6 font-[family-name:var(--font-display)] text-4xl tracking-[0.12em] text-glow uppercase sm:text-5xl">
-            {post.title}
-          </h1>
-          <div className="mt-6 flex items-center gap-3">
-            {post.author?.avatar ? (
-              <Image
-                src={post.author.avatar}
-                alt={post.author.name}
-                width={40}
-                height={40}
-                className="size-10 rounded-full object-cover"
-              />
-            ) : null}
-            <div>
-              <p className="text-sm text-white/85">
-                {post.author?.name ?? "Galaxisok"}
-              </p>
-              <time
-                dateTime={post.date}
-                className="text-[11px] tracking-[0.16em] text-white/40 uppercase"
-              >
-                {formatHuDate(post.date)}
-              </time>
-            </div>
-          </div>
-          {post.image ? (
-            <PostCover
-              src={post.image.src}
-              alt={post.image.alt}
-              width={post.image.width}
-              height={post.image.height}
-              variant="hero"
-              priority
+          <PostBackButton href={blogListHref(category?.slug)} />
+        </div>
+        <h1 className="mt-6 font-[family-name:var(--font-display)] text-4xl tracking-[0.12em] text-glow uppercase sm:text-5xl">
+          {post.title}
+        </h1>
+        <div className="mt-6 flex items-center gap-3">
+          {post.author?.avatar ? (
+            <Image
+              src={post.author.avatar}
+              alt={post.author.name}
+              width={40}
+              height={40}
+              className="size-10 rounded-full object-cover"
             />
           ) : null}
-          <div className="mt-8">
-            <PostBody html={post.content} />
+          <div>
+            <p className="text-sm text-white/85">
+              {post.author?.name ?? "Galaxisok"}
+            </p>
+            <time
+              dateTime={post.date}
+              className="text-[11px] tracking-[0.16em] text-white/40 uppercase"
+            >
+              {formatHuDate(post.date)}
+            </time>
           </div>
-        </article>
-        <div className="heart-shelf mx-auto mb-10 h-24 max-w-3xl sm:h-12" aria-hidden />
-        <PostHearts postId={post.id} />
-      </div>
+        </div>
+        {post.image ? (
+          <PostCover
+            src={post.image.src}
+            alt={post.image.alt}
+            width={post.image.width}
+            height={post.image.height}
+            variant="hero"
+            priority
+          />
+        ) : null}
+        <div className="mt-8">
+          <PostBody html={post.content} />
+        </div>
+      </article>
     </PageShell>
   );
 }

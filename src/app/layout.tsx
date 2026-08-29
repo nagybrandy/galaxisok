@@ -70,6 +70,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <head>
         <link rel="preload" href={HERO_IMAGE} as="image" type="image/jpeg" />
+        <link rel="preload" href="/atmosphere.jpg" as="image" type="image/jpeg" />
       </head>
       <body className="relative flex min-h-full flex-col bg-[#050b1c] font-sans text-white">
         <NightAtmosphere />

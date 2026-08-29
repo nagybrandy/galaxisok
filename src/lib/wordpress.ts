@@ -1,8 +1,6 @@
 // src/lib/wordpress.ts
 // Headless WordPress REST client: posts, authors, categories, concerts, gallery.
 
-import { parseHeartsPayload, type HeartsPayload } from "@/lib/hearts";
-
 const DEFAULT_WORDPRESS_URL = "https://admin.galaxisok.hu";
 
 export const WORDPRESS_CACHE_TAG = "wordpress";
@@ -549,35 +547,4 @@ export function formatHuDateTime(value: string): string {
     return `${parts.year} ${parts.day} ${parts.time}`;
   }
   return value.replace("T", " ");
-}
-
-function emptyHearts(): HeartsPayload {
-  return parseHeartsPayload(null);
-}
-
-export async function getPostHearts(
-  postId: number,
-  visitorIp = "",
-): Promise<HeartsPayload> {
-  try {
-    const response = await fetch(
-      `${wordpressUrl()}/wp-json/galaxisok/v1/hearts/${postId}`,
-      {
-        cache: "no-store",
-        headers: {
-          Accept: "application/json",
-          "User-Agent": "Galaxisok/1.0",
-          ...(visitorIp ? { "X-Client-IP": visitorIp } : {}),
-        },
-      },
-    );
-
-    if (!response.ok) {
-      return emptyHearts();
-    }
-
-    return parseHeartsPayload(await response.json());
-  } catch {
-    return emptyHearts();
-  }
 }
