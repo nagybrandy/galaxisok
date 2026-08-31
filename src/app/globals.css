@@ -1453,7 +1453,7 @@ body:has(.cookie-banner) .home-spotlight {
 .home-play svg {
   width: 2.4rem;
   height: 2.4rem;
-  margin-left: 0.22rem;
+  transform: translateX(-0.14rem);
 }
 
 .home-play:hover,

@@ -79,7 +79,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             </p>
             <time
               dateTime={post.date}
-              className="text-[11px] tracking-[0.16em] text-white/40 uppercase"
+              className="text-[11px] tracking-[0.16em] text-white/40"
             >
               {formatHuDate(post.date)}
             </time>
