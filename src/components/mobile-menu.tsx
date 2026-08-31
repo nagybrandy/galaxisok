@@ -3,7 +3,6 @@
 
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
@@ -12,6 +11,7 @@ import { HERO_IMAGE, NAV_LINKS, type NavLink } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 import { Logo } from "./logo";
+import { SkeletonImage } from "./skeleton-image";
 import { SocialLinks } from "./social-links";
 
 type MobileMenuProps = {
@@ -89,11 +89,10 @@ export function MobileMenu({
           aria-label="Menü"
         >
           <div className="absolute inset-0 overflow-hidden bg-[#050b1c]">
-            <Image
+            <SkeletonImage
               src={HERO_IMAGE}
               alt=""
               fill
-              unoptimized
               sizes="100vw"
               className="object-cover object-[center_16%] scale-[1.12] blur-[14px]"
             />

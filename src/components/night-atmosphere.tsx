@@ -1,7 +1,7 @@
 // src/components/night-atmosphere.tsx
 // Full-viewport night photo behind every inner page.
 
-import Image from "next/image";
+import { SkeletonImage } from "@/components/skeleton-image";
 
 export function NightAtmosphere() {
   return (
@@ -10,12 +10,11 @@ export function NightAtmosphere() {
       className="night-atmosphere pointer-events-none fixed inset-0 z-0 overflow-hidden"
     >
       <div className="night-atmosphere-photo">
-        <Image
+        <SkeletonImage
           src="/atmosphere.jpg"
           alt=""
           fill
           priority
-          unoptimized
           sizes="100vw"
           className="object-cover object-center"
         />

@@ -2,7 +2,6 @@
 // Multi-author WordPress feed: categories on the left, five posts per page.
 
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 
 import { BlogCategoryNav } from "@/components/blog-category-nav";
@@ -10,6 +9,7 @@ import { BlogListFade } from "@/components/blog-list-fade";
 import { BlogPagination } from "@/components/blog-pagination";
 import { PageShell } from "@/components/page-shell";
 import { PostCover } from "@/components/post-cover";
+import { SkeletonImage } from "@/components/skeleton-image";
 import { parseBlogPage } from "@/lib/blog";
 import { formatHuDate, getCategories, getPostsPage } from "@/lib/wordpress";
 
@@ -71,13 +71,14 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                             <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
                               <div className="flex items-center gap-3">
                                 {post.author?.avatar ? (
-                                  <Image
-                                    src={post.author.avatar}
-                                    alt={post.author.name}
-                                    width={36}
-                                    height={36}
-                                    className="size-8 rounded-full object-cover sm:size-9"
-                                  />
+                                  <span className="relative inline-block size-8 overflow-hidden rounded-full sm:size-9">
+                                    <SkeletonImage
+                                      src={post.author.avatar}
+                                      alt={post.author.name}
+                                      fill
+                                      className="object-cover"
+                                    />
+                                  </span>
                                 ) : (
                                   <span className="flex size-8 items-center justify-center rounded-full border border-white/20 text-[10px] tracking-[0.16em] uppercase sm:size-9">
                                     {post.author?.name.slice(0, 1) ?? "G"}

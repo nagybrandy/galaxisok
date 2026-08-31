@@ -3,11 +3,11 @@
 
 "use client";
 
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useLayoutEffect, useState } from "react";
 
 import { GrainOverlay } from "@/components/grain-overlay";
+import { SkeletonImage } from "@/components/skeleton-image";
 import {
   isHomeAboutPair,
   readHeroPath,
@@ -106,12 +106,11 @@ export function PersistentHero() {
       }}
     >
       <div className="persistent-hero-frame">
-        <Image
+        <SkeletonImage
           src={HERO_IMAGE}
           alt=""
           fill
           priority
-          unoptimized
           sizes="100vw"
           className="object-cover object-[center_16%]"
         />

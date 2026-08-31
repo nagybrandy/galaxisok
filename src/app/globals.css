@@ -720,37 +720,44 @@ html.hero-from-home.hero-copy-in .rolunk-copy {
   }
 }
 
-.image-skeleton {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
+.lazy-image.lazy-load-image-background {
+  display: block;
   overflow: hidden;
-  pointer-events: none;
-  background: rgba(255, 255, 255, 0.045);
-  opacity: 1;
-  transition: opacity 420ms ease;
 }
 
-.image-skeleton::after {
-  content: "";
+.lazy-image.is-fill.lazy-load-image-background {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    105deg,
-    transparent 18%,
-    rgba(255, 255, 255, 0.16) 48%,
-    transparent 78%
-  );
-  transform: translateX(-70%);
-  animation: image-skeleton-shimmer 1.5s ease-in-out infinite;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 
-.image-skeleton.is-ready {
+.lazy-image.is-fill .lazy-image-photo {
+  width: 100%;
+  height: 100%;
+}
+
+.lazy-load-image-background.blur {
+  filter: blur(18px);
+  transform: scale(1.06);
+}
+
+.lazy-load-image-background.blur > img {
   opacity: 0;
 }
 
-.image-skeleton-photo {
+.lazy-load-image-background.blur.lazy-load-image-loaded {
+  filter: blur(0);
+  transform: scale(1);
+  transition:
+    filter 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.lazy-load-image-background.blur.lazy-load-image-loaded > img {
   opacity: 1;
+  transition: opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @keyframes image-skeleton-shimmer {
@@ -763,13 +770,18 @@ html.hero-from-home.hero-copy-in .rolunk-copy {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .image-skeleton::after,
   .page-skel::after,
   .nav-progress {
     animation: none;
   }
 
-  .image-skeleton-photo {
+  .lazy-load-image-background.blur,
+  .lazy-load-image-background.blur.lazy-load-image-loaded,
+  .lazy-load-image-background.blur > img,
+  .lazy-load-image-background.blur.lazy-load-image-loaded > img {
+    filter: none;
+    transform: none;
+    opacity: 1;
     transition: none;
   }
 
@@ -933,6 +945,7 @@ html.hero-from-home.hero-copy-in .rolunk-copy {
 .night-atmosphere-photo {
   position: absolute;
   inset: 0;
+  overflow: hidden;
 }
 
 .night-atmosphere-wash {

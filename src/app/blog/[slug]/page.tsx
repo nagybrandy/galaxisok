@@ -2,7 +2,6 @@
 // Single WordPress post with cover image.
 
 import type { Metadata } from "next";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 
 import { PageShell } from "@/components/page-shell";
@@ -10,6 +9,7 @@ import { PostBackButton } from "@/components/post-back-button";
 import { PostBody } from "@/components/post-body";
 import { PostBreadcrumb } from "@/components/post-breadcrumb";
 import { PostCover } from "@/components/post-cover";
+import { SkeletonImage } from "@/components/skeleton-image";
 import { blogListHref } from "@/lib/blog";
 import { formatHuDate, getPostBySlug, getPosts } from "@/lib/wordpress";
 
@@ -67,13 +67,14 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         <h1 className="page-title page-title-lg mt-6 text-glow">{post.title}</h1>
         <div className="mt-6 flex items-center gap-3">
           {post.author?.avatar ? (
-            <Image
-              src={post.author.avatar}
-              alt={post.author.name}
-              width={40}
-              height={40}
-              className="size-10 rounded-full object-cover"
-            />
+            <span className="relative inline-block size-10 overflow-hidden rounded-full">
+              <SkeletonImage
+                src={post.author.avatar}
+                alt={post.author.name}
+                fill
+                className="object-cover"
+              />
+            </span>
           ) : null}
           <div>
             <p className="text-sm text-white/85">
