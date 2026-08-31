@@ -5,15 +5,36 @@
 
 import { Play } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 import type { FeaturedNews } from "@/lib/wordpress";
 
-type HomeSpotlightProps = {
-  news: FeaturedNews;
-};
-
-export function HomeSpotlight({ news }: HomeSpotlightProps) {
+export function HomeSpotlight() {
   const pathname = usePathname();
+  const [news, setNews] = useState<FeaturedNews>(null);
+
+  useEffect(() => {
+    if (pathname !== "/") {
+      return;
+    }
+
+    let cancelled = false;
+
+    void fetch("/api/fohir")
+      .then((response) => (response.ok ? response.json() : null))
+      .then((payload: FeaturedNews) => {
+        if (!cancelled && payload?.title && payload?.href) {
+          setNews(payload);
+        }
+      })
+      .catch(() => {
+        /* teaser is optional */
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [pathname]);
 
   if (pathname !== "/" || !news) {
     return null;

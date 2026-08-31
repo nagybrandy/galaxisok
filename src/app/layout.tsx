@@ -15,7 +15,6 @@ import { PersistentHero } from "@/components/persistent-hero";
 import { RoutePrefetcher } from "@/components/route-prefetcher";
 import { ScrollToTop } from "@/components/scroll-to-top";
 import { HERO_IMAGE, SITE_DESCRIPTION, SITE_NAME, siteUrl } from "@/lib/site";
-import { getFeaturedNews } from "@/lib/wordpress";
 
 import "./globals.css";
 
@@ -81,9 +80,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <NightAtmosphere />
         <PersistentHeader />
         <PersistentHero />
-        <Suspense fallback={null}>
-          <HomeSpotlightSlot />
-        </Suspense>
+        <HomeSpotlight />
         <Suspense fallback={null}>
           <ScrollToTop />
           <NavigationFeedback />
@@ -95,9 +92,4 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       </body>
     </html>
   );
-}
-
-async function HomeSpotlightSlot() {
-  const featured = await getFeaturedNews();
-  return <HomeSpotlight news={featured} />;
 }

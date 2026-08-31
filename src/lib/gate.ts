@@ -33,6 +33,7 @@ export function isPublicGatePath(pathname: string): boolean {
     pathname.startsWith("/kapu/") ||
     pathname.startsWith("/api/gate") ||
     pathname.startsWith("/api/revalidate") ||
+    pathname.startsWith("/api/fohir") ||
     pathname.startsWith("/api/calendar") ||
     pathname === "/galaxisok-koncertek.ics"
   );
