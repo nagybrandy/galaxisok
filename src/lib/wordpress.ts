@@ -1,5 +1,5 @@
 // src/lib/wordpress.ts
-// Headless WordPress REST client: posts, authors, categories, concerts, gallery.
+// Headless WordPress REST client: posts, authors, concerts, and the home teaser.
 
 import { unstable_cache } from "next/cache";
 
@@ -120,6 +120,11 @@ export type GalleryImage = {
   width: number;
   height: number;
 };
+
+export type FeaturedNews = {
+  title: string;
+  href: string;
+} | null;
 
 const WP_FETCH_ATTEMPTS = 5;
 const WP_CACHE_SECONDS = 60;
@@ -431,6 +436,59 @@ async function getPostBySlugFresh(slug: string): Promise<BlogPost | null> {
 }
 
 export const getPostBySlug = cacheWp("wp-post-slug", getPostBySlugFresh);
+
+function firstHref(html: string): string | null {
+  const tagged = html.match(/href=["']([^"']+)["']/i);
+  if (tagged?.[1]) {
+    return decodeEntities(tagged[1]).trim();
+  }
+
+  const plain = stripHtml(html).match(/https?:\/\/[^\s<>"']+/i);
+  if (plain?.[0]) {
+    return plain[0].replace(/[).,;]+$/, "");
+  }
+
+  const relative = stripHtml(html).match(/^\/[^\s]+/);
+  return relative?.[0] ?? null;
+}
+
+async function getFeaturedNewsFresh(): Promise<FeaturedNews> {
+  const pages = await wpFetch<WpPost[]>(
+    "/wp-json/wp/v2/pages?slug=fohir&status=publish",
+  );
+  const page = pages?.[0];
+  if (page) {
+    const title = decodeEntities(stripHtml(page.title.rendered));
+    const href =
+      firstHref(page.content.rendered) ?? firstHref(page.excerpt.rendered);
+    if (title && href) {
+      return { title, href };
+    }
+  }
+
+  const posts = await wpFetch<WpPost[]>(
+    "/wp-json/wp/v2/posts?slug=fohir&status=publish",
+  );
+  const post = posts?.[0];
+  if (!post) {
+    return null;
+  }
+
+  const title = decodeEntities(stripHtml(post.title.rendered));
+  if (!title) {
+    return null;
+  }
+
+  return {
+    title,
+    href:
+      firstHref(post.content.rendered) ??
+      firstHref(post.excerpt.rendered) ??
+      `/blog/${post.slug}`,
+  };
+}
+
+export const getFeaturedNews = cacheWp("wp-featured-news", getFeaturedNewsFresh);
 
 async function getConcertsFresh(): Promise<Concert[]> {
   const rows = await wpFetch<WpConcert[]>(

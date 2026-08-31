@@ -8,7 +8,7 @@ export const LIVE_SITE_URL = "https://galaxisok.hu";
 export const DEV_SITE_URL = "https://galaxisok-dev.vercel.app";
 export const WORDPRESS_PUBLIC_URL = "https://admin.galaxisok.hu";
 export const BANDCAMP_MUSIC_URL = "https://galaxisok.bandcamp.com/music";
-export const BANDCAMP_MERCH_URL = "https://galaxisok.bandcamp.com/merch";
+export const MERCH_URL = "https://shop.bsidemusic.hu/kategoria/galaxisok";
 export const HERO_IMAGE = "/hero.jpg";
 
 export type NavLink = {
@@ -22,7 +22,7 @@ export const NAV_LINKS: NavLink[] = [
   { href: "/blog", label: "Blog" },
   { href: BANDCAMP_MUSIC_URL, label: "Zene", external: true },
   { href: "/koncertek", label: "Koncertek" },
-  { href: BANDCAMP_MERCH_URL, label: "Merch", external: true },
+  { href: MERCH_URL, label: "Merch", external: true },
   { href: "/hirlevel", label: "Hírlevél" },
 ];
 

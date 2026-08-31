@@ -1,19 +1,12 @@
 // src/lib/blog.ts
-// Blog listing query helpers: category + page, always reset page on filter.
+// Blog listing query helpers. Page 1 has no query string.
 
-export function blogListHref(kategoria?: string, page = 1): string {
-  const params = new URLSearchParams();
-
-  if (kategoria) {
-    params.set("kategoria", kategoria);
-  }
-
+export function blogListHref(page = 1): string {
   if (page > 1) {
-    params.set("oldal", String(page));
+    return `/blog?oldal=${page}`;
   }
 
-  const query = params.toString();
-  return query ? `/blog?${query}` : "/blog";
+  return "/blog";
 }
 
 export function parseBlogPage(value?: string): number {

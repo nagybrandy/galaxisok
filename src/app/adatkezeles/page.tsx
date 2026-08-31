@@ -24,8 +24,8 @@ export default function AdatkezelesPage() {
       <p>
         A böngészéshez technikai adat kell (IP, böngésző, a megnyitott oldal).
         Ha feliratkozol a hírlevélre, az e-mail-címed a Mailchimphez kerül.
-        A zene és a merch a Bandcamp saját oldalára visz; ott a Bandcamp
-        láthat sütiket és technikai adatot.
+        A zene a Bandcampen, a merch a B Side Music shopjában nyílik; ott ők
+        láthatnak sütiket és technikai adatot.
         A blogot WordPressből olvassuk ({WORDPRESS_PUBLIC_URL}), a nyilvános
         bejegyzésekhez tartozó szerzői adatok ott tárolódnak.
       </p>
@@ -42,8 +42,9 @@ export default function AdatkezelesPage() {
       </p>
       <h2>Továbbítás</h2>
       <p>
-        Tárhely: Vercel. Tartalomkezelés: WordPress a fenti címen. Zene és merch:
-        Bandcamp. Hírlevél: Mailchimp, ha a feliratkozás él. Ezek saját
+        Tárhely: Vercel. Tartalomkezelés: WordPress a fenti címen. Zene:
+        Bandcamp. Merch: B Side Music. Hírlevél: Mailchimp, ha a feliratkozás
+        él. Ezek saját
         adatkezelési szabályzatot is alkalmazhatnak.
       </p>
       <h2>Megőrzés</h2>

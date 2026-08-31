@@ -1,10 +1,10 @@
 // src/app/aszf/page.tsx
-// Terms for the public Galaxisok site and the Bandcamp shop.
+// Terms for the public Galaxisok site, Bandcamp, and the merch shop.
 
 import type { Metadata } from "next";
 
 import { LegalPage } from "@/components/legal-page";
-import { BANDCAMP_MERCH_URL, SITE_NAME } from "@/lib/site";
+import { MERCH_URL, SITE_NAME } from "@/lib/site";
 import { BAND_EMAIL } from "@/lib/socials";
 
 export const metadata: Metadata = {
@@ -26,15 +26,15 @@ export default function AszfPage() {
       </p>
       <h2>A weboldal</h2>
       <p>
-        Az oldal híreket, koncertlistát, galériát és hírlevél-feliratkozást
-        mutat. A zene és a merch a Bandcamp saját oldalán nyílik meg.
+        Az oldal híreket, koncertlistát és hírlevél-feliratkozást mutat. A zene
+        a Bandcampen, a merch a B Side Music shopjában nyílik meg.
       </p>
       <h2>Vásárlás</h2>
       <p>
         A jegyek és a merch nem tőlünk, hanem a jegyszolgáltatótól vagy a
-        Bandcamptől kerülnek elszámolásra. A fizetés, szállítás és reklamáció
-        az ő feltételeik szerint megy. Merch:{" "}
-        <a href={BANDCAMP_MERCH_URL}>{BANDCAMP_MERCH_URL}</a>.
+        B Side Music shopjától kerülnek elszámolásra. A fizetés, szállítás és
+        reklamáció az ő feltételeik szerint megy. Merch:{" "}
+        <a href={MERCH_URL}>{MERCH_URL}</a>.
       </p>
       <h2>Tartalom</h2>
       <p>

@@ -110,7 +110,7 @@ export function CookieConsent() {
               <li className="flex items-start justify-between gap-4">
                 <div>
                   <p className="text-white">Beágyazások</p>
-                  <p className="mt-1">Hírlevél iframe. A zene és a merch a Bandcamp saját oldalán nyílik.</p>
+                  <p className="mt-1">Hírlevél iframe. A zene a Bandcampen, a merch a B Side shopban nyílik.</p>
                 </div>
                 <input
                   type="checkbox"

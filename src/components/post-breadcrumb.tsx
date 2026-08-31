@@ -1,11 +1,8 @@
 // src/components/post-breadcrumb.tsx
-// Főoldal → Blog → category → post. Last crumb is the current page.
+// Főoldal → Blog → post. Last crumb is the current page.
 
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
-
-import { blogListHref } from "@/lib/blog";
-import type { BlogCategory } from "@/lib/wordpress";
 
 type Crumb =
   | { kind: "link"; href: string; label: string }
@@ -13,7 +10,6 @@ type Crumb =
 
 type PostBreadcrumbProps = {
   title: string;
-  category?: BlogCategory;
 };
 
 function crumbKey(crumb: Crumb): string {
@@ -29,21 +25,12 @@ function crumbKey(crumb: Crumb): string {
   }
 }
 
-export function PostBreadcrumb({ title, category }: PostBreadcrumbProps) {
+export function PostBreadcrumb({ title }: PostBreadcrumbProps) {
   const crumbs: Crumb[] = [
     { kind: "link", href: "/", label: "Főoldal" },
     { kind: "link", href: "/blog", label: "Blog" },
+    { kind: "current", label: title },
   ];
-
-  if (category) {
-    crumbs.push({
-      kind: "link",
-      href: blogListHref(category.slug),
-      label: category.name,
-    });
-  }
-
-  crumbs.push({ kind: "current", label: title });
 
   return (
     <nav aria-label="Morzsamenü">

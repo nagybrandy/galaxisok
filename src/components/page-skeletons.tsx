@@ -10,40 +10,31 @@ function Bone({ className }: { className: string }) {
 export function BlogPageSkeleton() {
   return (
     <PageShell>
-      <main className="mx-auto w-full max-w-6xl flex-1 px-5 py-12 sm:px-8">
-        <div className="grid gap-10 lg:grid-cols-[11rem_minmax(0,1fr)] lg:items-start lg:gap-14">
-          <header>
-            <Bone className="h-5 w-24" />
-            <div className="mt-6 flex flex-wrap gap-3 lg:flex-col">
-              <Bone className="h-4 w-20" />
-              <Bone className="h-4 w-16" />
-              <Bone className="h-4 w-24" />
-            </div>
-          </header>
-          <section className="min-w-0">
-            <ul className="flex flex-col gap-8 sm:gap-10">
-              {Array.from({ length: 4 }, (_, index) => (
-                <li key={index}>
-                  <div className="flex h-[11.5rem] flex-row items-stretch gap-3 sm:h-[13rem] sm:gap-5">
-                    <Bone className="h-full w-28 shrink-0 rounded-xl sm:w-44 lg:w-52" />
-                    <div className="flex min-w-0 flex-1 flex-col">
-                      <div className="flex items-center gap-3">
-                        <Bone className="size-8 rounded-full sm:size-9" />
-                        <div className="min-w-0 flex-1">
-                          <Bone className="h-3 w-28" />
-                          <Bone className="mt-2 h-2.5 w-20" />
-                        </div>
+      <main className="mx-auto w-full max-w-3xl flex-1 px-5 py-12 sm:px-8">
+        <Bone className="mx-auto h-5 w-24" />
+        <section className="mt-12 min-w-0">
+          <ul className="divide-y divide-white/15">
+            {Array.from({ length: 4 }, (_, index) => (
+              <li key={index} className="py-8 first:pt-0 sm:py-10">
+                <div className="flex h-[11.5rem] flex-row items-stretch gap-3 sm:h-[13rem] sm:gap-5">
+                  <Bone className="h-full w-28 shrink-0 rounded-xl sm:w-44" />
+                  <div className="flex min-w-0 flex-1 flex-col">
+                    <div className="flex items-center gap-3">
+                      <Bone className="size-8 rounded-full sm:size-9" />
+                      <div className="min-w-0 flex-1">
+                        <Bone className="h-3 w-28" />
+                        <Bone className="mt-2 h-2.5 w-20" />
                       </div>
-                      <Bone className="mt-4 h-5 w-4/5" />
-                      <Bone className="mt-auto h-3 w-full" />
-                      <Bone className="mt-2 h-3 w-2/3" />
                     </div>
+                    <Bone className="mt-4 h-5 w-4/5" />
+                    <Bone className="mt-auto h-3 w-full" />
+                    <Bone className="mt-2 h-3 w-2/3" />
                   </div>
-                </li>
-              ))}
-            </ul>
-          </section>
-        </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
       </main>
     </PageShell>
   );
@@ -97,26 +88,13 @@ export function ConcertsPageSkeleton() {
 export function AboutPageSkeleton() {
   return (
     <PageShell flush>
-      <main className="rolunk-copy mx-auto w-full max-w-6xl flex-1 px-5 pb-16 pt-8 sm:px-8 sm:pb-20 sm:pt-10">
-        <Bone className="h-8 w-40 sm:h-12" />
-        <div className="mt-10 grid items-center gap-8 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-14">
-          <div>
-            <Bone className="h-8 w-full max-w-xl" />
-            <Bone className="mt-4 h-8 w-4/5 max-w-lg" />
-            <Bone className="mt-8 h-3 w-full max-w-2xl" />
-            <Bone className="mt-3 h-3 w-full max-w-2xl" />
-            <Bone className="mt-3 h-3 w-2/3 max-w-xl" />
-          </div>
-          <Bone className="aspect-[4/5] w-full" />
-        </div>
-        <div className="mt-20 border-t border-white/10 pt-12">
-          <Bone className="h-6 w-32" />
-          <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3">
-            <Bone className="aspect-[4/5]" />
-            <Bone className="aspect-[4/5]" />
-            <Bone className="aspect-[4/5]" />
-          </div>
-        </div>
+      <main className="rolunk-copy mx-auto w-full max-w-3xl flex-1 px-5 pb-16 pt-8 sm:px-8 sm:pb-20 sm:pt-10">
+        <Bone className="mx-auto h-8 w-40 sm:h-12" />
+        <Bone className="mx-auto mt-10 h-8 w-full max-w-xl" />
+        <Bone className="mx-auto mt-4 h-8 w-4/5 max-w-lg" />
+        <Bone className="mx-auto mt-8 h-3 w-full max-w-2xl" />
+        <Bone className="mx-auto mt-3 h-3 w-full max-w-2xl" />
+        <Bone className="mx-auto mt-3 h-3 w-2/3 max-w-xl" />
       </main>
     </PageShell>
   );

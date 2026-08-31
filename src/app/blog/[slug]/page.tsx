@@ -10,7 +10,6 @@ import { PostBody } from "@/components/post-body";
 import { PostBreadcrumb } from "@/components/post-breadcrumb";
 import { PostCover } from "@/components/post-cover";
 import { SkeletonImage } from "@/components/skeleton-image";
-import { blogListHref } from "@/lib/blog";
 import { formatHuDate, getPostBySlug, getPosts } from "@/lib/wordpress";
 
 type BlogPostPageProps = {
@@ -53,16 +52,14 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     notFound();
   }
 
-  const category = post.categories[0];
-
   return (
     <PageShell>
       <article className="relative z-[1] mx-auto w-full max-w-3xl flex-1 px-5 py-12 sm:px-8">
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0 flex-1">
-            <PostBreadcrumb title={post.title} category={category} />
+            <PostBreadcrumb title={post.title} />
           </div>
-          <PostBackButton href={blogListHref(category?.slug)} />
+          <PostBackButton href="/blog" />
         </div>
         <h1 className="page-title page-title-lg mt-6 text-glow">{post.title}</h1>
         <div className="mt-6 flex items-center gap-3">

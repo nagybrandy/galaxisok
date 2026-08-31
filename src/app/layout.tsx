@@ -6,7 +6,7 @@ import { Geist, Oswald } from "next/font/google";
 import { Suspense } from "react";
 
 import { CookieConsent } from "@/components/cookie-consent";
-import { LogoCursor } from "@/components/logo-cursor";
+import { HomeSpotlight } from "@/components/home-spotlight";
 import { NavigationFeedback } from "@/components/navigation-feedback";
 import { NightAtmosphere } from "@/components/night-atmosphere";
 import { PageFade } from "@/components/page-fade";
@@ -15,6 +15,7 @@ import { PersistentHero } from "@/components/persistent-hero";
 import { RoutePrefetcher } from "@/components/route-prefetcher";
 import { ScrollToTop } from "@/components/scroll-to-top";
 import { HERO_IMAGE, SITE_DESCRIPTION, SITE_NAME, siteUrl } from "@/lib/site";
+import { getFeaturedNews } from "@/lib/wordpress";
 
 import "./globals.css";
 
@@ -66,7 +67,9 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  const featured = await getFeaturedNews();
+
   return (
     <html
       lang="hu"
@@ -78,9 +81,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       </head>
       <body className="relative flex min-h-full flex-col bg-[#050b1c] font-sans text-white">
         <NightAtmosphere />
-        <LogoCursor />
         <PersistentHeader />
         <PersistentHero />
+        <HomeSpotlight news={featured} />
         <RoutePrefetcher />
         <Suspense fallback={null}>
           <ScrollToTop />
