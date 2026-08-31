@@ -51,7 +51,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                       <li key={post.id}>
                         <Link
                           href={`/blog/${post.slug}`}
-                          prefetch={false}
+                          prefetch
                           className="blog-post-teaser block"
                         >
                           <div className="flex h-[11.5rem] flex-row items-stretch gap-3 overflow-hidden sm:h-[13rem] sm:gap-5">

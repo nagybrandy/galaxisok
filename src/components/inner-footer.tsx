@@ -16,12 +16,14 @@ export function InnerFooter() {
         <nav className="flex min-w-0 items-center gap-x-3 sm:gap-x-1">
           <Link
             href="/aszf"
+            prefetch
             className="inline-flex h-8 items-center hover:text-white sm:h-9 sm:px-2"
           >
             ÁSZF
           </Link>
           <Link
             href="/adatkezeles"
+            prefetch
             className="inline-flex h-8 items-center hover:text-white sm:h-9 sm:px-2"
           >
             Adatkezelés

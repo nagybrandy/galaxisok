@@ -113,7 +113,7 @@ export function MobileMenu({ links = NAV_LINKS }: MobileMenuProps) {
               }
 
               return (
-                <Link key={link.href} href={link.href} prefetch={false} className={itemClass}>
+                <Link key={link.href} href={link.href} prefetch className={itemClass}>
                   {link.label}
                 </Link>
               );

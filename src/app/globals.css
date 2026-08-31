@@ -668,6 +668,47 @@ html.hero-from-home.hero-copy-in .rolunk-copy {
   animation: social-spark 900ms ease-in-out infinite;
 }
 
+.page-skel {
+  position: relative;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.page-skel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 18%,
+    rgba(255, 255, 255, 0.14) 48%,
+    transparent 78%
+  );
+  transform: translateX(-70%);
+  animation: image-skeleton-shimmer 1.5s ease-in-out infinite;
+}
+
+.nav-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 80;
+  width: 100%;
+  height: 2px;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, #fff 40%, #fff 60%, transparent);
+  animation: nav-progress-run 1.1s ease-in-out infinite;
+}
+
+@keyframes nav-progress-run {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
 .image-skeleton {
   position: absolute;
   inset: 0;
@@ -711,7 +752,9 @@ html.hero-from-home.hero-copy-in .rolunk-copy {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .image-skeleton::after {
+  .image-skeleton::after,
+  .page-skel::after,
+  .nav-progress {
     animation: none;
   }
 

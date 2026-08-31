@@ -7,10 +7,12 @@ import { Suspense } from "react";
 
 import { CookieConsent } from "@/components/cookie-consent";
 import { LogoCursor } from "@/components/logo-cursor";
+import { NavigationFeedback } from "@/components/navigation-feedback";
 import { NightAtmosphere } from "@/components/night-atmosphere";
 import { PageFade } from "@/components/page-fade";
 import { PersistentFooter, PersistentHeader } from "@/components/persistent-chrome";
 import { PersistentHero } from "@/components/persistent-hero";
+import { RoutePrefetcher } from "@/components/route-prefetcher";
 import { ScrollToTop } from "@/components/scroll-to-top";
 import { HERO_IMAGE, SITE_DESCRIPTION, SITE_NAME, siteUrl } from "@/lib/site";
 
@@ -79,8 +81,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <LogoCursor />
         <PersistentHeader />
         <PersistentHero />
+        <RoutePrefetcher />
         <Suspense fallback={null}>
           <ScrollToTop />
+          <NavigationFeedback />
         </Suspense>
         <PageFade>{children}</PageFade>
         <PersistentFooter />

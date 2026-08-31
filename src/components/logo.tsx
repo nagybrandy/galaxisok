@@ -14,6 +14,7 @@ export function Logo({ className, tone = "light" }: LogoProps) {
   return (
     <Link
       href="/"
+      prefetch
       aria-label="Galaxisok — kezdőlap"
       className={cn(
         "site-logo relative isolate inline-flex items-center overflow-visible font-[family-name:var(--font-display)] text-lg font-semibold leading-none tracking-[0.32em] uppercase sm:text-xl",

@@ -1,6 +1,8 @@
 // src/lib/wordpress.ts
 // Headless WordPress REST client: posts, authors, categories, concerts, gallery.
 
+import { unstable_cache } from "next/cache";
+
 const DEFAULT_WORDPRESS_URL = "https://admin.galaxisok.hu";
 
 export const WORDPRESS_CACHE_TAG = "wordpress";
@@ -120,6 +122,17 @@ export type GalleryImage = {
 };
 
 const WP_FETCH_ATTEMPTS = 3;
+const WP_CACHE_SECONDS = 60;
+
+function cacheWp<Args extends unknown[], Result>(
+  key: string,
+  fn: (...args: Args) => Promise<Result>,
+) {
+  return unstable_cache(fn, [key], {
+    revalidate: WP_CACHE_SECONDS,
+    tags: [WORDPRESS_CACHE_TAG],
+  });
+}
 
 function wordpressUrl(): string {
   const raw = process.env.WORDPRESS_URL ?? DEFAULT_WORDPRESS_URL;
@@ -251,6 +264,15 @@ async function wpRequest(path: string): Promise<Response | null> {
       });
 
       if (response.ok) {
+        const payload = await response
+          .clone()
+          .json()
+          .catch(() => null);
+        const emptyList = Array.isArray(payload) && payload.length === 0;
+        if (emptyList && attempt < WP_FETCH_ATTEMPTS - 1) {
+          await sleep(300 * (attempt + 1));
+          continue;
+        }
         return response;
       }
     } catch {
@@ -274,7 +296,7 @@ async function wpFetch<T>(path: string): Promise<T | null> {
   return (await response.json()) as T;
 }
 
-export async function getCategories(): Promise<BlogCategory[]> {
+async function getCategoriesFresh(): Promise<BlogCategory[]> {
   const terms = await wpFetch<WpTerm[]>(
     "/wp-json/wp/v2/categories?per_page=50&hide_empty=true",
   );
@@ -292,6 +314,8 @@ export async function getCategories(): Promise<BlogCategory[]> {
       count: term.count ?? 0,
     }));
 }
+
+export const getCategories = cacheWp("wp-categories", getCategoriesFresh);
 
 export const BLOG_PAGE_SIZE = 5;
 
@@ -316,7 +340,7 @@ async function categoryQuery(categorySlug?: string): Promise<string | null> {
   return `&categories=${match.id}`;
 }
 
-export async function getPosts(categorySlug?: string): Promise<BlogPost[]> {
+async function getPostsFresh(categorySlug?: string): Promise<BlogPost[]> {
   const extra = await categoryQuery(categorySlug);
   if (extra === null) {
     return [];
@@ -333,7 +357,9 @@ export async function getPosts(categorySlug?: string): Promise<BlogPost[]> {
   return posts.map(mapPost);
 }
 
-export async function getPostsPage(
+export const getPosts = cacheWp("wp-posts", getPostsFresh);
+
+async function getPostsPageFresh(
   categorySlug?: string,
   page = 1,
 ): Promise<BlogPostPage> {
@@ -367,7 +393,9 @@ export async function getPostsPage(
   };
 }
 
-export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
+export const getPostsPage = cacheWp("wp-posts-page", getPostsPageFresh);
+
+async function getPostBySlugFresh(slug: string): Promise<BlogPost | null> {
   const posts = await wpFetch<WpPost[]>(
     `/wp-json/wp/v2/posts?_embed=1&slug=${encodeURIComponent(slug)}&status=publish`,
   );
@@ -379,7 +407,9 @@ export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
   return mapPost(posts[0]);
 }
 
-export async function getConcerts(): Promise<Concert[]> {
+export const getPostBySlug = cacheWp("wp-post-slug", getPostBySlugFresh);
+
+async function getConcertsFresh(): Promise<Concert[]> {
   const rows = await wpFetch<WpConcert[]>(
     "/wp-json/wp/v2/koncertek?per_page=50&status=publish",
   );
@@ -408,6 +438,8 @@ export async function getConcerts(): Promise<Concert[]> {
       return aTime - bTime;
     });
 }
+
+export const getConcerts = cacheWp("wp-concerts", getConcertsFresh);
 
 function mapGalleryRow(row: WpPost): GalleryImage[] {
   const title = decodeEntities(stripHtml(row.title.rendered));
@@ -443,7 +475,7 @@ function mapGalleryMedia(media: WpMedia & { id?: number; title?: WpRendered }): 
   ];
 }
 
-export async function getGalleryImages(): Promise<GalleryImage[]> {
+async function getGalleryImagesFresh(): Promise<GalleryImage[]> {
   const rows = await wpFetch<WpPost[]>(
     "/wp-json/wp/v2/galeria?_embed=1&per_page=40&status=publish",
   );
@@ -459,6 +491,8 @@ export async function getGalleryImages(): Promise<GalleryImage[]> {
 
   return (media ?? []).flatMap(mapGalleryMedia);
 }
+
+export const getGalleryImages = cacheWp("wp-gallery", getGalleryImagesFresh);
 
 export function formatHuDate(isoDate: string): string {
   return new Intl.DateTimeFormat("hu-HU", {

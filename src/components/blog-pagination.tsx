@@ -29,7 +29,7 @@ export function BlogPagination({
   return (
     <nav aria-label="Lapozás" className="blog-pager">
       {page > 1 ? (
-        <Link href={previousHref} className="blog-pager-step" aria-label="Előző oldal">
+        <Link href={previousHref} prefetch className="blog-pager-step" aria-label="Előző oldal">
           <ChevronLeft className="size-6 sm:hidden" strokeWidth={1.75} />
           <span className="hidden sm:inline">Előző</span>
         </Link>
@@ -49,6 +49,7 @@ export function BlogPagination({
           <li key={item}>
             <Link
               href={blogListHref(kategoria, item)}
+              prefetch
               aria-current={item === page ? "page" : undefined}
               aria-label={`${item}. oldal`}
               className={cn("blog-pager-page", item === page && "is-active")}
@@ -60,7 +61,7 @@ export function BlogPagination({
       </ul>
 
       {page < totalPages ? (
-        <Link href={nextHref} className="blog-pager-step" aria-label="Következő oldal">
+        <Link href={nextHref} prefetch className="blog-pager-step" aria-label="Következő oldal">
           <ChevronRight className="size-6 sm:hidden" strokeWidth={1.75} />
           <span className="hidden sm:inline">Következő</span>
         </Link>
