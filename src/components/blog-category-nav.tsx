@@ -86,7 +86,7 @@ function CategoryLink({ href, active, children }: CategoryLinkProps) {
   return (
     <Link
       href={href}
-      prefetch
+      prefetch={false}
       className={cn(
         "blog-category-link inline-flex min-h-8 items-center font-[family-name:var(--font-display)] text-[11px] tracking-[0.22em] uppercase",
         active ? "is-active text-white" : "text-white/50 hover:text-white",

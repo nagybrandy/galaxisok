@@ -6,7 +6,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { NAV_LINKS, type NavLink } from "@/lib/site";
+import { NAV_LINKS, shouldPrefetchRoute, type NavLink } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 type SiteNavProps = {
@@ -53,7 +53,12 @@ export function SiteNav({ links = NAV_LINKS, className }: SiteNavProps) {
         }
 
         return (
-          <Link key={link.href} href={link.href} prefetch className={itemClass}>
+          <Link
+            key={link.href}
+            href={link.href}
+            prefetch={shouldPrefetchRoute(link.href)}
+            className={itemClass}
+          >
             {label}
           </Link>
         );

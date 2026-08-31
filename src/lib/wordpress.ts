@@ -121,17 +121,39 @@ export type GalleryImage = {
   height: number;
 };
 
-const WP_FETCH_ATTEMPTS = 3;
+const WP_FETCH_ATTEMPTS = 5;
 const WP_CACHE_SECONDS = 60;
+
+function isEmptyWpResult(result: unknown): boolean {
+  if (Array.isArray(result)) {
+    return result.length === 0;
+  }
+
+  if (result && typeof result === "object" && "posts" in result) {
+    const page = result as BlogPostPage;
+    return page.posts.length === 0;
+  }
+
+  return false;
+}
 
 function cacheWp<Args extends unknown[], Result>(
   key: string,
   fn: (...args: Args) => Promise<Result>,
 ) {
-  return unstable_cache(fn, [key], {
+  const cached = unstable_cache(fn, [key], {
     revalidate: WP_CACHE_SECONDS,
     tags: [WORDPRESS_CACHE_TAG],
   });
+
+  return async (...args: Args): Promise<Result> => {
+    const result = await cached(...args);
+    if (!isEmptyWpResult(result)) {
+      return result;
+    }
+
+    return fn(...args);
+  };
 }
 
 function wordpressUrl(): string {
@@ -257,6 +279,7 @@ async function wpRequest(path: string): Promise<Response | null> {
     try {
       const response = await fetch(url, {
         cache: "no-store",
+        signal: AbortSignal.timeout(12_000),
         headers: {
           Accept: "application/json",
           "User-Agent": "Galaxisok/1.0",
@@ -270,7 +293,7 @@ async function wpRequest(path: string): Promise<Response | null> {
           .catch(() => null);
         const emptyList = Array.isArray(payload) && payload.length === 0;
         if (emptyList && attempt < WP_FETCH_ATTEMPTS - 1) {
-          await sleep(300 * (attempt + 1));
+          await sleep(450 * (attempt + 1));
           continue;
         }
         return response;
@@ -280,7 +303,7 @@ async function wpRequest(path: string): Promise<Response | null> {
     }
 
     if (attempt < WP_FETCH_ATTEMPTS - 1) {
-      await sleep(300 * (attempt + 1));
+      await sleep(450 * (attempt + 1));
     }
   }
 

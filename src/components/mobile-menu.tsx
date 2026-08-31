@@ -7,7 +7,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 
-import { HERO_IMAGE, NAV_LINKS, type NavLink } from "@/lib/site";
+import { HERO_IMAGE, NAV_LINKS, shouldPrefetchRoute, type NavLink } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 import { Logo } from "./logo";
@@ -136,7 +136,12 @@ export function MobileMenu({
               }
 
               return (
-                <Link key={link.href} href={link.href} prefetch className={itemClass}>
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  prefetch={shouldPrefetchRoute(link.href)}
+                  className={itemClass}
+                >
                   {link.label}
                 </Link>
               );

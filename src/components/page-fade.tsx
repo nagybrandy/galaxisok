@@ -17,8 +17,7 @@ export function PageFade({ children }: PageFadeProps) {
   const pathname = usePathname();
   const previous = readHeroPath() || pathname;
   const skipHero = isHomeAboutPair(previous, pathname);
-  const skipInner = pathname !== "/" && previous !== "/";
-  const visible = useFadeOnChange(pathname, skipHero || skipInner);
+  const visible = useFadeOnChange(pathname, skipHero);
 
   return (
     <div className={visible ? "page-fade is-in" : "page-fade is-out"}>

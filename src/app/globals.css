@@ -203,7 +203,7 @@
   flex: 1 1 auto;
   min-height: 0;
   opacity: 0;
-  transition: opacity 420ms ease;
+  transition: opacity 560ms ease;
 }
 
 .page-fade.is-out {
@@ -321,9 +321,7 @@ html.hero-from-home.hero-copy-in .rolunk-copy {
 
 .blog-post-teaser:hover .blog-post-title,
 .blog-post-teaser:focus-visible .blog-post-title {
-  text-shadow:
-    0 0 10px rgba(255, 255, 255, 0.5),
-    0 0 22px rgba(255, 255, 255, 0.18);
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.12);
 }
 
 .blog-pager {

@@ -27,13 +27,19 @@ export const NAV_LINKS: NavLink[] = [
 ];
 
 export const PREFETCH_ROUTES = [
-  "/rolunk",
-  "/blog",
-  "/koncertek",
   "/hirlevel",
   "/aszf",
   "/adatkezeles",
 ] as const;
+
+export function shouldPrefetchRoute(href: string): boolean {
+  return (
+    href !== "/rolunk" &&
+    href !== "/koncertek" &&
+    href !== "/blog" &&
+    !href.startsWith("/blog/")
+  );
+}
 
 export function siteUrl(): string {
   return process.env.NEXT_PUBLIC_SITE_URL ?? DEV_SITE_URL;
