@@ -1,29 +1,46 @@
 // src/components/mobile-menu.tsx
-// Full-screen mobile nav. The same mark morphs into an X when the overlay opens.
+// Full-screen nav from phone through tablet. Wordmark stays on the overlay.
 
 "use client";
 
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import { HERO_IMAGE, NAV_LINKS, type NavLink } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
+import { Logo } from "./logo";
 import { SocialLinks } from "./social-links";
 
 type MobileMenuProps = {
   links?: NavLink[];
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 };
 
-export function MobileMenu({ links = NAV_LINKS }: MobileMenuProps) {
+export function MobileMenu({
+  links = NAV_LINKS,
+  open,
+  onOpenChange,
+}: MobileMenuProps) {
   const pathname = usePathname();
-  const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    setOpen(false);
-  }, [pathname]);
+    onOpenChange(false);
+  }, [pathname, onOpenChange]);
+
+  useEffect(() => {
+    const onResize = () => {
+      if (window.matchMedia("(min-width: 1024px)").matches) {
+        onOpenChange(false);
+      }
+    };
+
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, [onOpenChange]);
 
   useEffect(() => {
     if (!open) {
@@ -35,7 +52,7 @@ export function MobileMenu({ links = NAV_LINKS }: MobileMenuProps) {
 
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        setOpen(false);
+        onOpenChange(false);
       }
     };
 
@@ -44,17 +61,17 @@ export function MobileMenu({ links = NAV_LINKS }: MobileMenuProps) {
       document.body.style.overflow = previous;
       window.removeEventListener("keydown", onKey);
     };
-  }, [open]);
+  }, [open, onOpenChange]);
 
   return (
-    <div className="sm:hidden">
+    <div className="lg:hidden">
       <button
         type="button"
-        className="relative z-10 flex size-10 items-center justify-end text-white"
+        className="relative z-20 flex size-10 items-center justify-end text-white"
         aria-expanded={open}
         aria-controls="mobile-menu"
         aria-label={open ? "Menü bezárása" : "Menü"}
-        onClick={() => setOpen((value) => !value)}
+        onClick={() => onOpenChange(!open)}
       >
         <span className={cn("menu-mark", open && "is-open")} aria-hidden>
           <span />
@@ -66,7 +83,7 @@ export function MobileMenu({ links = NAV_LINKS }: MobileMenuProps) {
       {open ? (
         <div
           id="mobile-menu"
-          className="mobile-menu fixed inset-0 z-0 flex flex-col text-white"
+          className="mobile-menu fixed inset-0 z-[1] flex flex-col text-white"
           role="dialog"
           aria-modal="true"
           aria-label="Menü"
@@ -85,7 +102,14 @@ export function MobileMenu({ links = NAV_LINKS }: MobileMenuProps) {
             <div className="absolute inset-0 bg-[rgba(12,36,110,0.52)]" />
           </div>
 
-          <nav className="relative z-[1] flex min-h-0 flex-1 flex-col justify-center gap-5 overflow-y-auto px-5 pt-[max(5.5rem,calc(env(safe-area-inset-top)+4.25rem))] pb-6">
+          <div className="relative z-[2] flex items-center px-5 pt-[max(1.25rem,env(safe-area-inset-top))] pb-5 sm:px-8 sm:pt-[max(1.75rem,env(safe-area-inset-top))] sm:pb-7">
+            <Logo
+              tone="light"
+              className="pointer-events-auto relative z-10 inline-flex h-10 items-center leading-none"
+            />
+          </div>
+
+          <nav className="relative z-[2] flex min-h-0 flex-1 flex-col justify-center gap-4 overflow-y-auto px-5 pb-6 sm:gap-5 sm:px-8 md:gap-6">
             {links.map((link) => {
               const active =
                 !link.external &&
@@ -93,7 +117,7 @@ export function MobileMenu({ links = NAV_LINKS }: MobileMenuProps) {
                   (link.href !== "/" && pathname.startsWith(`${link.href}/`)));
 
               const itemClass = cn(
-                "mobile-menu-link font-[family-name:var(--font-display)] text-[2.35rem] font-semibold leading-none tracking-[0.18em] uppercase",
+                "mobile-menu-link font-[family-name:var(--font-display)] text-[1.85rem] font-semibold leading-none tracking-[0.16em] uppercase sm:text-[2.25rem] sm:tracking-[0.18em] md:text-[2.5rem]",
                 active ? "text-white" : "text-white/78",
               );
 
@@ -105,7 +129,7 @@ export function MobileMenu({ links = NAV_LINKS }: MobileMenuProps) {
                     target="_blank"
                     rel="noreferrer noopener"
                     className={itemClass}
-                    onClick={() => setOpen(false)}
+                    onClick={() => onOpenChange(false)}
                   >
                     {link.label}
                   </a>
@@ -120,7 +144,7 @@ export function MobileMenu({ links = NAV_LINKS }: MobileMenuProps) {
             })}
           </nav>
 
-          <div className="relative z-[1] px-5 pb-[max(2rem,env(safe-area-inset-bottom))] pt-2">
+          <div className="relative z-[2] px-5 pb-[max(2rem,env(safe-area-inset-bottom))] pt-2 sm:px-8">
             <SocialLinks layout="menu" />
           </div>
         </div>

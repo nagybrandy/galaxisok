@@ -19,7 +19,7 @@ export function SiteNav({ links = NAV_LINKS, className }: SiteNavProps) {
   const pathname = usePathname();
 
   return (
-    <nav className={cn("pointer-events-auto flex flex-wrap items-center gap-x-5 gap-y-2", className)}>
+    <nav className={cn("pointer-events-auto flex flex-wrap items-center gap-x-4 gap-y-2 xl:gap-x-5", className)}>
       {links.map((link) => {
         const active =
           !link.external &&
@@ -27,7 +27,7 @@ export function SiteNav({ links = NAV_LINKS, className }: SiteNavProps) {
             (link.href !== "/" && pathname.startsWith(`${link.href}/`)));
 
         const itemClass = cn(
-          "nav-link font-[family-name:var(--font-display)] text-[13px] font-semibold tracking-[0.16em] uppercase sm:text-[15px] sm:tracking-[0.18em]",
+          "nav-link font-[family-name:var(--font-display)] text-[13px] font-semibold tracking-[0.14em] uppercase xl:text-[15px] xl:tracking-[0.18em]",
           active ? "is-active text-white" : "text-white",
         );
 

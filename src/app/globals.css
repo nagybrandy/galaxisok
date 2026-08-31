@@ -166,6 +166,17 @@
   }
 }
 
+.site-header {
+  isolation: isolate;
+}
+
+.site-header.is-menu-open .site-logo {
+  color: #fff;
+  text-shadow:
+    0 1px 10px rgba(0, 0, 0, 0.7),
+    0 0 18px rgba(0, 0, 0, 0.45);
+}
+
 .site-header::before {
   content: "";
   position: absolute;
