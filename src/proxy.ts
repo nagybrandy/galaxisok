@@ -18,6 +18,7 @@ function isStaticAsset(pathname: string): boolean {
     pathname === "/favicon.svg" ||
     pathname === "/icon.svg" ||
     pathname === "/apple-icon.png" ||
+    pathname === "/atmosphere.jpg" ||
     pathname === "/hero.jpg" ||
     /\.(?:avif|gif|ico|ics|jpe?g|png|svg|webp|woff2?)$/i.test(pathname)
   );
@@ -51,6 +52,6 @@ export function proxy(request: NextRequest) {
 
 export const proxyConfig = {
   matcher: [
-    "/((?!_next/static|_next/image|_next/data|favicon.ico|icon.svg).*)",
+    "/((?!_next/static|_next/image|_next/data|favicon.ico|icon.svg|atmosphere\\.jpg|hero\\.jpg).*)",
   ],
 };
