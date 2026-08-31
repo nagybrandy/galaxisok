@@ -60,9 +60,9 @@ export function CookieConsent() {
   return (
     <>
       {banner ? (
-        <div className="fixed inset-x-0 bottom-0 z-50 border-t border-white/15 bg-[#050b1c]/95 px-5 py-4 backdrop-blur-md sm:px-8">
+        <div className="cookie-banner fixed inset-x-0 bottom-0 z-50 border-t border-white/15 bg-[#050b1c]/95 px-5 py-4 backdrop-blur-md sm:px-8">
           <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 md:flex-row md:items-center md:justify-between md:gap-8">
-            <p className="min-w-0 text-sm leading-6 text-white/70 md:max-w-xl">
+            <p className="min-w-0 font-[family-name:var(--font-fuse)] text-sm leading-6 font-normal text-white/70 md:max-w-xl">
               Sütiket használunk a belépéshez. A hírlevél beágyazásához külön
               engedély kell.{" "}
               <a href="/adatkezeles" className="underline underline-offset-4">
@@ -102,7 +102,7 @@ export function CookieConsent() {
             <h2 className="font-[family-name:var(--font-display)] text-2xl tracking-[0.18em] uppercase">
               Sütik
             </h2>
-            <ul className="mt-6 space-y-4 text-sm text-white/70">
+            <ul className="mt-6 space-y-4 font-[family-name:var(--font-fuse)] text-sm font-normal text-white/70">
               <li>
                 <p className="text-white">Szükséges</p>
                 <p className="mt-1">Belépés, a választásaid mentése. Ezeket nem lehet kikapcsolni.</p>

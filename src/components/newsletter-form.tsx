@@ -17,7 +17,7 @@ export function NewsletterForm({ embedUrl }: NewsletterFormProps) {
 
   return (
     <form
-      className="mt-10 w-full text-left"
+      className="mt-8 w-full text-left"
       action={embedUrl && accepted ? undefined : "#"}
       method="post"
       onSubmit={(event) => {

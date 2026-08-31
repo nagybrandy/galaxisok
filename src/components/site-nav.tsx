@@ -19,7 +19,7 @@ export function SiteNav({ links = NAV_LINKS, className }: SiteNavProps) {
   const pathname = usePathname();
 
   return (
-    <nav className={cn("pointer-events-auto flex flex-wrap items-center gap-x-4 gap-y-2 xl:gap-x-5", className)}>
+    <nav className={cn("pointer-events-auto flex flex-nowrap items-center gap-x-3 xl:gap-x-5", className)}>
       {links.map((link) => {
         const active =
           !link.external &&
@@ -57,6 +57,7 @@ export function SiteNav({ links = NAV_LINKS, className }: SiteNavProps) {
             key={link.href}
             href={link.href}
             prefetch={shouldPrefetchRoute(link.href)}
+            aria-current={active ? "page" : undefined}
             className={itemClass}
           >
             {label}

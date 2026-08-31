@@ -26,10 +26,12 @@ export async function POST(request: Request) {
   }
 
   revalidateTag(WORDPRESS_CACHE_TAG, "max");
+  revalidatePath("/");
   revalidatePath("/blog");
   revalidatePath("/blog/[slug]", "page");
   revalidatePath("/koncertek");
   revalidatePath("/rolunk");
+  revalidatePath("/kontakt");
 
   return NextResponse.json({ ok: true, revalidated: true });
 }

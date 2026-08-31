@@ -1,5 +1,6 @@
 // src/lib/wordpress.ts
-// Headless WordPress REST client: posts, authors, concerts, and the home teaser.
+// Headless WordPress REST client.
+// Editable pages: `rolunk` (bio), `kontakt` (contact), `fohir` (home title + link).
 
 import { unstable_cache } from "next/cache";
 
@@ -54,6 +55,14 @@ type WpPost = {
   featured_media: number;
   categories?: number[];
   yoast_head_json?: WpYoast;
+  meta?: {
+    fohir_url?: string;
+    helyszin?: string;
+    varos?: string;
+    idopont?: string;
+    jegy_url?: string;
+    komment?: string;
+  };
   _embedded?: {
     author?: WpAuthor[];
     "wp:featuredmedia"?: WpMedia[];
@@ -64,8 +73,10 @@ type WpPost = {
 type WpConcert = WpPost & {
   meta?: {
     helyszin?: string;
+    varos?: string;
     idopont?: string;
     jegy_url?: string;
+    komment?: string;
   };
 };
 
@@ -108,6 +119,7 @@ export type Concert = {
   title: string;
   description: string;
   venue: string;
+  city: string;
   startsAt: string | null;
   ticketUrl: string | null;
 };
@@ -124,7 +136,14 @@ export type GalleryImage = {
 export type FeaturedNews = {
   title: string;
   href: string;
+  linkLabel: string;
 } | null;
+
+export type WpEditablePage = {
+  title: string;
+  html: string;
+  image: GalleryImage | null;
+};
 
 const WP_FETCH_ATTEMPTS = 5;
 const WP_CACHE_SECONDS = 60;
@@ -279,12 +298,14 @@ function mapPost(post: WpPost): BlogPost {
 
 async function wpRequest(path: string): Promise<Response | null> {
   const url = `${wordpressUrl()}${path}`;
+  const slugLookup = /[?&]slug=/.test(path);
+  const timeoutMs = slugLookup ? 4_000 : 12_000;
 
   for (let attempt = 0; attempt < WP_FETCH_ATTEMPTS; attempt += 1) {
     try {
       const response = await fetch(url, {
         cache: "no-store",
-        signal: AbortSignal.timeout(12_000),
+        signal: AbortSignal.timeout(timeoutMs),
         headers: {
           Accept: "application/json",
           "User-Agent": "Galaxisok/1.0",
@@ -297,7 +318,8 @@ async function wpRequest(path: string): Promise<Response | null> {
           .json()
           .catch(() => null);
         const emptyList = Array.isArray(payload) && payload.length === 0;
-        if (emptyList && attempt < WP_FETCH_ATTEMPTS - 1) {
+        // A missing slug is a real empty result, not a cold WordPress miss.
+        if (emptyList && !slugLookup && attempt < WP_FETCH_ATTEMPTS - 1) {
           await sleep(450 * (attempt + 1));
           continue;
         }
@@ -452,43 +474,187 @@ function firstHref(html: string): string | null {
   return relative?.[0] ?? null;
 }
 
-async function getFeaturedNewsFresh(): Promise<FeaturedNews> {
-  const pages = await wpFetch<WpPost[]>(
-    "/wp-json/wp/v2/pages?slug=fohir&status=publish",
+function firstLink(html: string): { href: string; label: string } | null {
+  const tagged = html.match(
+    /<a\b[^>]*href=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/i,
   );
-  const page = pages?.[0];
-  if (page) {
-    const title = decodeEntities(stripHtml(page.title.rendered));
-    const href =
-      firstHref(page.content.rendered) ?? firstHref(page.excerpt.rendered);
-    if (title && href) {
-      return { title, href };
-    }
+  if (tagged?.[1]) {
+    return {
+      href: decodeEntities(tagged[1]).trim(),
+      label: stripHtml(tagged[2]).trim(),
+    };
   }
 
-  const posts = await wpFetch<WpPost[]>(
-    "/wp-json/wp/v2/posts?slug=fohir&status=publish",
-  );
-  const post = posts?.[0];
-  if (!post) {
+  const href = firstHref(html);
+  if (!href) {
     return null;
   }
 
+  return { href, label: "" };
+}
+
+async function getPageBySlugFresh(slug: string): Promise<WpEditablePage | null> {
+  const pages = await wpFetch<WpPost[]>(
+    `/wp-json/wp/v2/pages?slug=${encodeURIComponent(slug)}&_embed=1&status=publish`,
+  );
+  const page = pages?.[0];
+  if (!page) {
+    return null;
+  }
+
+  const title = decodeEntities(stripHtml(page.title.rendered));
+  const mapped = mapImage(page._embedded?.["wp:featuredmedia"]?.[0], title);
+
+  return {
+    title,
+    html: sanitizeWpHtml(page.content.rendered || ""),
+    image: mapped
+      ? {
+          id: page.id,
+          title,
+          ...mapped,
+        }
+      : null,
+  };
+}
+
+export const getPageBySlug = cacheWp("wp-page-slug", getPageBySlugFresh);
+
+function clipHeadline(text: string, max = 200): string {
+  const compact = text.replace(/\s+/g, " ").trim();
+  if (compact.length <= max) {
+    return compact;
+  }
+  return `${compact.slice(0, max - 1).replace(/\s+\S*$/, "")}…`;
+}
+
+function firstSentences(text: string, count = 2): string {
+  const parts: string[] = [];
+  let rest = text.trim();
+  for (let i = 0; i < count && rest; i += 1) {
+    const match = rest.match(/^[^.!?]+[.!?]?/);
+    if (!match) {
+      break;
+    }
+    parts.push(match[0].trim());
+    rest = rest.slice(match[0].length).trim();
+  }
+  return parts.join(" ");
+}
+
+function featuredNewsFromHomePage(page: WpPost): FeaturedNews {
+  const overlay = stripHtml(page.content.rendered || "")
+    .replace(/https?:\/\/\S+/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+  if (!overlay || overlay.toLowerCase() === "főhír") {
+    return null;
+  }
+
+  const href =
+    page.meta?.fohir_url?.trim() ||
+    firstLink(page.content.rendered)?.href ||
+    firstLink(page.excerpt.rendered)?.href;
+  if (!href) {
+    return null;
+  }
+
+  return {
+    title: clipHeadline(overlay, 280),
+    href,
+    linkLabel: "Lejátszás",
+  };
+}
+
+function featuredNewsFrom(
+  post: WpPost,
+  fallbackHref: string | null,
+): FeaturedNews {
   const title = decodeEntities(stripHtml(post.title.rendered));
   if (!title) {
     return null;
   }
 
+  const link =
+    firstLink(post.content.rendered) ?? firstLink(post.excerpt.rendered);
+  const href = link?.href || fallbackHref;
+  if (!href) {
+    return null;
+  }
+
+  const excerpt = stripHtml(post.excerpt.rendered || "").replace(/\s+/g, " ").trim();
+  const content = stripHtml(post.content.rendered || "")
+    .replace(/https?:\/\/\S+/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+  const extra = [excerpt, content].sort((a, b) => b.length - a.length)[0] ?? "";
+  const rest = extra.startsWith(title)
+    ? extra.slice(title.length).replace(/^[.\s—–-]+/, "")
+    : extra;
+  const headline =
+    rest && rest !== title && rest.length >= 12
+      ? `${title}. ${firstSentences(rest, 2)}`
+      : title;
+
   return {
-    title,
-    href:
-      firstHref(post.content.rendered) ??
-      firstHref(post.excerpt.rendered) ??
-      `/blog/${post.slug}`,
+    title: clipHeadline(headline),
+    href,
+    linkLabel: link?.label || "Lejátszás",
   };
 }
 
-export const getFeaturedNews = cacheWp("wp-featured-news", getFeaturedNewsFresh);
+async function getFeaturedNewsFresh(): Promise<FeaturedNews> {
+  const pages = await wpFetch<WpPost[]>(
+    "/wp-json/wp/v2/pages?slug=fohir&status=publish",
+  );
+  const fromPage = pages?.[0] ? featuredNewsFromHomePage(pages[0]) : null;
+  if (fromPage) {
+    return fromPage;
+  }
+
+  const named = await wpFetch<WpPost[]>(
+    "/wp-json/wp/v2/posts?slug=fohir&status=publish",
+  );
+  const fromNamed = named?.[0]
+    ? featuredNewsFrom(named[0], `/blog/${named[0].slug}`)
+    : null;
+  if (fromNamed) {
+    return fromNamed;
+  }
+
+  const latest = await wpFetch<WpPost[]>(
+    "/wp-json/wp/v2/posts?per_page=1&status=publish",
+  );
+  const post = latest?.[0];
+  if (!post) {
+    return null;
+  }
+
+  return featuredNewsFrom(post, `/blog/${post.slug}`);
+}
+
+export const getFeaturedNews = cacheWp("wp-featured-news-v3", getFeaturedNewsFresh);
+
+function splitVenueCity(
+  helyszin: string,
+  cityMeta?: string,
+): { venue: string; city: string } {
+  const city = cityMeta?.trim() ?? "";
+  const raw = helyszin.trim();
+  if (city) {
+    return { venue: raw, city };
+  }
+
+  const comma = raw.lastIndexOf(",");
+  if (comma > 0) {
+    return {
+      venue: raw.slice(0, comma).trim(),
+      city: raw.slice(comma + 1).trim(),
+    };
+  }
+
+  return { venue: raw, city: "" };
+}
 
 async function getConcertsFresh(): Promise<Concert[]> {
   const rows = await wpFetch<WpConcert[]>(
@@ -502,13 +668,22 @@ async function getConcertsFresh(): Promise<Concert[]> {
   return rows
     .map((row) => {
       const startsAt = row.meta?.idopont?.trim() || null;
+      const title = decodeEntities(stripHtml(row.title.rendered));
+      const { venue, city } = splitVenueCity(
+        row.meta?.helyszin?.trim() || title,
+        row.meta?.varos,
+      );
+      const comment =
+        row.meta?.komment?.trim() ||
+        stripHtml(row.content.rendered || row.excerpt.rendered);
 
       return {
         id: row.id,
         slug: row.slug,
-        title: decodeEntities(stripHtml(row.title.rendered)),
-        description: stripHtml(row.content.rendered || row.excerpt.rendered),
-        venue: row.meta?.helyszin?.trim() || "",
+        title,
+        description: comment,
+        venue: venue || title,
+        city,
         startsAt,
         ticketUrl: row.meta?.jegy_url?.trim() || null,
       };
@@ -597,6 +772,25 @@ const HU_MONTHS = [
   "november",
   "december",
 ] as const;
+
+export function formatTourDate(value: string): string | null {
+  const naive = value.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (naive) {
+    const [, year, month, day] = naive;
+    const monthName = HU_MONTHS[Number(month) - 1];
+    if (!monthName) {
+      return null;
+    }
+    return `${year}. ${monthName} ${Number(day)}.`;
+  }
+
+  const parts = formatHuDateTimeParts(value);
+  if (!parts) {
+    return null;
+  }
+
+  return `${parts.year} ${parts.day}`.replace(/\s+/g, " ").trim();
+}
 
 export type HuDateTimeParts = {
   year: string;

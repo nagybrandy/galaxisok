@@ -1,5 +1,5 @@
 // src/lib/use-fade-on-change.ts
-// Hide before paint, then fade in. Home → Rólunk keeps the photo on screen.
+// Hide before paint, then fade in.
 
 "use client";
 

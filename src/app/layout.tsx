@@ -1,8 +1,8 @@
 // src/app/layout.tsx
-// Root chrome: poster-like display face, hero as default SEO image.
+// Root chrome: Oswald for display, Fuse Regular (Outfit stand-in until licensed files land) for copy.
 
 import type { Metadata, Viewport } from "next";
-import { Geist, Oswald } from "next/font/google";
+import { Oswald, Outfit } from "next/font/google";
 import { Suspense } from "react";
 
 import { CookieConsent } from "@/components/cookie-consent";
@@ -14,19 +14,26 @@ import { PersistentFooter, PersistentHeader } from "@/components/persistent-chro
 import { PersistentHero } from "@/components/persistent-hero";
 import { RoutePrefetcher } from "@/components/route-prefetcher";
 import { ScrollToTop } from "@/components/scroll-to-top";
-import { HERO_IMAGE, SITE_DESCRIPTION, SITE_NAME, siteUrl } from "@/lib/site";
+import {
+  ATMOSPHERE_IMAGE,
+  HERO_IMAGE,
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  siteUrl,
+} from "@/lib/site";
 
 import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin", "latin-ext"],
-});
 
 const oswald = Oswald({
   variable: "--font-display",
   subsets: ["latin", "latin-ext"],
   weight: ["400", "500", "600", "700"],
+});
+
+const fuse = Outfit({
+  variable: "--font-fuse",
+  subsets: ["latin", "latin-ext"],
+  weight: ["400", "600"],
 });
 
 export const metadata: Metadata = {
@@ -70,13 +77,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="hu"
-      className={`${geistSans.variable} ${oswald.variable} h-full antialiased`}
+      className={`${oswald.variable} ${fuse.variable} h-full antialiased`}
     >
       <head>
         <link rel="preload" href={HERO_IMAGE} as="image" type="image/jpeg" />
-        <link rel="preload" href="/atmosphere.jpg" as="image" type="image/jpeg" />
+        <link rel="preload" href={ATMOSPHERE_IMAGE} as="image" type="image/jpeg" />
       </head>
-      <body className="relative flex min-h-full flex-col bg-[#050b1c] font-sans text-white">
+      <body className="relative flex min-h-dvh flex-col bg-[#050b1c] font-sans text-white">
         <NightAtmosphere />
         <PersistentHeader />
         <PersistentHero />

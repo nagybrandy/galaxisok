@@ -1,5 +1,5 @@
 // src/components/home-spotlight.tsx
-// Optional homepage headline + play control, from the WordPress `fohir` page.
+// Homepage headline + play control over the photo, Fruit Bats style.
 
 "use client";
 
@@ -43,16 +43,16 @@ export function HomeSpotlight() {
   const external = /^https?:\/\//i.test(news.href);
 
   return (
-    <div className="home-spotlight">
+    <div className="home-spotlight is-appearing">
       <p className="home-spotlight-title">{news.title}</p>
       <a
         href={news.href}
         className="home-play"
+        aria-label={news.linkLabel || "Lejátszás"}
         target={external ? "_blank" : undefined}
         rel={external ? "noreferrer noopener" : undefined}
-        aria-label={`${news.title} — megnyitás`}
       >
-        <Play className="size-7 translate-x-0.5" fill="currentColor" aria-hidden />
+        <Play fill="currentColor" strokeWidth={0} aria-hidden />
       </a>
     </div>
   );

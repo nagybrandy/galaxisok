@@ -6,6 +6,7 @@ export type CalendarConcert = {
   title: string;
   description: string;
   venue: string;
+  city?: string;
   startsAt: string | null;
   ticketUrl: string | null;
 };
@@ -114,7 +115,7 @@ export function eventTitle(): string {
 }
 
 export function eventLocation(concert: CalendarConcert): string {
-  return concert.venue.trim() || concert.title.trim();
+  return [concert.venue, concert.city].filter(Boolean).join(", ").trim() || concert.title.trim();
 }
 
 export function eventDetails(concert: CalendarConcert): string {

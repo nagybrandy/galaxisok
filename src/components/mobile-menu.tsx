@@ -7,11 +7,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 
-import { HERO_IMAGE, NAV_LINKS, shouldPrefetchRoute, type NavLink } from "@/lib/site";
+import { NAV_LINKS, shouldPrefetchRoute, type NavLink } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
+import { AtmosphereBackdrop } from "./atmosphere-backdrop";
 import { Logo } from "./logo";
-import { SkeletonImage } from "./skeleton-image";
 import { SocialLinks } from "./social-links";
 
 type MobileMenuProps = {
@@ -88,17 +88,8 @@ export function MobileMenu({
           aria-modal="true"
           aria-label="Menü"
         >
-          <div className="absolute inset-0 overflow-hidden bg-[#050b1c]">
-            <SkeletonImage
-              src={HERO_IMAGE}
-              alt=""
-              fill
-              sizes="100vw"
-              className="object-cover object-[center_16%] scale-[1.12] blur-[14px]"
-            />
-            <div className="mobile-menu-noise" aria-hidden />
-            <div className="mobile-menu-noise-fine" aria-hidden />
-            <div className="absolute inset-0 bg-[rgba(12,36,110,0.52)]" />
+          <div className="absolute inset-0 overflow-hidden">
+            <AtmosphereBackdrop />
           </div>
 
           <div className="relative z-[2] flex items-center px-5 pt-[max(1.25rem,env(safe-area-inset-top))] pb-5 sm:px-8 sm:pt-[max(1.75rem,env(safe-area-inset-top))] sm:pb-7">
@@ -117,7 +108,7 @@ export function MobileMenu({
 
               const itemClass = cn(
                 "mobile-menu-link font-[family-name:var(--font-display)] text-[1.85rem] font-semibold leading-none tracking-[0.16em] uppercase sm:text-[2.25rem] sm:tracking-[0.18em] md:text-[2.5rem]",
-                active ? "text-white" : "text-white/78",
+                active ? "is-active text-white" : "text-white/78",
               );
 
               if (link.external) {
@@ -140,6 +131,7 @@ export function MobileMenu({
                   key={link.href}
                   href={link.href}
                   prefetch={shouldPrefetchRoute(link.href)}
+                  aria-current={active ? "page" : undefined}
                   className={itemClass}
                 >
                   {link.label}

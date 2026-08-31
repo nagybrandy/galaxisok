@@ -1,27 +1,16 @@
 // src/components/night-atmosphere.tsx
-// Full-viewport night photo behind inner pages. Native img so the first
-// load after the tesztoldal gate cannot stick on a transparent placeholder.
+// Album-cover night photo behind inner pages. Hidden on the gate.
 
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useLayoutEffect, useRef, useState } from "react";
 
-import { cn } from "@/lib/utils";
+import { ATMOSPHERE_IMAGE } from "@/lib/site";
 
 export function NightAtmosphere() {
   const pathname = usePathname();
-  const imageRef = useRef<HTMLImageElement>(null);
-  const [ready, setReady] = useState(false);
 
-  useLayoutEffect(() => {
-    const image = imageRef.current;
-    if (image?.complete && image.naturalWidth > 0) {
-      setReady(true);
-    }
-  }, [pathname]);
-
-  if (pathname === "/kapu") {
+  if (!pathname || pathname === "/kapu" || pathname === "/") {
     return null;
   }
 
@@ -32,13 +21,11 @@ export function NightAtmosphere() {
     >
       <div className="night-atmosphere-photo">
         <img
-          ref={imageRef}
-          src="/atmosphere.jpg"
+          src={ATMOSPHERE_IMAGE}
           alt=""
           fetchPriority="high"
           decoding="async"
-          onLoad={() => setReady(true)}
-          className={cn("night-atmosphere-img", ready && "is-ready")}
+          className="night-atmosphere-img"
         />
       </div>
       <div className="night-atmosphere-wash" />

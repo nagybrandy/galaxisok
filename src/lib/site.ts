@@ -10,6 +10,7 @@ export const WORDPRESS_PUBLIC_URL = "https://admin.galaxisok.hu";
 export const BANDCAMP_MUSIC_URL = "https://galaxisok.bandcamp.com/music";
 export const MERCH_URL = "https://shop.bsidemusic.hu/kategoria/galaxisok";
 export const HERO_IMAGE = "/hero.jpg";
+export const ATMOSPHERE_IMAGE = "/atmosphere.jpg";
 
 export type NavLink = {
   href: string;
@@ -20,10 +21,11 @@ export type NavLink = {
 export const NAV_LINKS: NavLink[] = [
   { href: "/rolunk", label: "Rólunk" },
   { href: "/blog", label: "Blog" },
-  { href: BANDCAMP_MUSIC_URL, label: "Zene", external: true },
   { href: "/koncertek", label: "Koncertek" },
+  { href: BANDCAMP_MUSIC_URL, label: "Zene", external: true },
   { href: MERCH_URL, label: "Merch", external: true },
   { href: "/hirlevel", label: "Hírlevél" },
+  { href: "/kontakt", label: "Kontakt" },
 ];
 
 export const PREFETCH_ROUTES = [
@@ -36,6 +38,7 @@ export function shouldPrefetchRoute(href: string): boolean {
   return (
     href !== "/rolunk" &&
     href !== "/koncertek" &&
+    href !== "/kontakt" &&
     href !== "/blog" &&
     !href.startsWith("/blog/")
   );

@@ -1,23 +1,16 @@
 // src/components/page-shell.tsx
 // Inner page body only. Atmosphere, header, and footer live in the root layout.
+// Fills the space above the footer so short pages still pin the bar to the bottom.
 
 import type { ReactNode } from "react";
 
-import { cn } from "@/lib/utils";
-
 type PageShellProps = {
   children: ReactNode;
-  flush?: boolean;
 };
 
-export function PageShell({ children, flush = false }: PageShellProps) {
+export function PageShell({ children }: PageShellProps) {
   return (
-    <div
-      className={cn(
-        "relative z-[1] flex min-h-dvh flex-col text-white",
-        !flush && "pt-[max(5rem,calc(env(safe-area-inset-top)+3.75rem))]",
-      )}
-    >
+    <div className="relative z-[1] flex flex-1 flex-col text-white">
       {children}
     </div>
   );

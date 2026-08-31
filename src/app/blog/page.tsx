@@ -6,6 +6,7 @@ import Link from "next/link";
 
 import { BlogListFade } from "@/components/blog-list-fade";
 import { BlogPagination } from "@/components/blog-pagination";
+import { INNER_PAGE_BLOG } from "@/components/page-heading";
 import { PageShell } from "@/components/page-shell";
 import { PostCover } from "@/components/post-cover";
 import { SkeletonImage } from "@/components/skeleton-image";
@@ -30,25 +31,25 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 
   return (
     <PageShell>
-      <main className="mx-auto w-full max-w-3xl flex-1 px-5 py-12 sm:px-8">
-        <h1 className="page-title text-center text-glow">Blog</h1>
-        <section className="mt-12 min-w-0">
+      <main className={INNER_PAGE_BLOG}>
+        <h1 className="sr-only">Galaxisok · Blog</h1>
+        <section className="min-w-0">
           <BlogListFade listKey={String(page)}>
             {posts.length === 0 ? (
-              <p className="text-center text-white/55">
+              <p className="text-white/55 font-[family-name:var(--font-fuse)]">
                 Itt jelennek meg a WordPressből érkező bejegyzések.
               </p>
             ) : (
               <>
-                <ul className="divide-y divide-white/15">
+                <ul className="blog-list">
                   {posts.map((post) => (
-                    <li key={post.id} className="py-8 first:pt-0 last:pb-0 sm:py-10">
+                    <li key={post.id} className="blog-list-item py-8 first:pt-0 last:pb-0 sm:py-10">
                       <Link
                         href={`/blog/${post.slug}`}
                         prefetch={false}
                         className="blog-post-teaser block"
                       >
-                        <div className="flex h-[11.5rem] flex-row items-stretch gap-3 overflow-hidden sm:h-[13rem] sm:gap-5">
+                        <div className="flex flex-row items-stretch gap-3 overflow-hidden sm:gap-5">
                           {post.image ? (
                             <PostCover
                               src={post.image.src}
@@ -58,11 +59,11 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                             />
                           ) : (
                             <div
-                              className="h-full w-28 shrink-0 rounded-xl bg-white/5 sm:w-44"
+                              className="w-28 shrink-0 self-stretch rounded-xl bg-white/5 sm:w-44"
                               aria-hidden
                             />
                           )}
-                          <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
+                          <div className="flex min-w-0 flex-1 flex-col">
                             <div className="flex items-center gap-3">
                               {post.author?.avatar ? (
                                 <span className="relative inline-block size-8 overflow-hidden rounded-full sm:size-9">
@@ -90,12 +91,14 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                                 </time>
                               </div>
                             </div>
-                            <h2 className="blog-post-title mt-2 line-clamp-2 text-lg font-semibold tracking-tight sm:mt-3 sm:text-2xl">
+                            <h2 className="blog-post-title mt-2 line-clamp-2 text-lg font-normal tracking-tight sm:text-2xl">
                               {post.title}
                             </h2>
-                            <p className="mt-auto pt-2 line-clamp-3 text-sm leading-6 text-white/60 sm:text-base">
-                              {post.excerpt || "\u00a0"}
-                            </p>
+                            <div className="blog-teaser-excerpt">
+                              <p className="line-clamp-3 text-sm leading-6 text-white/60 sm:text-base">
+                                {post.excerpt || "\u00a0"}
+                              </p>
+                            </div>
                           </div>
                         </div>
                       </Link>

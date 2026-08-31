@@ -1,12 +1,10 @@
 // src/components/skeleton-image.tsx
-// Photos arrive blurred, then ease into focus via react-lazy-load-image-component.
+// Native img. Lazy-load wrappers can stick at opacity 0 after the gate.
 
 "use client";
 
-import { LazyLoadImage } from "react-lazy-load-image-component";
 import type { MouseEventHandler } from "react";
 
-import { IMAGE_BLUR_PLACEHOLDER } from "@/lib/image-placeholder";
 import { cn } from "@/lib/utils";
 
 type SkeletonImageProps = {
@@ -33,17 +31,14 @@ export function SkeletonImage({
   onClick,
 }: SkeletonImageProps) {
   return (
-    <LazyLoadImage
+    <img
       src={src}
       alt={alt}
-      effect="blur"
-      placeholderSrc={IMAGE_BLUR_PLACEHOLDER}
-      threshold={140}
-      visibleByDefault={priority}
-      width={fill ? "100%" : width}
-      height={fill ? "100%" : height}
-      wrapperClassName={cn("lazy-image", fill && "is-fill")}
-      className={cn("lazy-image-photo", className)}
+      width={fill ? undefined : width}
+      height={fill ? undefined : height}
+      fetchPriority={priority ? "high" : "auto"}
+      decoding="async"
+      className={cn(fill && "absolute inset-0 h-full w-full", className)}
       onClick={onClick}
     />
   );

@@ -4,6 +4,7 @@
 import type { Metadata } from "next";
 
 import { NewsletterForm } from "@/components/newsletter-form";
+import { INNER_PAGE_CENTER } from "@/components/page-heading";
 import { PageShell } from "@/components/page-shell";
 
 export const metadata: Metadata = {
@@ -16,12 +17,14 @@ export default function HirlevelPage() {
 
   return (
     <PageShell>
-      <main className="mx-auto flex w-full max-w-xl flex-1 flex-col items-center justify-center px-5 py-12 text-center sm:px-8">
-        <h1 className="page-title page-title-lg text-glow">Hírlevél</h1>
-        <p className="mt-5 text-white/60">
-          Koncertek, lemezek, hírek — csak akkor írunk, ha van mit.
-        </p>
-        <NewsletterForm embedUrl={embedUrl} />
+      <main className={INNER_PAGE_CENTER}>
+        <div className="flex w-full max-w-xl flex-col items-center">
+          <h1 className="page-title page-title-lg text-glow">Hírlevél</h1>
+          <p className="mt-6 font-[family-name:var(--font-fuse)] font-normal text-white/60">
+            Koncertek, lemezek, hírek — csak akkor írunk, ha van mit.
+          </p>
+          <NewsletterForm embedUrl={embedUrl} />
+        </div>
       </main>
     </PageShell>
   );
