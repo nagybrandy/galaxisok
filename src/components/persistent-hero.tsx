@@ -7,7 +7,6 @@ import { usePathname } from "next/navigation";
 import { useLayoutEffect, useState } from "react";
 
 import { GrainOverlay } from "@/components/grain-overlay";
-import { SkeletonImage } from "@/components/skeleton-image";
 import {
   isHomeAboutPair,
   readHeroPath,
@@ -106,13 +105,12 @@ export function PersistentHero() {
       }}
     >
       <div className="persistent-hero-frame">
-        <SkeletonImage
+        <img
           src={HERO_IMAGE}
           alt=""
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-[center_16%]"
+          fetchPriority="high"
+          decoding="async"
+          className="persistent-hero-img"
         />
         <GrainOverlay />
       </div>

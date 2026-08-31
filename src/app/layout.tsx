@@ -67,9 +67,7 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
-export default async function RootLayout({ children }: LayoutProps<"/">) {
-  const featured = await getFeaturedNews();
-
+export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="hu"
@@ -83,16 +81,23 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         <NightAtmosphere />
         <PersistentHeader />
         <PersistentHero />
-        <HomeSpotlight news={featured} />
-        <RoutePrefetcher />
+        <Suspense fallback={null}>
+          <HomeSpotlightSlot />
+        </Suspense>
         <Suspense fallback={null}>
           <ScrollToTop />
           <NavigationFeedback />
         </Suspense>
+        <RoutePrefetcher />
         <PageFade>{children}</PageFade>
         <PersistentFooter />
         <CookieConsent />
       </body>
     </html>
   );
+}
+
+async function HomeSpotlightSlot() {
+  const featured = await getFeaturedNews();
+  return <HomeSpotlight news={featured} />;
 }

@@ -1090,6 +1090,14 @@ html.hero-from-home.hero-copy-in .rolunk-copy {
   background: #000;
 }
 
+.persistent-hero-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 16%;
+}
+
 .persistent-hero.is-about .persistent-hero-frame {
   mask-image: linear-gradient(to bottom, #000 58%, transparent 100%);
   -webkit-mask-image: linear-gradient(to bottom, #000 58%, transparent 100%);
