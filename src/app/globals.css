@@ -840,8 +840,8 @@ html.home-lock .page-fade {
 }
 
 .social-link.is-menu {
-  width: 3.5rem;
-  height: 3.5rem;
+  width: clamp(2.35rem, 6.8dvh, 3.5rem);
+  height: clamp(2.35rem, 6.8dvh, 3.5rem);
 }
 
 .mobile-menu-noise {
@@ -862,12 +862,53 @@ html.home-lock .page-fade {
   background-size: 88px 88px;
 }
 
+.mobile-menu {
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow: hidden;
+}
+
+.mobile-menu-head {
+  padding-bottom: clamp(0.65rem, 2dvh, 1.25rem);
+}
+
+.mobile-menu-foot {
+  padding-top: clamp(0.15rem, 0.8dvh, 0.5rem);
+  padding-bottom: max(clamp(1rem, 2.4dvh, 2rem), env(safe-area-inset-bottom));
+}
+
+.mobile-menu-nav {
+  container-type: size;
+  justify-content: safe center;
+  gap: clamp(0.3rem, min(1.15dvh, 2.4cqh), 1.5rem);
+  padding-bottom: clamp(0.75rem, 2dvh, 1.5rem);
+}
+
 .mobile-menu-link {
   position: relative;
   display: inline-block;
   width: fit-content;
+  font-size: clamp(1.15rem, min(4.05dvh, 8.6cqh), 1.85rem);
+  letter-spacing: 0.16em;
   text-shadow: 0 0 18px rgba(0, 0, 0, 0.45);
   transition: text-shadow 180ms ease, color 180ms ease;
+}
+
+@media (min-width: 640px) {
+  .mobile-menu-head {
+    padding-bottom: clamp(0.85rem, 2.2dvh, 1.75rem);
+  }
+
+  .mobile-menu-link {
+    font-size: clamp(1.35rem, min(4.4dvh, 9cqh), 2.25rem);
+    letter-spacing: 0.18em;
+  }
+}
+
+@media (min-width: 768px) {
+  .mobile-menu-link {
+    font-size: clamp(1.5rem, min(4.6dvh, 9.5cqh), 2.5rem);
+  }
 }
 
 .mobile-menu-link:hover,
@@ -955,6 +996,47 @@ html.home-lock .page-fade {
 .post-body {
   font-family: var(--font-fuse), ui-sans-serif, system-ui, sans-serif;
   font-weight: 400;
+}
+
+.post-body iframe {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  margin: 2rem 0;
+  aspect-ratio: 16 / 9;
+  border: 0;
+}
+
+.post-body .wp-block-embed {
+  width: 100%;
+  max-width: 100%;
+}
+
+.post-body .wp-block-embed__wrapper {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 56.25%;
+  overflow: hidden;
+  background: #000;
+}
+
+.post-body .wp-embed-aspect-4-3 .wp-block-embed__wrapper {
+  padding-bottom: 75%;
+}
+
+.post-body .wp-embed-aspect-9-16 .wp-block-embed__wrapper {
+  padding-bottom: 177.78%;
+}
+
+.post-body .wp-block-embed__wrapper iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  aspect-ratio: auto;
 }
 
 .post-body strong,
@@ -1464,7 +1546,7 @@ body:has(.cookie-banner) .home-spotlight {
 
 .rolunk-photo {
   width: 100%;
-  max-width: 28rem;
+  max-width: 38rem;
   margin: 0 auto 2.75rem;
 }
 

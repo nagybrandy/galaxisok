@@ -271,13 +271,13 @@ function galaxisok_render_fohir_screen(): void
     if ($saved) {
         echo '<div class="notice notice-success is-dismissible"><p>Elmentve. A főoldali fotón ez jelenik meg.</p></div>';
     }
-    echo '<p>Ez a szöveg a főoldali fotóra kerül, a Play gomb fölé. A gomb a megadott linkre visz.</p>';
+    echo '<p>Ez a szöveg a főoldali fotóra kerül, a Play gomb fölé. A gomb a megadott linkre visz. Ha a feliratot és a linket üresen mented, a főoldalon nem jelenik meg főhír.</p>';
     echo '<form method="post">';
     wp_nonce_field('galaxisok_fohir_screen', 'galaxisok_fohir_screen_nonce');
     echo '<table class="form-table" role="presentation"><tbody>';
     echo '<tr><th scope="row"><label for="galaxisok_fohir_text">Felirat</label></th><td>';
     echo '<textarea class="large-text" rows="5" id="galaxisok_fohir_text" name="galaxisok_fohir_text" placeholder="Új évad, új dalok. A nyár után újra stúdióba mentünk.">' . esc_textarea($text) . '</textarea>';
-    echo '<p class="description">Két-három mondat elég. Ez jelenik meg a fotón.</p></td></tr>';
+    echo '<p class="description">Két-három mondat elég. Üresen hagyva nincs főhír a címlapon.</p></td></tr>';
     echo '<tr><th scope="row"><label for="galaxisok_fohir_url">Play gomb linkje</label></th><td>';
     echo '<input type="text" class="regular-text" id="galaxisok_fohir_url" name="galaxisok_fohir_url" value="' . esc_attr($url) . '" placeholder="/blog/uj-evad vagy https://…" />';
     echo '<p class="description">Belső oldal: <code>/blog/cikk-slug</code> vagy <code>/koncertek</code>. Külső: teljes https:// cím.</p></td></tr>';

@@ -607,33 +607,21 @@ async function getFeaturedNewsFresh(): Promise<FeaturedNews> {
   const pages = await wpFetch<WpPost[]>(
     "/wp-json/wp/v2/pages?slug=fohir&status=publish",
   );
-  const fromPage = pages?.[0] ? featuredNewsFromHomePage(pages[0]) : null;
-  if (fromPage) {
-    return fromPage;
+  if (pages?.[0]) {
+    return featuredNewsFromHomePage(pages[0]);
   }
 
   const named = await wpFetch<WpPost[]>(
     "/wp-json/wp/v2/posts?slug=fohir&status=publish",
   );
-  const fromNamed = named?.[0]
-    ? featuredNewsFrom(named[0], `/blog/${named[0].slug}`)
-    : null;
-  if (fromNamed) {
-    return fromNamed;
+  if (named?.[0]) {
+    return featuredNewsFrom(named[0], `/blog/${named[0].slug}`);
   }
 
-  const latest = await wpFetch<WpPost[]>(
-    "/wp-json/wp/v2/posts?per_page=1&status=publish",
-  );
-  const post = latest?.[0];
-  if (!post) {
-    return null;
-  }
-
-  return featuredNewsFrom(post, `/blog/${post.slug}`);
+  return null;
 }
 
-export const getFeaturedNews = cacheWp("wp-featured-news-v3", getFeaturedNewsFresh);
+export const getFeaturedNews = cacheWp("wp-featured-news-v4", getFeaturedNewsFresh);
 
 function splitVenueCity(
   helyszin: string,

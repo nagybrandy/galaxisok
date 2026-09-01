@@ -92,14 +92,14 @@ export function MobileMenu({
             <AtmosphereBackdrop />
           </div>
 
-          <div className="relative z-[2] flex items-center px-5 pt-[max(1.25rem,env(safe-area-inset-top))] pb-5 sm:px-8 sm:pt-[max(1.75rem,env(safe-area-inset-top))] sm:pb-7">
+          <div className="mobile-menu-head relative z-[2] flex items-center px-5 pt-[max(1.25rem,env(safe-area-inset-top))] sm:px-8 sm:pt-[max(1.75rem,env(safe-area-inset-top))]">
             <Logo
               tone="light"
               className="pointer-events-auto relative z-10 inline-flex h-10 items-center leading-none"
             />
           </div>
 
-          <nav className="relative z-[2] flex min-h-0 flex-1 flex-col justify-center gap-4 overflow-y-auto px-5 pb-6 sm:gap-5 sm:px-8 md:gap-6">
+          <nav className="mobile-menu-nav relative z-[2] flex min-h-0 flex-1 flex-col overflow-y-auto px-5 sm:px-8">
             {links.map((link) => {
               const active =
                 !link.external &&
@@ -107,7 +107,7 @@ export function MobileMenu({
                   (link.href !== "/" && pathname.startsWith(`${link.href}/`)));
 
               const itemClass = cn(
-                "mobile-menu-link font-[family-name:var(--font-display)] text-[1.85rem] font-semibold leading-none tracking-[0.16em] uppercase sm:text-[2.25rem] sm:tracking-[0.18em] md:text-[2.5rem]",
+                "mobile-menu-link font-[family-name:var(--font-display)] font-semibold leading-none uppercase",
                 active ? "is-active text-white" : "text-white/78",
               );
 
@@ -140,7 +140,7 @@ export function MobileMenu({
             })}
           </nav>
 
-          <div className="relative z-[2] px-5 pb-[max(2rem,env(safe-area-inset-bottom))] pt-2 sm:px-8">
+          <div className="mobile-menu-foot relative z-[2] px-5 sm:px-8">
             <SocialLinks layout="menu" />
           </div>
         </div>

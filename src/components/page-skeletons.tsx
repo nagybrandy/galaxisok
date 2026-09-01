@@ -100,7 +100,7 @@ export function AboutPageSkeleton() {
   return (
     <PageShell>
       <main className={INNER_PAGE_PROSE}>
-        <Bone className="rolunk-photo aspect-[4/5] w-full max-w-xs" />
+        <Bone className="rolunk-photo aspect-[4/5] w-full" />
         <Bone className="h-3 w-full max-w-xl" />
         <Bone className="mt-3 h-3 w-full max-w-xl" />
         <Bone className="mt-3 h-3 w-4/5 max-w-lg" />
