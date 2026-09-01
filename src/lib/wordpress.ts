@@ -299,7 +299,8 @@ function mapPost(post: WpPost): BlogPost {
 async function wpRequest(path: string): Promise<Response | null> {
   const url = `${wordpressUrl()}${path}`;
   const slugLookup = /[?&]slug=/.test(path);
-  const timeoutMs = slugLookup ? 4_000 : 12_000;
+  const timeoutMs = 12_000;
+  const emptyRetries = slugLookup ? 2 : WP_FETCH_ATTEMPTS - 1;
 
   for (let attempt = 0; attempt < WP_FETCH_ATTEMPTS; attempt += 1) {
     try {
@@ -318,8 +319,8 @@ async function wpRequest(path: string): Promise<Response | null> {
           .json()
           .catch(() => null);
         const emptyList = Array.isArray(payload) && payload.length === 0;
-        // A missing slug is a real empty result, not a cold WordPress miss.
-        if (emptyList && !slugLookup && attempt < WP_FETCH_ATTEMPTS - 1) {
+        // Cold WordPress can answer 200 [] on the first hit, even for a real slug.
+        if (emptyList && attempt < emptyRetries) {
           await sleep(450 * (attempt + 1));
           continue;
         }
@@ -450,14 +451,24 @@ async function getPostBySlugFresh(slug: string): Promise<BlogPost | null> {
     `/wp-json/wp/v2/posts?_embed=1&slug=${encodeURIComponent(slug)}&status=publish`,
   );
 
-  if (!posts?.[0]) {
-    return null;
+  if (posts?.[0]) {
+    return mapPost(posts[0]);
   }
 
-  return mapPost(posts[0]);
+  const listed = await getPosts();
+  const match = listed.find((post) => post.slug === slug);
+  if (match) {
+    return match;
+  }
+
+  if (posts === null && listed.length === 0) {
+    throw new Error("WordPress unavailable");
+  }
+
+  return null;
 }
 
-export const getPostBySlug = cacheWp("wp-post-slug", getPostBySlugFresh);
+export const getPostBySlug = cacheWp("wp-post-slug-v2", getPostBySlugFresh);
 
 function firstHref(html: string): string | null {
   const tagged = html.match(/href=["']([^"']+)["']/i);

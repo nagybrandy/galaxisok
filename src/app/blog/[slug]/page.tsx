@@ -10,18 +10,15 @@ import { PostBody } from "@/components/post-body";
 import { PostBreadcrumb } from "@/components/post-breadcrumb";
 import { PostCover } from "@/components/post-cover";
 import { SkeletonImage } from "@/components/skeleton-image";
-import { formatHuDate, getPostBySlug, getPosts } from "@/lib/wordpress";
+import { formatHuDate, getPostBySlug } from "@/lib/wordpress";
 
 type BlogPostPageProps = {
   params: Promise<{ slug: string }>;
 };
 
 export const dynamic = "force-dynamic";
-
-export async function generateStaticParams() {
-  const posts = await getPosts();
-  return posts.map((post) => ({ slug: post.slug }));
-}
+export const dynamicParams = true;
+export const maxDuration = 30;
 
 export async function generateMetadata({
   params,

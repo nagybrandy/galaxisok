@@ -14,6 +14,7 @@ import { parseBlogPage } from "@/lib/blog";
 import { formatHuDate, getPostsPage } from "@/lib/wordpress";
 
 export const dynamic = "force-dynamic";
+export const maxDuration = 30;
 
 export const metadata: Metadata = {
   title: "Blog",
