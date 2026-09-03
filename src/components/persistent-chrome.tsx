@@ -15,7 +15,7 @@ export function PersistentHeader() {
     return null;
   }
 
-  const tone = pathname === "/" ? "light" : "dark";
+  const tone = "dark";
 
   return <SiteHeader tone={tone} />;
 }

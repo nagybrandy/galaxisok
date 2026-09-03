@@ -17,7 +17,6 @@ import { RoutePrefetcher } from "@/components/route-prefetcher";
 import { ScrollToTop } from "@/components/scroll-to-top";
 import { isLiveHuHost } from "@/lib/gate";
 import {
-  ATMOSPHERE_IMAGE,
   HERO_IMAGE,
   SITE_DESCRIPTION,
   SITE_NAME,
@@ -99,7 +98,6 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
     >
       <head>
         <link rel="preload" href={HERO_IMAGE} as="image" type="image/jpeg" />
-        <link rel="preload" href={ATMOSPHERE_IMAGE} as="image" type="image/jpeg" />
       </head>
       <body className="site-body relative flex min-h-dvh flex-col font-sans">
         <NightAtmosphere />
