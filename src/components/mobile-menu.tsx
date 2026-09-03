@@ -94,7 +94,7 @@ export function MobileMenu({
 
           <div className="mobile-menu-head relative z-[2] flex items-center px-5 pt-[max(1.25rem,env(safe-area-inset-top))] sm:px-8 sm:pt-[max(1.75rem,env(safe-area-inset-top))]">
             <Logo
-              tone="light"
+              tone="dark"
               className="pointer-events-auto relative z-10 inline-flex h-10 items-center leading-none"
             />
           </div>

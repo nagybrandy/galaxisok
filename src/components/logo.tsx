@@ -18,7 +18,7 @@ type LogoProps = {
   tone?: "light" | "dark";
 };
 
-export function Logo({ className, tone = "light" }: LogoProps) {
+export function Logo({ className, tone: _tone = "light" }: LogoProps) {
   return (
     <TooltipProvider delayDuration={280}>
       <Tooltip>
@@ -28,10 +28,7 @@ export function Logo({ className, tone = "light" }: LogoProps) {
             prefetch
             aria-label="Galaxisok — vissza a főoldalra"
             className={cn(
-              "site-logo relative isolate inline-flex items-center overflow-visible font-[family-name:var(--font-display)] text-base font-semibold leading-none tracking-[0.22em] uppercase min-[380px]:text-lg min-[380px]:tracking-[0.32em] sm:text-xl",
-              tone === "light"
-                ? "text-white text-glow"
-                : "text-foreground",
+              "site-logo relative isolate inline-flex items-center overflow-visible font-[family-name:var(--font-display)] text-base font-semibold leading-none tracking-[0.22em] uppercase min-[380px]:text-lg min-[380px]:tracking-[0.32em] sm:text-xl text-foreground",
               className,
             )}
           >
