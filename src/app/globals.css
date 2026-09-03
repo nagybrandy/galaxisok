@@ -1310,8 +1310,8 @@ html.home-lock .page-fade {
 }
 
 .concert-ticket.is-soon {
-  border-color: var(--site-text-28);
-  color: var(--site-text-40);
+  border-color: color-mix(in srgb, var(--site-link) 28%, transparent);
+  color: color-mix(in srgb, var(--site-link) 55%, transparent);
 }
 
 .concert-ticket.is-soon span {
@@ -1371,7 +1371,7 @@ html.home-lock .page-fade {
   inset: 0.2rem 0;
   z-index: -1;
   border-radius: 0.4rem;
-  background: var(--site-text-8);
+  background: color-mix(in srgb, var(--site-link) 8%, transparent);
   opacity: 0;
   transition: opacity 220ms ease;
   pointer-events: none;
@@ -1391,7 +1391,7 @@ html.home-lock .page-fade {
 }
 
 .concert-row + .concert-row {
-  border-top: 1px solid var(--site-text-18);
+  border-top: 1px solid color-mix(in srgb, var(--site-link) 18%, transparent);
 }
 
 .concert-row-copy {
@@ -1406,7 +1406,7 @@ html.home-lock .page-fade {
   letter-spacing: 0.04em;
   line-height: 1.25;
   text-transform: uppercase;
-  color: var(--site-text);
+  color: var(--site-link);
 }
 
 .concert-row-venue {
@@ -1415,7 +1415,7 @@ html.home-lock .page-fade {
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.4;
-  color: var(--site-text-82);
+  color: var(--site-link-88);
 }
 
 .concert-row-note {
@@ -1424,7 +1424,7 @@ html.home-lock .page-fade {
   font-size: 0.88rem;
   font-weight: 400;
   line-height: 1.45;
-  color: var(--site-text-52);
+  color: var(--site-link-75);
 }
 
 .concert-row-city {
@@ -1435,7 +1435,7 @@ html.home-lock .page-fade {
   font-weight: 400;
   line-height: 1.4;
   text-align: left;
-  color: var(--site-text-82);
+  color: var(--site-link-88);
   white-space: nowrap;
 }
 
@@ -1506,7 +1506,7 @@ html.home-lock .page-fade {
   padding: 0;
   border: none;
   background: transparent;
-  color: var(--site-text-72);
+  color: var(--site-link-75);
   transition:
     color 160ms ease,
     filter 160ms ease;
@@ -1514,8 +1514,18 @@ html.home-lock .page-fade {
 
 .concerts-all-link:hover,
 .concerts-all-link:focus-visible {
-  color: var(--site-text);
-  filter: drop-shadow(0 0 8px color-mix(in srgb, var(--site-text) 35%, transparent));
+  color: var(--site-link-hover);
+  filter: drop-shadow(0 0 8px color-mix(in srgb, var(--site-link) 35%, transparent));
+}
+
+.concert-calendar-link {
+  color: var(--site-link-75);
+  transition: color 160ms ease;
+}
+
+.concert-calendar-link:hover,
+.concert-calendar-link:focus-visible {
+  color: var(--site-link-hover);
 }
 
 .concerts-all-icon {

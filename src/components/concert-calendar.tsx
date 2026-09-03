@@ -85,7 +85,7 @@ export function AddToGoogleCalendarLink({
           href={href}
           target="_blank"
           rel="noreferrer noopener"
-          className="inline-flex size-9 items-center justify-center text-white/70 transition-opacity hover:text-white"
+          className="concert-calendar-link inline-flex size-9 items-center justify-center transition-opacity"
           aria-label="Hozzáadás a Google Naptárhoz"
         >
           <CalendarPlus className="size-5" strokeWidth={1.6} aria-hidden />
