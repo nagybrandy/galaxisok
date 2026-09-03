@@ -83,7 +83,7 @@ export function MobileMenu({
       {open ? (
         <div
           id="mobile-menu"
-          className="mobile-menu fixed inset-0 z-[1] flex flex-col text-white"
+          className="mobile-menu fixed inset-0 z-[1] flex flex-col text-foreground"
           role="dialog"
           aria-modal="true"
           aria-label="Menü"

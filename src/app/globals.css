@@ -1099,7 +1099,8 @@ html.home-lock .page-fade {
   box-shadow: none;
 }
 
-.mobile-menu .site-logo {
+.mobile-menu .site-logo,
+.mobile-menu .site-logo .relative {
   color: var(--site-text);
   text-shadow: none;
 }
