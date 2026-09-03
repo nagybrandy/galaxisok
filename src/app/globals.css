@@ -662,8 +662,8 @@ html.home-lock .page-fade {
   left: 0.08em;
   height: 3px;
   background: var(--site-underline);
-  filter: none;
-  opacity: 1;
+  filter: blur(2.5px);
+  opacity: 0.6;
   box-shadow: none;
 }
 
@@ -1117,8 +1117,8 @@ html.home-lock .page-fade {
   left: 0.06em;
   height: 4px;
   background: var(--site-underline);
-  filter: none;
-  opacity: 1;
+  filter: blur(3px);
+  opacity: 0.55;
   box-shadow: none;
 }
 
