@@ -14,6 +14,8 @@ import { PersistentFooter, PersistentHeader } from "@/components/persistent-chro
 import { PersistentHero } from "@/components/persistent-hero";
 import { RoutePrefetcher } from "@/components/route-prefetcher";
 import { ScrollToTop } from "@/components/scroll-to-top";
+import { ThemeInitScript } from "@/components/theme-init-script";
+import { ThemeProvider } from "@/components/theme-provider";
 import {
   ATMOSPHERE_IMAGE,
   HERO_IMAGE,
@@ -80,22 +82,25 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${oswald.variable} ${fuse.variable} h-full antialiased`}
     >
       <head>
+        <ThemeInitScript />
         <link rel="preload" href={HERO_IMAGE} as="image" type="image/jpeg" />
         <link rel="preload" href={ATMOSPHERE_IMAGE} as="image" type="image/jpeg" />
       </head>
-      <body className="relative flex min-h-dvh flex-col bg-[#050b1c] font-sans text-white">
-        <NightAtmosphere />
-        <PersistentHeader />
-        <PersistentHero />
-        <HomeSpotlight />
-        <Suspense fallback={null}>
-          <ScrollToTop />
-          <NavigationFeedback />
-        </Suspense>
-        <RoutePrefetcher />
-        <PageFade>{children}</PageFade>
-        <PersistentFooter />
-        <CookieConsent />
+      <body className="site-body relative flex min-h-dvh flex-col font-sans">
+        <ThemeProvider>
+          <NightAtmosphere />
+          <PersistentHeader />
+          <PersistentHero />
+          <HomeSpotlight />
+          <Suspense fallback={null}>
+            <ScrollToTop />
+            <NavigationFeedback />
+          </Suspense>
+          <RoutePrefetcher />
+          <PageFade>{children}</PageFade>
+          <PersistentFooter />
+          <CookieConsent />
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -10,7 +10,7 @@ type PageShellProps = {
 
 export function PageShell({ children }: PageShellProps) {
   return (
-    <div className="relative z-[1] flex flex-1 flex-col text-white">
+    <div className="relative z-[1] flex flex-1 flex-col">
       {children}
     </div>
   );
