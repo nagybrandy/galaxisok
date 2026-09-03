@@ -15,19 +15,22 @@ import {
 
 import {
   applyThemeToDocument,
-  clearThemeFromDocument,
+  DEFAULT_THEME,
+  getActiveTheme,
   readTheme,
   THEME_CHANGED_EVENT,
   type SiteTheme,
 } from "@/lib/theme";
 
 type ThemeContextValue = {
-  theme: SiteTheme | null;
+  theme: SiteTheme;
+  hasStoredTheme: boolean;
   refresh: () => void;
 };
 
 const ThemeContext = createContext<ThemeContextValue>({
-  theme: null,
+  theme: DEFAULT_THEME,
+  hasStoredTheme: false,
   refresh: () => undefined,
 });
 
@@ -40,16 +43,12 @@ type ThemeProviderProps = {
 };
 
 export function ThemeProvider({ children }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<SiteTheme | null>(null);
+  const [theme, setTheme] = useState<SiteTheme>(DEFAULT_THEME);
 
   const refresh = useCallback(() => {
-    const next = readTheme();
+    const next = getActiveTheme();
     setTheme(next);
-    if (next) {
-      applyThemeToDocument(next);
-    } else {
-      clearThemeFromDocument();
-    }
+    applyThemeToDocument(next);
   }, []);
 
   useEffect(() => {
@@ -65,7 +64,10 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     };
   }, [refresh]);
 
-  const value = useMemo(() => ({ theme, refresh }), [theme, refresh]);
+  const value = useMemo(
+    () => ({ theme, hasStoredTheme: readTheme() !== null, refresh }),
+    [theme, refresh],
+  );
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 }

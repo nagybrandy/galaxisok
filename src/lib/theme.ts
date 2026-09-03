@@ -58,9 +58,9 @@ export const THEME_PRESETS: SiteTheme[] = [
   {
     id: "holdfeny",
     name: "Holdfény",
-    description: "Meleg, krémszínű háttér — esti hangulat, tiszta olvashatóság.",
-    bg: "#faf7f2",
-    text: "#1a2340",
+    description: "Alapértelmezett — meleg, halvány krém háttér, sötétkék szöveg.",
+    bg: "#e8e3da",
+    text: "#0c246e",
     showBackgroundImage: false,
     imageSaturation: 1,
   },
@@ -121,8 +121,12 @@ export const THEME_PRESETS: SiteTheme[] = [
 ];
 
 export const DEFAULT_THEME: SiteTheme = THEME_PRESETS.find(
-  (preset) => preset.id === "eredeti",
+  (preset) => preset.id === "holdfeny",
 )!;
+
+export function getActiveTheme(): SiteTheme {
+  return readTheme() ?? DEFAULT_THEME;
+}
 
 type StoredTheme = {
   id: ThemePresetId;
@@ -200,6 +204,7 @@ export function readTheme(): SiteTheme | null {
 export function clearThemeFromDocument(): void {
   const root = document.documentElement;
   delete root.dataset.siteTheme;
+  delete root.dataset.siteLight;
 
   const properties = [
     "--site-bg",
@@ -248,8 +253,14 @@ export function formatThemeCopy(bg: string, text: string): string {
 
 export function applyThemeToDocument(theme: SiteTheme): void {
   const root = document.documentElement;
+  const light = isLightColor(theme.bg);
 
   root.dataset.siteTheme = theme.id;
+  if (light) {
+    root.dataset.siteLight = "true";
+  } else {
+    delete root.dataset.siteLight;
+  }
   root.style.setProperty("--site-bg", theme.bg);
   root.style.setProperty("--site-text", theme.text);
   root.style.setProperty(
@@ -284,9 +295,10 @@ export function applyThemeToDocument(theme: SiteTheme): void {
   root.style.setProperty("--primary-foreground", theme.bg);
 
   const glowRgb = hexToRgb(theme.text);
-  const glowStrength = isLightColor(theme.bg) ? 0 : 0.22;
   root.style.setProperty(
     "--site-text-glow",
-    `0 0 6px rgba(${glowRgb.r}, ${glowRgb.g}, ${glowRgb.b}, ${glowStrength}), 0 0 14px rgba(${glowRgb.r}, ${glowRgb.g}, ${glowRgb.b}, ${glowStrength * 0.36})`,
+    light
+      ? "none"
+      : `0 0 6px rgba(${glowRgb.r}, ${glowRgb.g}, ${glowRgb.b}, 0.22), 0 0 14px rgba(${glowRgb.r}, ${glowRgb.g}, ${glowRgb.b}, 0.08)`,
   );
 }

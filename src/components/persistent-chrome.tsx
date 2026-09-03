@@ -19,8 +19,7 @@ export function PersistentHeader() {
     return null;
   }
 
-  const tone =
-    theme && isLightColor(theme.bg) ? "dark" : "light";
+  const tone = isLightColor(theme.bg) ? "dark" : "light";
 
   return <SiteHeader tone={tone} />;
 }

@@ -49,24 +49,24 @@
 }
 
 :root {
-  --background: #050b1c;
-  --foreground: #f5f7ff;
-  --card: #0a1228;
-  --card-foreground: #f5f7ff;
-  --popover: #0a1228;
-  --popover-foreground: #f5f7ff;
-  --primary: #ffffff;
-  --primary-foreground: #050b1c;
-  --secondary: #121a33;
-  --secondary-foreground: #f5f7ff;
-  --muted: #121a33;
-  --muted-foreground: rgba(245, 247, 255, 0.55);
-  --accent: #121a33;
-  --accent-foreground: #f5f7ff;
+  --background: #e8e3da;
+  --foreground: #0c246e;
+  --card: #e8e3da;
+  --card-foreground: #0c246e;
+  --popover: #e8e3da;
+  --popover-foreground: #0c246e;
+  --primary: #0c246e;
+  --primary-foreground: #e8e3da;
+  --secondary: #ddd8cf;
+  --secondary-foreground: #0c246e;
+  --muted: #ddd8cf;
+  --muted-foreground: rgba(12, 36, 110, 0.55);
+  --accent: #ddd8cf;
+  --accent-foreground: #0c246e;
   --destructive: oklch(0.577 0.245 27.325);
-  --border: rgba(255, 255, 255, 0.12);
-  --input: rgba(255, 255, 255, 0.16);
-  --ring: rgba(255, 255, 255, 0.4);
+  --border: rgba(12, 36, 110, 0.12);
+  --input: rgba(12, 36, 110, 0.16);
+  --ring: rgba(12, 36, 110, 0.4);
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
@@ -81,36 +81,34 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
-  --site-bg: #050b1c;
-  --site-text: #f5f7ff;
-  --site-show-bg-image: 1;
+  --site-bg: #e8e3da;
+  --site-text: #0c246e;
+  --site-show-bg-image: 0;
   --site-image-saturation: 1;
-  --site-header-tone: light;
-  --site-text-8: rgba(245, 247, 255, 0.08);
-  --site-text-10: rgba(245, 247, 255, 0.1);
-  --site-text-18: rgba(245, 247, 255, 0.18);
-  --site-text-20: rgba(245, 247, 255, 0.2);
-  --site-text-22: rgba(245, 247, 255, 0.22);
-  --site-text-25: rgba(245, 247, 255, 0.25);
-  --site-text-28: rgba(245, 247, 255, 0.28);
-  --site-text-30: rgba(245, 247, 255, 0.3);
-  --site-text-40: rgba(245, 247, 255, 0.4);
-  --site-text-45: rgba(245, 247, 255, 0.45);
-  --site-text-50: rgba(245, 247, 255, 0.5);
-  --site-text-52: rgba(245, 247, 255, 0.52);
-  --site-text-55: rgba(245, 247, 255, 0.55);
-  --site-text-60: rgba(245, 247, 255, 0.6);
-  --site-text-65: rgba(245, 247, 255, 0.65);
-  --site-text-70: rgba(245, 247, 255, 0.7);
-  --site-text-72: rgba(245, 247, 255, 0.72);
-  --site-text-78: rgba(245, 247, 255, 0.78);
-  --site-text-80: rgba(245, 247, 255, 0.8);
-  --site-text-82: rgba(245, 247, 255, 0.82);
-  --site-text-85: rgba(245, 247, 255, 0.85);
-  --site-text-88: rgba(245, 247, 255, 0.88);
-  --site-text-glow:
-    0 0 6px rgba(255, 255, 255, 0.22),
-    0 0 14px rgba(255, 255, 255, 0.08);
+  --site-header-tone: dark;
+  --site-text-8: rgba(12, 36, 110, 0.08);
+  --site-text-10: rgba(12, 36, 110, 0.1);
+  --site-text-18: rgba(12, 36, 110, 0.18);
+  --site-text-20: rgba(12, 36, 110, 0.2);
+  --site-text-22: rgba(12, 36, 110, 0.22);
+  --site-text-25: rgba(12, 36, 110, 0.25);
+  --site-text-28: rgba(12, 36, 110, 0.28);
+  --site-text-30: rgba(12, 36, 110, 0.3);
+  --site-text-40: rgba(12, 36, 110, 0.4);
+  --site-text-45: rgba(12, 36, 110, 0.45);
+  --site-text-50: rgba(12, 36, 110, 0.5);
+  --site-text-52: rgba(12, 36, 110, 0.52);
+  --site-text-55: rgba(12, 36, 110, 0.55);
+  --site-text-60: rgba(12, 36, 110, 0.6);
+  --site-text-65: rgba(12, 36, 110, 0.65);
+  --site-text-70: rgba(12, 36, 110, 0.7);
+  --site-text-72: rgba(12, 36, 110, 0.72);
+  --site-text-78: rgba(12, 36, 110, 0.78);
+  --site-text-80: rgba(12, 36, 110, 0.8);
+  --site-text-82: rgba(12, 36, 110, 0.82);
+  --site-text-85: rgba(12, 36, 110, 0.85);
+  --site-text-88: rgba(12, 36, 110, 0.88);
+  --site-text-glow: none;
 }
 
 .dark {
@@ -161,6 +159,22 @@
 
 .text-glow {
   text-shadow: var(--site-text-glow);
+}
+
+html[data-site-light="true"] .text-glow,
+html[data-site-light="true"] .blog-category-link:hover,
+html[data-site-light="true"] .blog-category-link:focus-visible,
+html[data-site-light="true"] .blog-category-link.is-active,
+html[data-site-light="true"] .crumb-link:hover,
+html[data-site-light="true"] .crumb-link:focus-visible,
+html[data-site-light="true"] .nav-link,
+html[data-site-light="true"] .mobile-menu-link:hover,
+html[data-site-light="true"] .mobile-menu-link:focus-visible,
+html[data-site-light="true"] .mobile-menu-link:active,
+html[data-site-light="true"] .concerts-all-link:hover,
+html[data-site-light="true"] .concerts-all-link:focus-visible {
+  text-shadow: none;
+  filter: none;
 }
 
 .site-body {
@@ -437,6 +451,12 @@ html.home-lock .page-fade {
 .blog-category-link.is-active {
   color: var(--site-text);
   text-shadow: 0 0 6px color-mix(in srgb, var(--site-text) 28%, transparent);
+}
+
+html[data-site-light="true"] .blog-category-link:hover,
+html[data-site-light="true"] .blog-category-link:focus-visible,
+html[data-site-light="true"] .blog-category-link.is-active {
+  text-shadow: none;
 }
 
 .blog-category-link.is-active::after {

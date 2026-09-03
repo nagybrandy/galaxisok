@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { useSiteTheme } from "@/components/theme-provider";
 import {
   clearTheme,
+  DEFAULT_THEME,
   formatThemeCopy,
   THEME_PRESETS,
   writeTheme,
@@ -59,9 +60,9 @@ function ThemeCard({
 }
 
 export function BgThemePicker() {
-  const { theme: activeTheme, refresh } = useSiteTheme();
-  const [customBg, setCustomBg] = useState(activeTheme?.bg ?? "#0c246e");
-  const [customText, setCustomText] = useState(activeTheme?.text ?? "#f5f7ff");
+  const { theme: activeTheme, hasStoredTheme, refresh } = useSiteTheme();
+  const [customBg, setCustomBg] = useState(activeTheme.bg);
+  const [customText, setCustomText] = useState(activeTheme.text);
   const [copied, setCopied] = useState(false);
 
   const applyTheme = useCallback(
@@ -113,12 +114,12 @@ export function BgThemePicker() {
               <ThemeCard
                 key={preset.id}
                 theme={preset}
-                active={activeTheme?.id === preset.id}
+                active={activeTheme.id === preset.id}
                 onSelect={() => applyTheme(preset)}
               />
             ))}
           </div>
-          {activeTheme ? (
+          {hasStoredTheme && activeTheme.id !== DEFAULT_THEME.id ? (
             <Button
               type="button"
               variant="outline"
@@ -128,7 +129,7 @@ export function BgThemePicker() {
               }}
               className="mt-4 h-10 rounded-sm border-white/25 bg-transparent px-5 text-[11px] tracking-[0.2em] text-white uppercase hover:bg-white/10 hover:text-white"
             >
-              Vissza az eredeti háttérképhez
+              Vissza az alapértelmezethez (Holdfény)
             </Button>
           ) : null}
         </section>
@@ -224,9 +225,8 @@ export function BgThemePicker() {
         <p className="mt-12 text-xs text-white/40">
           Aktív téma:{" "}
           <span className="font-mono text-white/60">
-            {activeTheme
-              ? `${activeTheme.name} (${activeTheme.bg} / ${activeTheme.text})`
-              : "Nincs mentve — az eredeti háttérkép aktív"}
+            {activeTheme.name} ({activeTheme.bg} / {activeTheme.text})
+            {!hasStoredTheme ? " · alapértelmezett" : ""}
           </span>
         </p>
       </main>

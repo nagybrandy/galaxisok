@@ -1,5 +1,5 @@
 // src/components/theme-init-script.tsx
-// Inline script that applies saved theme before first paint to avoid flash.
+// Inline script that applies saved theme (or Holdfény default) before first paint.
 
 import { THEME_PRESETS, THEME_STORAGE_KEY } from "@/lib/theme";
 
@@ -15,7 +15,7 @@ const INIT_SCRIPT = `
 (function () {
   var KEY = ${JSON.stringify(THEME_STORAGE_KEY)};
   var PRESETS = ${JSON.stringify(PRESET_DATA)};
-  var DEFAULT_ID = "eredeti";
+  var DEFAULT_ID = "holdfeny";
 
   function hexToRgb(hex) {
     var n = hex.replace("#", "");
@@ -54,19 +54,22 @@ const INIT_SCRIPT = `
       PRESETS.find(function (p) { return p.id === DEFAULT_ID; });
   }
 
-  try {
-    var raw = localStorage.getItem(KEY);
-    if (!raw) return;
-    var theme = resolve(JSON.parse(raw));
-    if (!theme) return;
-
+  function applyTheme(theme) {
     var root = document.documentElement;
+    var light = isLight(theme.bg);
+
     root.dataset.siteTheme = theme.id;
+    if (light) {
+      root.dataset.siteLight = "true";
+    } else {
+      delete root.dataset.siteLight;
+    }
+
     root.style.setProperty("--site-bg", theme.bg);
     root.style.setProperty("--site-text", theme.text);
     root.style.setProperty("--site-show-bg-image", theme.showBackgroundImage ? "1" : "0");
     root.style.setProperty("--site-image-saturation", String(theme.imageSaturation));
-    root.style.setProperty("--site-header-tone", isLight(theme.bg) ? "dark" : "light");
+    root.style.setProperty("--site-header-tone", light ? "dark" : "light");
 
     [8, 10, 18, 20, 22, 25, 28, 30, 40, 45, 50, 52, 55, 60, 65, 70, 72, 78, 80, 82, 85, 88].forEach(function (opacity) {
       root.style.setProperty(
@@ -82,18 +85,18 @@ const INIT_SCRIPT = `
     root.style.setProperty("--muted-foreground", textOpacity(theme.text, 0.55));
     root.style.setProperty("--border", textOpacity(theme.text, 0.12));
     root.style.setProperty("--input", textOpacity(theme.text, 0.16));
-    root.style.setProperty(
-      "--primary",
-      isLight(theme.bg) ? theme.text : "#ffffff"
-    );
+    root.style.setProperty("--primary", light ? theme.text : "#ffffff");
     root.style.setProperty("--primary-foreground", theme.bg);
+    root.style.setProperty("--site-text-glow", light ? "none" : (
+      "0 0 6px rgba(" + hexToRgb(theme.text).r + "," + hexToRgb(theme.text).g + "," + hexToRgb(theme.text).b + ",0.22), 0 0 14px rgba(" + hexToRgb(theme.text).r + "," + hexToRgb(theme.text).g + "," + hexToRgb(theme.text).b + ",0.08)"
+    ));
+  }
 
-    var glow = hexToRgb(theme.text);
-    var strength = isLight(theme.bg) ? 0 : 0.22;
-    root.style.setProperty(
-      "--site-text-glow",
-      "0 0 6px rgba(" + glow.r + "," + glow.g + "," + glow.b + "," + strength + "), 0 0 14px rgba(" + glow.r + "," + glow.g + "," + glow.b + "," + (strength * 0.36) + ")"
-    );
+  try {
+    var raw = localStorage.getItem(KEY);
+    var theme = resolve(raw ? JSON.parse(raw) : null);
+    if (!theme) return;
+    applyTheme(theme);
   } catch (e) {}
 })();
 `;
