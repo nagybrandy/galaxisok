@@ -86,16 +86,28 @@
   --site-show-bg-image: 1;
   --site-image-saturation: 1;
   --site-header-tone: light;
+  --site-text-8: rgba(245, 247, 255, 0.08);
+  --site-text-10: rgba(245, 247, 255, 0.1);
+  --site-text-18: rgba(245, 247, 255, 0.18);
+  --site-text-20: rgba(245, 247, 255, 0.2);
+  --site-text-22: rgba(245, 247, 255, 0.22);
+  --site-text-25: rgba(245, 247, 255, 0.25);
+  --site-text-28: rgba(245, 247, 255, 0.28);
   --site-text-30: rgba(245, 247, 255, 0.3);
   --site-text-40: rgba(245, 247, 255, 0.4);
   --site-text-45: rgba(245, 247, 255, 0.45);
+  --site-text-50: rgba(245, 247, 255, 0.5);
+  --site-text-52: rgba(245, 247, 255, 0.52);
   --site-text-55: rgba(245, 247, 255, 0.55);
   --site-text-60: rgba(245, 247, 255, 0.6);
   --site-text-65: rgba(245, 247, 255, 0.65);
   --site-text-70: rgba(245, 247, 255, 0.7);
+  --site-text-72: rgba(245, 247, 255, 0.72);
   --site-text-78: rgba(245, 247, 255, 0.78);
   --site-text-80: rgba(245, 247, 255, 0.8);
+  --site-text-82: rgba(245, 247, 255, 0.82);
   --site-text-85: rgba(245, 247, 255, 0.85);
+  --site-text-88: rgba(245, 247, 255, 0.88);
   --site-text-glow:
     0 0 6px rgba(255, 255, 255, 0.22),
     0 0 14px rgba(255, 255, 255, 0.08);
@@ -156,6 +168,11 @@
   color: var(--site-text);
 }
 
+html[data-site-theme] body {
+  background-color: var(--site-bg);
+  color: var(--site-text);
+}
+
 html[data-site-theme] .text-white {
   color: var(--site-text);
 }
@@ -204,8 +221,52 @@ html[data-site-theme] .hover\:text-white:hover {
   color: var(--site-text);
 }
 
-html[data-site-theme] .legal-copy-body h2 {
+html[data-site-theme] .border-white\/10 {
+  border-color: var(--site-text-10);
+}
+
+html[data-site-theme] .border-white\/15 {
+  border-color: color-mix(in srgb, var(--site-text) 15%, transparent);
+}
+
+html[data-site-theme] .border-white\/20 {
+  border-color: var(--site-text-20);
+}
+
+html[data-site-theme] .border-white\/25 {
+  border-color: var(--site-text-25);
+}
+
+html[data-site-theme] .bg-white\/5 {
+  background-color: color-mix(in srgb, var(--site-text) 5%, transparent);
+}
+
+html[data-site-theme] .placeholder\:text-white\/30::placeholder {
+  color: var(--site-text-30);
+}
+
+html[data-site-theme] .page-title,
+html[data-site-theme] .page-title-lg,
+html[data-site-theme] .contact-page-title,
+html[data-site-theme] .blog-post-title,
+html[data-site-theme] .home-spotlight-title {
   color: var(--site-text);
+}
+
+html[data-site-theme] .legal-copy-body,
+html[data-site-theme] .legal-copy-body h2,
+html[data-site-theme] .post-body,
+html[data-site-theme] .post-body h2,
+html[data-site-theme] .post-body h3 {
+  color: var(--site-text);
+}
+
+html[data-site-theme] .legal-copy-body {
+  color: var(--site-text-70);
+}
+
+html[data-site-theme] footer.border-t {
+  border-color: var(--site-text-10);
 }
 
 html[data-site-theme] .persistent-hero-img,
@@ -359,7 +420,7 @@ html.home-lock .page-fade {
   bottom: 0.15em;
   left: 0;
   height: 1px;
-  background: rgba(255, 255, 255, 0.7);
+  background: var(--site-text-70);
   opacity: 0;
   transform: scaleX(0.4);
   transition:
@@ -369,13 +430,13 @@ html.home-lock .page-fade {
 
 .blog-category-link:hover,
 .blog-category-link:focus-visible {
-  color: #fff;
-  text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+  color: var(--site-text);
+  text-shadow: 0 0 8px color-mix(in srgb, var(--site-text) 40%, transparent);
 }
 
 .blog-category-link.is-active {
-  color: #fff;
-  text-shadow: 0 0 6px rgba(255, 255, 255, 0.28);
+  color: var(--site-text);
+  text-shadow: 0 0 6px color-mix(in srgb, var(--site-text) 28%, transparent);
 }
 
 .blog-category-link.is-active::after {
@@ -398,15 +459,17 @@ html.home-lock .page-fade {
 }
 
 .blog-list-item + .blog-list-item {
-  border-top: 1px solid rgba(255, 255, 255, 0.18);
+  border-top: 1px solid var(--site-text-18);
 }
 
 .blog-post-teaser {
   position: relative;
+  color: var(--site-text);
 }
 
 .blog-post-title {
   font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif;
+  color: var(--site-text);
   text-decoration: underline;
   text-decoration-color: transparent;
   text-decoration-thickness: 1px;
@@ -451,17 +514,17 @@ html.home-lock .page-fade {
   min-height: 2.5rem;
   align-items: center;
   justify-content: center;
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--site-text-85);
   transition: color 180ms ease;
 }
 
 .blog-pager-step:hover,
 .blog-pager-step:focus-visible {
-  color: #fff;
+  color: var(--site-text);
 }
 
 .blog-pager-step.is-disabled {
-  color: rgba(255, 255, 255, 0.22);
+  color: var(--site-text-22);
   pointer-events: none;
 }
 
@@ -469,7 +532,7 @@ html.home-lock .page-fade {
   min-width: 4.5rem;
   font-size: 0.8125rem;
   letter-spacing: 0.2em;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--site-text-70);
   text-align: center;
   text-transform: uppercase;
 }
@@ -482,8 +545,8 @@ html.home-lock .page-fade {
 
 .crumb-link:hover,
 .crumb-link:focus-visible {
-  color: #fff;
-  text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+  color: var(--site-text);
+  text-shadow: 0 0 8px color-mix(in srgb, var(--site-text) 40%, transparent);
 }
 
 .post-back {
@@ -495,9 +558,9 @@ html.home-lock .page-fade {
 
 .post-back:hover,
 .post-back:focus-visible {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.5);
+  color: var(--site-text);
+  background: var(--site-text-8);
+  border-color: var(--site-text-50);
 }
 
 .nav-link {
@@ -1157,7 +1220,7 @@ html.home-lock .page-fade {
 .post-body strong,
 .post-body b {
   font-weight: 600;
-  color: #fff;
+  color: var(--site-text);
 }
 
 .post-body h4,
@@ -1182,7 +1245,7 @@ html.home-lock .page-fade {
 .post-body hr {
   margin: 2.5rem 0;
   border: 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  border-top: 1px solid color-mix(in srgb, var(--site-text) 15%, transparent);
 }
 
 .post-body table {
@@ -1197,26 +1260,26 @@ html.home-lock .page-fade {
   padding: 0.7rem 0.8rem;
   text-align: left;
   vertical-align: top;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--site-text-12, color-mix(in srgb, var(--site-text) 12%, transparent));
 }
 
 .post-body thead th {
   font-size: 0.72rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.7);
-  background: rgba(255, 255, 255, 0.06);
+  color: var(--site-text-70);
+  background: var(--site-text-8);
 }
 
 .post-body tbody tr:nth-child(even) {
-  background: rgba(255, 255, 255, 0.03);
+  background: color-mix(in srgb, var(--site-text) 3%, transparent);
 }
 
 .post-body code {
   padding: 0.1em 0.35em;
   font-size: 0.88em;
-  color: #fff;
-  background: rgba(255, 255, 255, 0.08);
+  color: var(--site-text);
+  background: var(--site-text-8);
 }
 
 .post-body pre {
@@ -1252,17 +1315,17 @@ html.home-lock .page-fade {
 .post-body details {
   margin: 1.25rem 0;
   padding: 0.85rem 1rem;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid color-mix(in srgb, var(--site-text) 12%, transparent);
 }
 
 .post-body summary {
   cursor: pointer;
   font-weight: 400;
-  color: #fff;
+  color: var(--site-text);
 }
 
 .post-body small {
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--site-text-50);
 }
 
 .concert-ticket {
@@ -1271,9 +1334,9 @@ html.home-lock .page-fade {
   align-items: center;
   justify-content: center;
   padding: 0 0.9rem;
-  border: 1px solid rgba(255, 255, 255, 0.88);
+  border: 1px solid var(--site-text-88);
   background: transparent;
-  color: #fff;
+  color: var(--site-text);
   font-size: 11px;
   line-height: 1;
   text-transform: uppercase;
@@ -1286,8 +1349,8 @@ html.home-lock .page-fade {
 }
 
 .concert-ticket.is-soon {
-  border-color: rgba(255, 255, 255, 0.28);
-  color: rgba(255, 255, 255, 0.4);
+  border-color: var(--site-text-28);
+  color: var(--site-text-40);
 }
 
 .concert-ticket.is-soon span {
@@ -1296,7 +1359,7 @@ html.home-lock .page-fade {
 
 .concert-ticket:hover,
 .concert-ticket:focus-visible {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--site-text-8);
 }
 
 .concerts-head {
@@ -1345,7 +1408,7 @@ html.home-lock .page-fade {
   inset: 0.2rem 0;
   z-index: -1;
   border-radius: 0.4rem;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--site-text-8);
   opacity: 0;
   transition: opacity 220ms ease;
   pointer-events: none;
@@ -1365,7 +1428,7 @@ html.home-lock .page-fade {
 }
 
 .concert-row + .concert-row {
-  border-top: 1px solid rgba(255, 255, 255, 0.18);
+  border-top: 1px solid var(--site-text-18);
 }
 
 .concert-row-copy {
@@ -1380,7 +1443,7 @@ html.home-lock .page-fade {
   letter-spacing: 0.04em;
   line-height: 1.25;
   text-transform: uppercase;
-  color: #fff;
+  color: var(--site-text);
 }
 
 .concert-row-venue {
@@ -1389,7 +1452,7 @@ html.home-lock .page-fade {
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.4;
-  color: rgba(255, 255, 255, 0.82);
+  color: var(--site-text-82);
 }
 
 .concert-row-note {
@@ -1398,7 +1461,7 @@ html.home-lock .page-fade {
   font-size: 0.88rem;
   font-weight: 400;
   line-height: 1.45;
-  color: rgba(255, 255, 255, 0.52);
+  color: var(--site-text-52);
 }
 
 .concert-row-city {
@@ -1409,7 +1472,7 @@ html.home-lock .page-fade {
   font-weight: 400;
   line-height: 1.4;
   text-align: left;
-  color: rgba(255, 255, 255, 0.82);
+  color: var(--site-text-82);
   white-space: nowrap;
 }
 
@@ -1480,7 +1543,7 @@ html.home-lock .page-fade {
   padding: 0;
   border: none;
   background: transparent;
-  color: rgba(255, 255, 255, 0.72);
+  color: var(--site-text-72);
   transition:
     color 160ms ease,
     filter 160ms ease;
@@ -1488,8 +1551,8 @@ html.home-lock .page-fade {
 
 .concerts-all-link:hover,
 .concerts-all-link:focus-visible {
-  color: #fff;
-  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.35));
+  color: var(--site-text);
+  filter: drop-shadow(0 0 8px color-mix(in srgb, var(--site-text) 35%, transparent));
 }
 
 .concerts-all-icon {
@@ -1637,9 +1700,9 @@ body:has(.cookie-banner) .home-spotlight {
   height: 6.15rem;
   align-items: center;
   justify-content: center;
-  border: 2px solid rgba(255, 255, 255, 0.92);
+  border: 2px solid var(--site-text-88);
   border-radius: 999px;
-  color: #fff;
+  color: var(--site-text);
   background: transparent;
   box-shadow: 0 1px 18px rgba(0, 0, 0, 0.35);
   transition:
@@ -1656,8 +1719,8 @@ body:has(.cookie-banner) .home-spotlight {
 
 .home-play:hover,
 .home-play:focus-visible {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: #fff;
+  background: var(--site-text-10);
+  border-color: var(--site-text);
 }
 
 .rolunk-photo {
@@ -1675,7 +1738,7 @@ body:has(.cookie-banner) .home-spotlight {
 .wp-copy {
   width: 100%;
   max-width: 38rem;
-  color: rgba(255, 255, 255, 0.72);
+  color: var(--site-text-72);
   font-family: var(--font-fuse), ui-sans-serif, system-ui, sans-serif;
   font-size: 1.05rem;
   font-weight: 400;
@@ -1696,7 +1759,7 @@ body:has(.cookie-banner) .home-spotlight {
 .wp-copy strong,
 .wp-copy b {
   font-weight: 600;
-  color: #fff;
+  color: var(--site-text);
 }
 
 .wp-copy p {
@@ -1710,7 +1773,7 @@ body:has(.cookie-banner) .home-spotlight {
 .wp-copy h2,
 .wp-copy h3 {
   margin: 2.35rem 0 0.7rem;
-  color: #fff;
+  color: var(--site-text);
   font-size: 0.72rem;
   font-weight: 400;
   letter-spacing: 0.22em;
@@ -1724,6 +1787,7 @@ body:has(.cookie-banner) .home-spotlight {
   letter-spacing: 0.14em;
   line-height: 1.15;
   text-transform: uppercase;
+  color: var(--site-text);
 }
 
 .wp-copy.is-contact h2,
@@ -1741,13 +1805,13 @@ body:has(.cookie-banner) .home-spotlight {
 }
 
 .wp-copy a {
-  color: rgba(255, 255, 255, 0.88);
+  color: var(--site-text-88);
   text-decoration: underline;
   text-underline-offset: 0.28em;
 }
 
 .wp-copy a:hover {
-  color: #fff;
+  color: var(--site-text);
 }
 
 .legal-copy-body {

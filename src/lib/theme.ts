@@ -8,6 +8,9 @@ export type ThemePresetId =
   | "kek"
   | "negativ"
   | "pasztell"
+  | "holdfeny"
+  | "kod"
+  | "rozsafeny"
   | "ejszaka"
   | "kontraszt"
   | "meleg"
@@ -49,6 +52,33 @@ export const THEME_PRESETS: SiteTheme[] = [
     description: "Lágy, halvány kék-lila tónusok.",
     bg: "#d4dff5",
     text: "#2a3d66",
+    showBackgroundImage: false,
+    imageSaturation: 1,
+  },
+  {
+    id: "holdfeny",
+    name: "Holdfény",
+    description: "Meleg, krémszínű háttér — esti hangulat, tiszta olvashatóság.",
+    bg: "#faf7f2",
+    text: "#1a2340",
+    showBackgroundImage: false,
+    imageSaturation: 1,
+  },
+  {
+    id: "kod",
+    name: "Ködbe vesző",
+    description: "Hűvös, ködös kék — galaxis-hangulat világos változatban.",
+    bg: "#e8eff8",
+    text: "#142952",
+    showBackgroundImage: false,
+    imageSaturation: 1,
+  },
+  {
+    id: "rozsafeny",
+    name: "Rózsafény",
+    description: "Lágy rózsaszín-krémszín — albumborító ihletésű meleg tónus.",
+    bg: "#f5eef3",
+    text: "#352838",
     showBackgroundImage: false,
     imageSaturation: 1,
   },
@@ -178,16 +208,18 @@ export function clearThemeFromDocument(): void {
     "--site-image-saturation",
     "--site-header-tone",
     "--site-text-glow",
-    "--site-text-30",
-    "--site-text-40",
-    "--site-text-45",
-    "--site-text-55",
-    "--site-text-60",
-    "--site-text-65",
-    "--site-text-70",
-    "--site-text-78",
-    "--site-text-80",
-    "--site-text-85",
+    "--background",
+    "--foreground",
+    "--card",
+    "--card-foreground",
+    "--muted-foreground",
+    "--border",
+    "--input",
+    "--primary",
+    "--primary-foreground",
+    ...([8, 10, 18, 20, 22, 25, 28, 30, 40, 45, 50, 52, 55, 60, 65, 70, 72, 78, 80, 82, 85, 88] as const).map(
+      (opacity) => `--site-text-${opacity}`,
+    ),
   ];
 
   for (const property of properties) {
@@ -230,13 +262,26 @@ export function applyThemeToDocument(theme: SiteTheme): void {
     isLightColor(theme.bg) ? "dark" : "light",
   );
 
-  const opacities = [30, 40, 45, 55, 60, 65, 70, 78, 80, 85] as const;
+  const opacities = [8, 10, 18, 20, 22, 25, 28, 30, 40, 45, 50, 52, 55, 60, 65, 70, 72, 78, 80, 82, 85, 88] as const;
   for (const opacity of opacities) {
     root.style.setProperty(
       `--site-text-${opacity}`,
       textWithOpacity(theme.text, opacity / 100),
     );
   }
+
+  root.style.setProperty("--background", theme.bg);
+  root.style.setProperty("--foreground", theme.text);
+  root.style.setProperty("--card", theme.bg);
+  root.style.setProperty("--card-foreground", theme.text);
+  root.style.setProperty("--muted-foreground", textWithOpacity(theme.text, 0.55));
+  root.style.setProperty("--border", textWithOpacity(theme.text, 0.12));
+  root.style.setProperty("--input", textWithOpacity(theme.text, 0.16));
+  root.style.setProperty(
+    "--primary",
+    isLightColor(theme.bg) ? theme.text : "#ffffff",
+  );
+  root.style.setProperty("--primary-foreground", theme.bg);
 
   const glowRgb = hexToRgb(theme.text);
   const glowStrength = isLightColor(theme.bg) ? 0 : 0.22;

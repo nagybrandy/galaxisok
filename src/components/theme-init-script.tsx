@@ -68,12 +68,25 @@ const INIT_SCRIPT = `
     root.style.setProperty("--site-image-saturation", String(theme.imageSaturation));
     root.style.setProperty("--site-header-tone", isLight(theme.bg) ? "dark" : "light");
 
-    [30, 40, 45, 55, 60, 65, 70, 78, 80, 85].forEach(function (opacity) {
+    [8, 10, 18, 20, 22, 25, 28, 30, 40, 45, 50, 52, 55, 60, 65, 70, 72, 78, 80, 82, 85, 88].forEach(function (opacity) {
       root.style.setProperty(
         "--site-text-" + opacity,
         textOpacity(theme.text, opacity / 100)
       );
     });
+
+    root.style.setProperty("--background", theme.bg);
+    root.style.setProperty("--foreground", theme.text);
+    root.style.setProperty("--card", theme.bg);
+    root.style.setProperty("--card-foreground", theme.text);
+    root.style.setProperty("--muted-foreground", textOpacity(theme.text, 0.55));
+    root.style.setProperty("--border", textOpacity(theme.text, 0.12));
+    root.style.setProperty("--input", textOpacity(theme.text, 0.16));
+    root.style.setProperty(
+      "--primary",
+      isLight(theme.bg) ? theme.text : "#ffffff"
+    );
+    root.style.setProperty("--primary-foreground", theme.bg);
 
     var glow = hexToRgb(theme.text);
     var strength = isLight(theme.bg) ? 0 : 0.22;
