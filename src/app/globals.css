@@ -213,7 +213,7 @@
 }
 
 .site-body .hover\:text-white:hover {
-  color: var(--site-link-hover);
+  color: var(--site-text);
 }
 
 .site-body a.underline,
@@ -226,14 +226,16 @@
   color: var(--site-bg);
 }
 
-.site-body a:not(.nav-link):not(.mobile-menu-link):not(.social-link):not(.post-back):not(.blog-post-teaser):not(.site-logo):not(.home-play):not(.concert-row-hit):not(.concert-ticket):not(.concerts-all-link),
-.site-body .post-body a {
+.site-body .post-body a,
+.site-body .wp-copy a,
+.site-body .legal-copy-body a {
   color: var(--site-link);
   text-decoration-color: var(--site-underline);
 }
 
-.site-body a:not(.nav-link):not(.mobile-menu-link):not(.social-link):not(.post-back):not(.blog-post-teaser):not(.site-logo):not(.home-play):not(.concert-row-hit):not(.concert-ticket):not(.concerts-all-link):hover,
-.site-body .post-body a:hover {
+.site-body .post-body a:hover,
+.site-body .wp-copy a:hover,
+.site-body .legal-copy-body a:hover {
   color: var(--site-link-hover);
   text-decoration-color: var(--site-underline);
 }
@@ -308,25 +310,6 @@
 
 .site-body footer.border-t {
   border-color: var(--site-text-10);
-}
-
-.site-body .blog-post-teaser,
-.site-body .blog-post-teaser .blog-post-title {
-  color: var(--site-link);
-}
-
-.site-body .blog-post-teaser:hover .blog-post-title,
-.site-body .blog-post-teaser:focus-visible .blog-post-title {
-  color: var(--site-link-hover);
-}
-
-.site-body .crumb-link {
-  color: var(--site-link-75);
-}
-
-.site-body .crumb-link:hover,
-.site-body .crumb-link:focus-visible {
-  color: var(--site-link-hover);
 }
 
 .site-body .blog-category-link:hover,
@@ -576,6 +559,7 @@ html.home-lock .page-fade {
 }
 
 .crumb-link {
+  color: var(--site-text-70);
   transition:
     color 160ms ease,
     text-shadow 160ms ease;
@@ -583,12 +567,12 @@ html.home-lock .page-fade {
 
 .crumb-link:hover,
 .crumb-link:focus-visible {
-  color: var(--site-link-hover);
+  color: var(--site-text);
 }
 
 .post-back {
-  color: var(--site-link);
-  border-color: color-mix(in srgb, var(--site-link) 45%, transparent);
+  color: var(--site-text-80);
+  border-color: var(--site-text-25);
   transition:
     color 160ms ease,
     border-color 160ms ease,
@@ -597,9 +581,9 @@ html.home-lock .page-fade {
 
 .post-back:hover,
 .post-back:focus-visible {
-  color: var(--site-link-hover);
-  background: color-mix(in srgb, var(--site-link) 8%, transparent);
-  border-color: var(--site-link);
+  color: var(--site-text);
+  background: var(--site-text-8);
+  border-color: var(--site-text-50);
 }
 
 .nav-link {
@@ -626,7 +610,7 @@ html.home-lock .page-fade {
   border-radius: 999px;
   background: radial-gradient(
     ellipse at center,
-    color-mix(in srgb, var(--site-link) 12%, transparent),
+    color-mix(in srgb, var(--site-text) 12%, transparent),
     transparent 72%
   );
   opacity: 0;
@@ -639,7 +623,7 @@ html.home-lock .page-fade {
 
 .nav-link:hover,
 .nav-link:focus-visible {
-  color: var(--site-link-hover);
+  color: var(--site-text);
   letter-spacing: 0.2em;
   text-shadow: none;
 }
@@ -733,7 +717,7 @@ html.home-lock .page-fade {
 .social-link:focus-visible,
 .social-link.is-lit {
   z-index: 2;
-  color: var(--site-link);
+  color: var(--site-text);
   transform: scale(1.12);
 }
 
@@ -1105,7 +1089,7 @@ html.home-lock .page-fade {
 .mobile-menu-link:hover,
 .mobile-menu-link:focus-visible,
 .mobile-menu-link:active {
-  color: var(--site-link-hover);
+  color: var(--site-text);
   text-shadow: none;
 }
 
