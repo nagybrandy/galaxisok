@@ -7,6 +7,7 @@ import type { NextRequest } from "next/server";
 import {
   GATE_COOKIE,
   gateToken,
+  isLiveHuHost,
   isPublicGatePath,
   shouldProtectHost,
 } from "@/lib/gate";
@@ -32,6 +33,13 @@ export function proxy(request: NextRequest) {
   }
 
   const host = request.headers.get("host") ?? "";
+
+  if (isLiveHuHost(host) && pathname !== "/coming-soon") {
+    const comingSoon = request.nextUrl.clone();
+    comingSoon.pathname = "/coming-soon";
+    comingSoon.search = "";
+    return NextResponse.rewrite(comingSoon);
+  }
 
   if (!shouldProtectHost(host)) {
     return NextResponse.next();

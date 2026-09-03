@@ -3,6 +3,7 @@
 
 import type { Metadata, Viewport } from "next";
 import { Oswald, Outfit } from "next/font/google";
+import { headers } from "next/headers";
 import { Suspense } from "react";
 
 import { CookieConsent } from "@/components/cookie-consent";
@@ -16,6 +17,7 @@ import { RoutePrefetcher } from "@/components/route-prefetcher";
 import { ScrollToTop } from "@/components/scroll-to-top";
 import { ThemeInitScript } from "@/components/theme-init-script";
 import { ThemeProvider } from "@/components/theme-provider";
+import { isLiveHuHost } from "@/lib/gate";
 import {
   ATMOSPHERE_IMAGE,
   HERO_IMAGE,
@@ -75,7 +77,23 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  const host = (await headers()).get("host") ?? "";
+  const comingSoon = isLiveHuHost(host);
+
+  if (comingSoon) {
+    return (
+      <html
+        lang="hu"
+        className={`${oswald.variable} ${fuse.variable} h-full antialiased`}
+      >
+        <body className="flex min-h-dvh flex-col bg-background font-sans text-foreground">
+          {children}
+        </body>
+      </html>
+    );
+  }
+
   return (
     <html
       lang="hu"

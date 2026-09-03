@@ -13,10 +13,15 @@ export function gateToken(): string {
   return createHash("sha256").update(`galaxisok:${gatePassword()}`).digest("hex");
 }
 
+export function isLiveHuHost(host: string): boolean {
+  const hostname = host.split(":")[0]?.toLowerCase() ?? "";
+  return hostname === "galaxisok.hu" || hostname === "www.galaxisok.hu";
+}
+
 export function shouldProtectHost(host: string): boolean {
   const hostname = host.split(":")[0]?.toLowerCase() ?? "";
 
-  if (hostname === "galaxisok.hu" || hostname === "www.galaxisok.hu") {
+  if (isLiveHuHost(host)) {
     return false;
   }
 
