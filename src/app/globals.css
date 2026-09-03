@@ -1371,7 +1371,7 @@ html.home-lock .page-fade {
   inset: 0.2rem 0;
   z-index: -1;
   border-radius: 0.4rem;
-  background: color-mix(in srgb, var(--site-link) 8%, transparent);
+  background: var(--site-text-8);
   opacity: 0;
   transition: opacity 220ms ease;
   pointer-events: none;
@@ -1391,7 +1391,7 @@ html.home-lock .page-fade {
 }
 
 .concert-row + .concert-row {
-  border-top: 1px solid color-mix(in srgb, var(--site-link) 18%, transparent);
+  border-top: 1px solid var(--site-text-18);
 }
 
 .concert-row-copy {
@@ -1406,7 +1406,7 @@ html.home-lock .page-fade {
   letter-spacing: 0.04em;
   line-height: 1.25;
   text-transform: uppercase;
-  color: var(--site-link);
+  color: var(--site-text);
 }
 
 .concert-row-venue {
@@ -1415,7 +1415,7 @@ html.home-lock .page-fade {
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.4;
-  color: var(--site-link-88);
+  color: var(--site-text-82);
 }
 
 .concert-row-note {
@@ -1424,7 +1424,7 @@ html.home-lock .page-fade {
   font-size: 0.88rem;
   font-weight: 400;
   line-height: 1.45;
-  color: var(--site-link-75);
+  color: var(--site-text-52);
 }
 
 .concert-row-city {
@@ -1435,7 +1435,7 @@ html.home-lock .page-fade {
   font-weight: 400;
   line-height: 1.4;
   text-align: left;
-  color: var(--site-link-88);
+  color: var(--site-text-82);
   white-space: nowrap;
 }
 
