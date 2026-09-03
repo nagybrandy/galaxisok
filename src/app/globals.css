@@ -1558,6 +1558,15 @@ html.home-lock .page-fade {
 .persistent-hero.is-home {
   flex: none;
   height: 100dvh;
+  background: #000;
+}
+
+html.home-lock .persistent-hero.is-home {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100dvh;
 }
 
 .persistent-hero.is-hidden {
@@ -1603,6 +1612,14 @@ html.home-lock .page-fade {
 
 .persistent-hero-frame.is-appearing .persistent-hero-img {
   animation: hero-settle 1.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .persistent-hero-frame.is-appearing,
+  .persistent-hero-frame.is-appearing .persistent-hero-img {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 @keyframes spotlight-appear {
@@ -1814,6 +1831,7 @@ body:has(.cookie-banner) .home-spotlight {
 }
 
 /* Homepage hero — white chrome over the photo (inner pages keep cream palette). */
+.site-header.is-hero-chrome:not(.is-menu-open) .site-logo,
 .site-header.is-hero-chrome:not(.is-menu-open) .text-white {
   color: #fff;
 }
