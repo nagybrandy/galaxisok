@@ -15,9 +15,10 @@ export function PersistentHeader() {
     return null;
   }
 
-  const tone = "dark";
+  const onHome = pathname === "/";
+  const tone = onHome ? "light" : "dark";
 
-  return <SiteHeader tone={tone} />;
+  return <SiteHeader tone={tone} className={onHome ? "is-hero-chrome" : undefined} />;
 }
 
 export function PersistentFooter() {

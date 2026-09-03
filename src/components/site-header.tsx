@@ -16,11 +16,13 @@ import { SocialLinks } from "./social-links";
 type SiteHeaderProps = {
   tone?: "light" | "dark";
   links?: NavLink[];
+  className?: string;
 };
 
 export function SiteHeader({
   tone = "light",
   links = NAV_LINKS,
+  className,
 }: SiteHeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -29,6 +31,7 @@ export function SiteHeader({
       className={cn(
         "site-header pointer-events-none flex items-center justify-between gap-3 px-5 pt-[max(1.25rem,env(safe-area-inset-top))] pb-5 sm:gap-4 sm:px-8 sm:pt-[max(1.75rem,env(safe-area-inset-top))] sm:pb-7",
         menuOpen && "is-menu-open",
+        className,
       )}
     >
       <Logo
