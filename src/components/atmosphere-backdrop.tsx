@@ -19,7 +19,6 @@ export function AtmosphereBackdrop({ priority = false }: AtmosphereBackdropProps
       />
       <div className="mobile-menu-noise" aria-hidden />
       <div className="mobile-menu-noise-fine" aria-hidden />
-      <div className="atmosphere-backdrop-solid" />
       <div className="atmosphere-backdrop-wash" />
     </div>
   );

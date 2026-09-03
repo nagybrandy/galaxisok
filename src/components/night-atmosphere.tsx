@@ -28,7 +28,6 @@ export function NightAtmosphere() {
           className="night-atmosphere-img"
         />
       </div>
-      <div className="night-atmosphere-solid" />
       <div className="night-atmosphere-wash" />
       <div className="night-atmosphere-dither" />
     </div>

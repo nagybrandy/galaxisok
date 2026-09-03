@@ -5,21 +5,17 @@
 
 import { usePathname } from "next/navigation";
 
-import { useSiteTheme } from "@/components/theme-provider";
-import { isLightColor } from "@/lib/theme";
-
 import { InnerFooter } from "./inner-footer";
 import { SiteHeader } from "./site-header";
 
 export function PersistentHeader() {
   const pathname = usePathname();
-  const { theme } = useSiteTheme();
 
   if (pathname === "/kapu") {
     return null;
   }
 
-  const tone = isLightColor(theme.bg) ? "dark" : "light";
+  const tone = pathname === "/" ? "light" : "dark";
 
   return <SiteHeader tone={tone} />;
 }
