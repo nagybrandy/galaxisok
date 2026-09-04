@@ -27,7 +27,7 @@ export function SiteNav({ links = NAV_LINKS, className }: SiteNavProps) {
             (link.href !== "/" && pathname.startsWith(`${link.href}/`)));
 
         const itemClass = cn(
-          "nav-link font-[family-name:var(--font-display)] text-[13px] font-semibold tracking-[0.14em] uppercase xl:text-[15px] xl:tracking-[0.18em]",
+          "nav-link font-[family-name:var(--font-fuse)] text-[13px] font-normal tracking-[0.12em] uppercase xl:text-[15px] xl:tracking-[0.16em]",
           active ? "is-active text-white" : "text-white",
         );
 

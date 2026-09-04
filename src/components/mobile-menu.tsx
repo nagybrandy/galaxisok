@@ -107,7 +107,7 @@ export function MobileMenu({
                   (link.href !== "/" && pathname.startsWith(`${link.href}/`)));
 
               const itemClass = cn(
-                "mobile-menu-link font-[family-name:var(--font-display)] font-semibold leading-none uppercase",
+                "mobile-menu-link font-[family-name:var(--font-fuse)] font-normal leading-none uppercase",
                 active ? "is-active text-white" : "text-white/78",
               );
 
