@@ -7,9 +7,10 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-fuse), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-fuse), ui-serif, Georgia, "Times New Roman", serif;
+  --font-serif: var(--font-fuse), ui-serif, Georgia, "Times New Roman", serif;
   --font-mono: ui-monospace, monospace;
-  --font-heading: var(--font-sans);
+  --font-heading: var(--font-serif);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -510,7 +511,7 @@ html.home-lock .page-fade {
   flex-direction: column;
   justify-content: flex-end;
   height: 4.5rem;
-  font-family: var(--font-fuse), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-fuse), ui-serif, Georgia, "Times New Roman", serif;
   font-weight: 400;
 }
 
@@ -1116,7 +1117,7 @@ html.home-lock .page-fade {
 }
 
 .post-body {
-  font-family: var(--font-fuse), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-fuse), ui-serif, Georgia, "Times New Roman", serif;
   font-weight: 400;
 }
 
@@ -1394,7 +1395,7 @@ html.home-lock .page-fade {
 
 .concert-row-venue {
   margin: 0.22rem 0 0;
-  font-family: var(--font-fuse), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-fuse), ui-serif, Georgia, "Times New Roman", serif;
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.4;
@@ -1403,7 +1404,7 @@ html.home-lock .page-fade {
 
 .concert-row-note {
   margin-top: 0.18rem;
-  font-family: var(--font-fuse), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-fuse), ui-serif, Georgia, "Times New Roman", serif;
   font-size: 0.88rem;
   font-weight: 400;
   line-height: 1.45;
@@ -1413,7 +1414,7 @@ html.home-lock .page-fade {
 .concert-row-city {
   margin: 0;
   align-self: center;
-  font-family: var(--font-fuse), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-fuse), ui-serif, Georgia, "Times New Roman", serif;
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.4;
@@ -1713,8 +1714,8 @@ body:has(.cookie-banner) .home-spotlight {
   width: 100%;
   max-width: 38rem;
   color: var(--site-text-72);
-  font-family: var(--font-fuse), ui-sans-serif, system-ui, sans-serif;
-  font-size: 1.05rem;
+  font-family: var(--font-fuse), ui-serif, Georgia, "Times New Roman", serif;
+  font-size: 1.125rem;
   font-weight: 400;
   line-height: 1.85;
 }
@@ -1790,7 +1791,7 @@ body:has(.cookie-banner) .home-spotlight {
 }
 
 .legal-copy-body {
-  font-family: var(--font-fuse), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-fuse), ui-serif, Georgia, "Times New Roman", serif;
   font-weight: 400;
 }
 

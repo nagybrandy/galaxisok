@@ -1,8 +1,8 @@
 // src/app/layout.tsx
-// Root chrome: Oswald for display, Fuse Regular (Outfit stand-in until licensed files land) for copy.
+// Root chrome: Oswald for display, EB Garamond for literary body copy.
 
 import type { Metadata, Viewport } from "next";
-import { Oswald, Outfit } from "next/font/google";
+import { EB_Garamond, Oswald } from "next/font/google";
 import { headers } from "next/headers";
 import { Suspense } from "react";
 
@@ -31,10 +31,11 @@ const oswald = Oswald({
   weight: ["400", "500", "600", "700"],
 });
 
-const fuse = Outfit({
+const garamond = EB_Garamond({
   variable: "--font-fuse",
   subsets: ["latin", "latin-ext"],
-  weight: ["400", "600"],
+  weight: ["400", "500", "600"],
+  style: ["normal", "italic"],
 });
 
 export const metadata: Metadata = {
@@ -82,7 +83,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
     return (
       <html
         lang="hu"
-        className={`${oswald.variable} ${fuse.variable} h-full antialiased`}
+        className={`${oswald.variable} ${garamond.variable} h-full antialiased`}
       >
         <body className="flex min-h-dvh flex-col bg-background font-sans text-foreground">
           {children}
@@ -94,7 +95,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="hu"
-      className={`${oswald.variable} ${fuse.variable} h-full antialiased`}
+      className={`${oswald.variable} ${garamond.variable} h-full antialiased`}
     >
       <head>
         <link rel="preload" href={HERO_IMAGE} as="image" type="image/jpeg" />
