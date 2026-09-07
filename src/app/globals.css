@@ -50,14 +50,14 @@
 }
 
 :root {
-  --background: #e8e3da;
+  --background: #f5f4e6;
   --foreground: #000;
-  --card: #e8e3da;
+  --card: #f5f4e6;
   --card-foreground: #000;
-  --popover: #e8e3da;
+  --popover: #f5f4e6;
   --popover-foreground: #000;
   --primary: #8a3348;
-  --primary-foreground: #e8e3da;
+  --primary-foreground: #f5f4e6;
   --secondary: #ddd8cf;
   --secondary-foreground: #000;
   --muted: #ddd8cf;
@@ -82,7 +82,7 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
-  --site-bg: #e8e3da;
+  --site-bg: #f5f4e6;
   --site-text: #000;
   --site-link: #8a3348;
   --site-link-hover: #6f2538;
@@ -618,7 +618,7 @@ html.home-lock .page-fade {
 .nav-link:hover,
 .nav-link:focus-visible {
   color: var(--site-text);
-  letter-spacing: 0.18em;
+  letter-spacing: 0.2em;
   text-shadow: none;
 }
 
