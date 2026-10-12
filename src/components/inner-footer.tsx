@@ -1,11 +1,7 @@
 // src/components/inner-footer.tsx
 // Legal links and copyright stay on one row, even on a narrow phone.
 
-"use client";
-
 import Link from "next/link";
-
-import { openCookieSettings } from "@/lib/consent";
 
 export function InnerFooter() {
   const year = new Date().getFullYear();
@@ -28,13 +24,13 @@ export function InnerFooter() {
           >
             Adatkezelés
           </Link>
-          <button
-            type="button"
-            className="inline-flex h-8 items-center uppercase hover:text-white sm:h-9 sm:px-2"
-            onClick={openCookieSettings}
+          <Link
+            href="/sutik"
+            prefetch
+            className="inline-flex h-8 items-center hover:text-white sm:h-9 sm:px-2"
           >
             Sütik
-          </button>
+          </Link>
         </nav>
         <p className="shrink-0 whitespace-nowrap leading-none">© {year} Galaxisok</p>
       </div>

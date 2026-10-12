@@ -1,5 +1,5 @@
 // src/components/night-atmosphere.tsx
-// Fixed background layer for inner pages. Solid color only.
+// Document-sized paper layer that scrolls naturally with inner-page content.
 
 "use client";
 
@@ -15,7 +15,7 @@ export function NightAtmosphere() {
   return (
     <div
       aria-hidden
-      className="night-atmosphere pointer-events-none fixed inset-0 z-0"
+      className="night-atmosphere pointer-events-none absolute inset-0 z-0"
     />
   );
 }

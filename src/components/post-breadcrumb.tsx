@@ -34,7 +34,7 @@ export function PostBreadcrumb({ title }: PostBreadcrumbProps) {
 
   return (
     <nav aria-label="Morzsamenü">
-      <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] tracking-[0.18em] text-white/45 uppercase">
+      <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 font-[family-name:var(--font-display)] text-[11px] tracking-[0.18em] text-white/45 uppercase">
         {crumbs.map((crumb, index) => (
           <li key={crumbKey(crumb)} className="flex min-w-0 items-center gap-2">
             {index > 0 ? (

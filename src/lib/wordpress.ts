@@ -263,14 +263,28 @@ function mapCategories(post: WpPost): BlogCategory[] {
     }));
 }
 
-function longerExcerpt(post: WpPost): string {
-  const excerpt = stripHtml(post.excerpt.rendered);
-  const content = stripHtml(post.content.rendered);
-  const text = excerpt.length >= 180 ? excerpt : content || excerpt;
-  if (text.length <= 520) {
-    return text;
+// Blog list lead: the first non-empty paragraph, with a plain-text fallback.
+function firstParagraphText(html: string): string {
+  const pattern = /<p\b[^>]*>([\s\S]*?)<\/p>/gi;
+
+  for (const match of html.matchAll(pattern)) {
+    const text = stripHtml(match[1] ?? "")
+      .replace(/\s+/g, " ")
+      .trim();
+    if (text) {
+      return text;
+    }
   }
-  return `${text.slice(0, 519).replace(/\s+\S*$/, "")}…`;
+
+  return "";
+}
+
+function listingLead(post: WpPost): string {
+  return (
+    firstParagraphText(post.content?.rendered ?? "") ||
+    firstParagraphText(post.excerpt?.rendered ?? "") ||
+    stripHtml(post.excerpt?.rendered ?? "")
+  );
 }
 
 function mapPost(post: WpPost): BlogPost {
@@ -281,7 +295,7 @@ function mapPost(post: WpPost): BlogPost {
     id: post.id,
     slug: post.slug,
     title,
-    excerpt: longerExcerpt(post),
+    excerpt: listingLead(post),
     content: sanitizeWpHtml(post.content.rendered),
     date: post.date,
     author: mapAuthor(post._embedded?.author?.[0]),
@@ -755,6 +769,20 @@ export function formatHuDate(isoDate: string): string {
     month: "long",
     day: "numeric",
   }).format(new Date(isoDate));
+}
+
+export function formatHuNumericDate(isoDate: string): string {
+  const date = new Date(isoDate);
+  if (Number.isNaN(date.getTime())) {
+    return isoDate;
+  }
+
+  return new Intl.DateTimeFormat("hu-HU", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    timeZone: "Europe/Budapest",
+  }).format(date);
 }
 
 const HU_MONTHS = [

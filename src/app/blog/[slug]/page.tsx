@@ -2,15 +2,17 @@
 // Single WordPress post with cover image.
 
 import type { Metadata } from "next";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 
+import { CommentsSection } from "@/components/comments-section";
 import { PageShell } from "@/components/page-shell";
 import { PostBackButton } from "@/components/post-back-button";
 import { PostBody } from "@/components/post-body";
 import { PostBreadcrumb } from "@/components/post-breadcrumb";
-import { PostCover } from "@/components/post-cover";
 import { SkeletonImage } from "@/components/skeleton-image";
-import { formatHuDate, getPostBySlug } from "@/lib/wordpress";
+import { getApprovedComments } from "@/lib/comments";
+import { formatHuNumericDate, getPostBySlug } from "@/lib/wordpress";
 
 type BlogPostPageProps = {
   params: Promise<{ slug: string }>;
@@ -31,7 +33,7 @@ export async function generateMetadata({
   }
 
   return {
-    title: post.seoTitle ?? post.title,
+    title: post.title,
     description: post.seoDescription || post.excerpt || post.title,
     openGraph: post.image
       ? {
@@ -49,52 +51,55 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     notFound();
   }
 
+  const comments = await getApprovedComments(post.id);
+
   return (
     <PageShell>
-      <article className="relative z-[1] mx-auto w-full max-w-3xl flex-1 px-5 py-12 sm:px-8">
-        <div className="flex items-start justify-between gap-4">
-          <div className="min-w-0 flex-1">
-            <PostBreadcrumb title={post.title} />
-          </div>
+      <article className="relative z-[1] mx-auto w-full max-w-5xl flex-1 px-5 pb-16 pt-8 sm:px-8 sm:pt-10">
+        <div className="post-toolbar">
+          <PostBreadcrumb title={post.title} />
           <PostBackButton href="/blog" />
         </div>
-        <h1 className="page-title page-title-lg mt-6 text-glow">{post.title}</h1>
-        <div className="mt-6 flex items-center gap-3">
-          {post.author?.avatar ? (
-            <span className="relative inline-block size-10 overflow-hidden rounded-full">
-              <SkeletonImage
-                src={post.author.avatar}
-                alt={post.author.name}
-                fill
-                className="object-cover"
-              />
-            </span>
-          ) : null}
-          <div>
-            <p className="text-sm text-white/85">
-              {post.author?.name ?? "Galaxisok"}
-            </p>
-            <time
-              dateTime={post.date}
-              className="text-[11px] tracking-[0.16em] text-white/40"
-            >
-              {formatHuDate(post.date)}
-            </time>
-          </div>
+        <time
+          dateTime={post.date}
+          className="block font-[family-name:var(--font-display)] text-sm font-light text-white/55"
+        >
+          {formatHuNumericDate(post.date)}
+        </time>
+        <h1 className="mt-3 font-[family-name:var(--font-display)] text-[clamp(2rem,4vw,4rem)] leading-[1.08] font-semibold text-white">
+          {post.title}
+        </h1>
+        <div className="post-author">
+          <Image
+            src={post.author?.avatar ?? "/benedek-avatar.jpg"}
+            alt=""
+            width={40}
+            height={40}
+            unoptimized
+            className="post-author-avatar"
+            aria-hidden
+          />
+          <p className="font-[family-name:var(--font-display)] text-sm font-light text-white/55">
+            {post.author?.name ?? "Galaxisok"}
+          </p>
         </div>
         {post.image ? (
-          <PostCover
-            src={post.image.src}
-            alt={post.image.alt}
-            width={post.image.width}
-            height={post.image.height}
-            variant="hero"
-            priority
-          />
+          <div className="post-hero mb-8">
+            <div className="post-hero-photo">
+              <SkeletonImage
+                src={post.image.src}
+                alt={post.image.alt}
+                fill
+                priority
+                unoptimized
+                sizes="(min-width: 1280px) 1280px, 68vw"
+                className="object-cover object-[center_28%]"
+              />
+            </div>
+          </div>
         ) : null}
-        <div className="mt-8">
-          <PostBody html={post.content} />
-        </div>
+        <PostBody html={post.content} />
+        <CommentsSection postId={post.id} initialComments={comments} />
       </article>
     </PageShell>
   );

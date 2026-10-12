@@ -1,11 +1,12 @@
 // src/components/site-nav.tsx
-// Uppercase menu. Hover lifts the item; the current route stays lit.
+// Minimal uppercase menu with the wordmark's dotted hover glow.
 
 "use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { HoverSparkAccent } from "@/components/hover-spark-accent";
 import { NAV_LINKS, shouldPrefetchRoute, type NavLink } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
@@ -27,16 +28,11 @@ export function SiteNav({ links = NAV_LINKS, className }: SiteNavProps) {
             (link.href !== "/" && pathname.startsWith(`${link.href}/`)));
 
         const itemClass = cn(
-          "nav-link font-[family-name:var(--font-display)] text-[13px] font-semibold tracking-[0.14em] uppercase xl:text-[15px] xl:tracking-[0.18em]",
+          "nav-link inline-flex items-center font-[family-name:var(--font-display)] text-[13px] font-semibold tracking-[0.14em] uppercase xl:text-[15px] xl:tracking-[0.18em]",
           active ? "is-active text-white" : "text-white",
         );
 
-        const label = (
-          <>
-            <span className="hover-spark-dots" aria-hidden />
-            {link.label}
-          </>
-        );
+        const label = link.label;
 
         if (link.external) {
           return (
@@ -47,7 +43,10 @@ export function SiteNav({ links = NAV_LINKS, className }: SiteNavProps) {
               rel="noreferrer noopener"
               className={itemClass}
             >
-              {label}
+              <span className="relative inline-block">
+                <HoverSparkAccent />
+                {label}
+              </span>
             </a>
           );
         }
@@ -60,7 +59,10 @@ export function SiteNav({ links = NAV_LINKS, className }: SiteNavProps) {
             aria-current={active ? "page" : undefined}
             className={itemClass}
           >
-            {label}
+            <span className="relative inline-block">
+              <HoverSparkAccent />
+              {label}
+            </span>
           </Link>
         );
       })}

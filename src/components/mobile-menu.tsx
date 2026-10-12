@@ -7,12 +7,14 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 
+import { HoverSparkAccent } from "@/components/hover-spark-accent";
 import { NAV_LINKS, shouldPrefetchRoute, type NavLink } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 import { AtmosphereBackdrop } from "./atmosphere-backdrop";
 import { Logo } from "./logo";
 import { SocialLinks } from "./social-links";
+import { ThemeToggle } from "./theme-toggle";
 
 type MobileMenuProps = {
   links?: NavLink[];
@@ -92,11 +94,14 @@ export function MobileMenu({
             <AtmosphereBackdrop />
           </div>
 
-          <div className="mobile-menu-head relative z-[2] flex items-center px-5 pt-[max(1.25rem,env(safe-area-inset-top))] sm:px-8 sm:pt-[max(1.75rem,env(safe-area-inset-top))]">
+          <div className="mobile-menu-head relative z-[2] flex items-center justify-between px-5 pt-[max(1.25rem,env(safe-area-inset-top))] sm:px-8 sm:pt-[max(1.75rem,env(safe-area-inset-top))]">
             <Logo
-              tone="dark"
+              tone="light"
               className="pointer-events-auto relative z-10 inline-flex h-10 items-center leading-none"
             />
+            <div className="mobile-menu-theme-toggle mr-12">
+              <ThemeToggle />
+            </div>
           </div>
 
           <nav className="mobile-menu-nav relative z-[2] flex min-h-0 flex-1 flex-col overflow-y-auto px-5 sm:px-8">
@@ -121,7 +126,10 @@ export function MobileMenu({
                     className={itemClass}
                     onClick={() => onOpenChange(false)}
                   >
-                    {link.label}
+                    <span className="relative inline-block">
+                      <HoverSparkAccent />
+                      {link.label}
+                    </span>
                   </a>
                 );
               }
@@ -134,7 +142,10 @@ export function MobileMenu({
                   aria-current={active ? "page" : undefined}
                   className={itemClass}
                 >
-                  {link.label}
+                  <span className="relative inline-block">
+                    <HoverSparkAccent />
+                    {link.label}
+                  </span>
                 </Link>
               );
             })}

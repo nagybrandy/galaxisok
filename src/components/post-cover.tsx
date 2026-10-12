@@ -21,7 +21,7 @@ export function PostCover({
 }: PostCoverProps) {
   if (variant === "hero") {
     return (
-      <div className="relative mt-8 aspect-[16/10] max-h-[46dvh] overflow-hidden rounded-xl bg-black/40 sm:max-h-[58dvh]">
+      <div className="relative mt-8 aspect-[16/10] max-h-[46dvh] overflow-hidden rounded-[2px] bg-black/40 sm:max-h-[58dvh]">
         <SkeletonImage
           src={src}
           alt={alt}
@@ -37,7 +37,7 @@ export function PostCover({
   return (
     <div
       className={cn(
-        "teaser-cover relative w-28 shrink-0 self-stretch overflow-hidden rounded-xl bg-black/40",
+        "teaser-cover relative w-28 shrink-0 self-stretch overflow-hidden rounded-[2px] bg-black/40",
         "sm:w-44 lg:w-52",
       )}
     >

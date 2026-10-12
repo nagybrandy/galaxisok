@@ -1,10 +1,11 @@
 // src/components/logo.tsx
-// Wordmark in the top-left. Hover sparks match the menu, around the whole word.
+// Top-left wordmark with a dotted hover accent links back to the homepage.
 
 "use client";
 
 import Link from "next/link";
 
+import { HoverSparkAccent } from "@/components/hover-spark-accent";
 import {
   Tooltip,
   TooltipContent,
@@ -18,7 +19,7 @@ type LogoProps = {
   tone?: "light" | "dark";
 };
 
-export function Logo({ className, tone: _tone = "light" }: LogoProps) {
+export function Logo({ className }: LogoProps) {
   return (
     <TooltipProvider delayDuration={280}>
       <Tooltip>
@@ -28,15 +29,14 @@ export function Logo({ className, tone: _tone = "light" }: LogoProps) {
             prefetch
             aria-label="Galaxisok — vissza a főoldalra"
             className={cn(
-              "site-logo relative isolate inline-flex items-center overflow-visible font-[family-name:var(--font-display)] text-base font-semibold leading-none tracking-[0.22em] uppercase min-[380px]:text-lg min-[380px]:tracking-[0.32em] sm:text-xl text-foreground",
+              "site-logo relative isolate inline-flex items-center overflow-visible font-[family-name:var(--font-display)] text-base font-semibold leading-none tracking-[0.22em] text-white uppercase min-[380px]:text-lg min-[380px]:tracking-[0.32em] sm:text-xl",
               className,
             )}
           >
-            <span className="hover-spark-halo" aria-hidden />
-            <span className="hover-spark-dots site-logo-spark-start" aria-hidden />
-            <span className="hover-spark-dots site-logo-spark-mid" aria-hidden />
-            <span className="hover-spark-dots site-logo-spark-end" aria-hidden />
-            <span className="relative">Galaxisok</span>
+            <span className="relative inline-block">
+              <HoverSparkAccent variant="logo" />
+              Galaxisok
+            </span>
           </Link>
         </TooltipTrigger>
         <TooltipContent

@@ -1,5 +1,5 @@
 // src/lib/gate.ts
-// Password gate for vercel.app / local. Public .hu hosts stay open.
+// Password gate for local and preview hosts, excluding the public comparison site.
 
 import { createHash } from "node:crypto";
 
@@ -21,7 +21,7 @@ export function isLiveHuHost(host: string): boolean {
 export function shouldProtectHost(host: string): boolean {
   const hostname = host.split(":")[0]?.toLowerCase() ?? "";
 
-  if (isLiveHuHost(host)) {
+  if (isLiveHuHost(host) || hostname === "galaxisok-new.vercel.app") {
     return false;
   }
 

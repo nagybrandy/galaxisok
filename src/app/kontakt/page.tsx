@@ -24,7 +24,7 @@ export default async function KontaktPage() {
     <PageShell>
       <main className={INNER_PAGE_CENTER}>
         <div className="flex w-full max-w-xl flex-col items-center">
-          <h1 className="contact-page-title text-glow">Kontakt</h1>
+          <h1 className="page-title page-title-lg text-glow">Kontakt</h1>
           <WpCopy variant="contact" html={html} />
         </div>
       </main>

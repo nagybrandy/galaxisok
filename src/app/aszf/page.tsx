@@ -1,54 +1,186 @@
 // src/app/aszf/page.tsx
-// Terms for the public Galaxisok site, Bandcamp, and the merch shop.
+// Terms of use for the site, newsletter and comments; purchases happen elsewhere.
 
 import type { Metadata } from "next";
+import Link from "next/link";
 
 import { LegalPage } from "@/components/legal-page";
-import { MERCH_URL, SITE_NAME } from "@/lib/site";
-import { BAND_EMAIL } from "@/lib/socials";
+import { CONTROLLER, PROCESSORS } from "@/lib/legal";
+import { BANDCAMP_MUSIC_URL, MERCH_URL, SITE_NAME } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "ÁSZF",
-  description: "A Galaxisok weboldalának általános szerződési feltételei.",
+  title: "Általános szerződési feltételek",
+  description:
+    "A Galaxisok weboldalának, hírlevelének és hozzászólásainak használati feltételei, impresszum.",
 };
+
+const hosts = PROCESSORS.filter(
+  (processor) =>
+    processor.name.startsWith("Vercel") || processor.name.startsWith("Tárhelypark"),
+);
 
 export default function AszfPage() {
   return (
-    <LegalPage title="ÁSZF">
+    <LegalPage title="Általános szerződési feltételek">
       <p>
-        Ezek a feltételek a {SITE_NAME} hivatalos weboldalára vonatkoznak. A
-        oldal használatával elfogadod őket.
+        Ez a dokumentum a {SITE_NAME} hivatalos weboldalának (galaxisok.hu, a
+        továbbiakban: weboldal) használati feltételeit tartalmazza, az
+        elektronikus kereskedelmi szolgáltatások, valamint az információs
+        társadalommal összefüggő szolgáltatások egyes kérdéseiről szóló 2001. évi
+        CVIII. törvény (Ekertv.) és a Polgári Törvénykönyvről szóló 2013. évi V.
+        törvény (Ptk.) alapján. A weboldal használatával, a hírlevélre
+        feliratkozással vagy hozzászólás beküldésével elfogadod ezeket a
+        feltételeket. Ha nem értesz egyet velük, kérjük, ne használd a weboldalt.
       </p>
-      <h2>Szolgáltató</h2>
+
+      <h2>1. Szolgáltató (impresszum)</h2>
+      <dl>
+        <dt>Név</dt>
+        <dd>{CONTROLLER.name}</dd>
+        <dt>Képviselő</dt>
+        <dd>{CONTROLLER.representative}</dd>
+        <dt>Székhely</dt>
+        <dd>{CONTROLLER.address}</dd>
+        <dt>Nyilvántartás</dt>
+        <dd>{CONTROLLER.registration}</dd>
+        <dt>E-mail</dt>
+        <dd>
+          <a href={`mailto:${CONTROLLER.email}`}>{CONTROLLER.email}</a>
+        </dd>
+      </dl>
+
+      <h2>2. Tárhelyszolgáltatók</h2>
+      <ul>
+        {hosts.map((host) => (
+          <li key={host.name}>
+            <strong>{host.name}</strong> – {host.address}, {host.country}.{" "}
+            {host.role}{" "}
+            <a href={host.policyUrl} rel="noreferrer" target="_blank">
+              Elérhetőség és szabályzat
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <h2>3. A szolgáltatás</h2>
       <p>
-        A weboldalt a {SITE_NAME} zenekar üzemelteti. Kapcsolat:{" "}
-        <a href={`mailto:${BAND_EMAIL}`}>{BAND_EMAIL}</a>.
+        A weboldal a zenekar híreit, blogbejegyzéseit, koncertlistáját és
+        elérhetőségeit mutatja, hírlevél-feliratkozást és a bejegyzésekhez
+        hozzászólást tesz lehetővé. A weboldal használata ingyenes, regisztráció
+        nem szükséges. A weboldalon nem történik értékesítés: a zene a Bandcampen
+        (<a href={BANDCAMP_MUSIC_URL}>{BANDCAMP_MUSIC_URL}</a>), a merch a B Side
+        Music webshopjában (<a href={MERCH_URL}>{MERCH_URL}</a>), a koncertjegy a
+        koncertlistából nyíló jegyértékesítő partnereknél vásárolható meg. Ezekre
+        a vásárlásokra az adott szolgáltató saját általános szerződési feltételei,
+        fizetési, szállítási, elállási és panaszkezelési szabályai vonatkoznak;
+        fogyasztói jogaidat velük szemben gyakorolhatod. Mi ezekben a
+        jogviszonyokban nem vagyunk fél.
       </p>
-      <h2>A weboldal</h2>
+
+      <h2>4. Hírlevél</h2>
       <p>
-        Az oldal híreket, koncertlistát és hírlevél-feliratkozást mutat. A zene
-        a Bandcampen, a merch a B Side Music shopjában nyílik meg.
+        A hírlevélre a <Link href="/hirlevel">Hírlevél</Link> oldalon, az
+        e-mail-címed megadásával és a hozzájárulás bejelölésével iratkozhatsz
+        fel. A feliratkozás csak a megerősítő e-mailben lévő linkre kattintás
+        után válik érvényessé (kettős megerősítés). A hírlevél ingyenes, csak
+        akkor küldjük, ha van hírünk: koncert, megjelenés, zenekari hír. Bármikor
+        leiratkozhatsz a levelek alján lévő linkkel vagy e-mailben; a
+        leiratkozást legkésőbb 5 munkanapon belül átvezetjük. A hírlevéllel
+        kapcsolatos adatkezelést az{" "}
+        <Link href="/adatkezeles">adatkezelési tájékoztató</Link> 3.2 pontja
+        írja le.
       </p>
-      <h2>Vásárlás</h2>
+
+      <h2>5. Hozzászólások</h2>
       <p>
-        A jegyek és a merch nem tőlünk, hanem a jegyszolgáltatótól vagy a
-        B Side Music shopjától kerülnek elszámolásra. A fizetés, szállítás és
-        reklamáció az ő feltételeik szerint megy. Merch:{" "}
-        <a href={MERCH_URL}>{MERCH_URL}</a>.
+        A blogbejegyzésekhez név (vagy becenév) és e-mail-cím megadásával
+        szólhatsz hozzá. A hozzászólás csak moderálás után jelenik meg. A
+        beküldéssel szavatolod, hogy a hozzászólás a saját műved, és engedélyt
+        adsz a weboldalon való közzétételére. Nem engedélyezett:
       </p>
-      <h2>Tartalom</h2>
+      <ul>
+        <li>jogellenes, gyűlöletkeltő, rágalmazó, zaklató vagy fenyegető tartalom;</li>
+        <li>más személyes adatának engedély nélküli közlése;</li>
+        <li>szerzői jogot sértő tartalom;</li>
+        <li>reklám, spam, kéretlen linkek;</li>
+        <li>más személy vagy a zenekar tagjainak nevében való megszólalás.</li>
+      </ul>
       <p>
-        A szövegek, fotók és a logó a zenekar vagy a megjelölt szerző
-        tulajdonában vannak. Másolni, terjeszteni csak engedéllyel lehet.
+        A moderálás során a fenti szabályokba ütköző hozzászólást nem
+        hagyjuk jóvá, a már közzétett hozzászólást pedig eltávolíthatjuk. A
+        zenekar tagjainak és a weboldal üzemeltetőjének hozzászólásait „(admin)”
+        jelölés különbözteti meg; ezek a nevek más beküldő számára nem
+        használhatók. Döntésünkről kérésedre e-mailben indokolást adunk, és
+        kifogásodat ugyanott jelezheted.
       </p>
-      <h2>Felelősség</h2>
+
+      <h2>6. Jogellenes tartalom bejelentése</h2>
       <p>
-        Az oldalt jóhiszeműen tartjuk karban, de nem vállalunk jótállást a
-        folyamatos elérhetőségért, és a külső oldalak (Bandcamp, közösségi
-        média, jegyeladás) működéséért.
+        Ha a weboldalon közzétett hozzászólásban jogellenes vagy e feltételekbe
+        ütköző tartalmat találsz, kérjük, jelezd a{" "}
+        <a href={`mailto:${CONTROLLER.email}`}>{CONTROLLER.email}</a> címen (a
+        digitális szolgáltatásokról szóló 2022/2065 EU rendelet 12. és 16. cikke
+        szerinti kapcsolattartási pont). A bejelentésben add meg a hozzászólás
+        linkjét vagy sorszámát, és írd le, miért tartod jogsértőnek. A bejelentést
+        indokolatlan késedelem nélkül megvizsgáljuk, és döntésünkről értesítünk.
       </p>
-      <h2>Módosítás</h2>
-      <p>A feltételeket indokolt esetben frissítjük. A hatályos szöveg mindig itt olvasható.</p>
+
+      <h2>7. Szellemi tulajdon</h2>
+      <p>
+        A weboldalon megjelenő szövegek, fotók, videók, zenék, a logó és a
+        grafikai elemek a zenekar, a megjelölt szerző vagy a jogosult tulajdona,
+        és a szerzői jogról szóló 1999. évi LXXVI. törvény védelme alatt állnak.
+        A tartalmat a saját, nem kereskedelmi célú felhasználáson, idézésen és a
+        linkeléssel történő megosztáson túl csak előzetes írásbeli engedéllyel
+        lehet másolni, átdolgozni vagy terjeszteni. Sajtómegkereséssel a kontakt
+        oldalon megadott címen fordulj hozzánk.
+      </p>
+
+      <h2>8. Felelősség</h2>
+      <p>
+        A weboldalt gondosan tartjuk karban, de nem vállalunk felelősséget a
+        folyamatos, hibátlan elérhetőségért, a koncertadatok esetleges
+        változásáért (a hivatalos információ mindig a szervezőnél és a
+        jegyértékesítőnél van), valamint a külső oldalak tartalmáért és
+        működéséért. A felhasználói hozzászólások a beküldő véleményét tükrözik;
+        az Ekertv. 2. § lc) pontja szerinti tárhelyszolgáltatóként a tudomásunkra
+        jutott jogsértő tartalmat a 6. pont szerint eltávolítjuk. Nem korlátozzuk
+        a felelősségünket a szándékosan vagy az emberi életet, testi épséget,
+        egészséget károsító magatartással okozott kárért.
+      </p>
+
+      <h2>9. Panaszkezelés</h2>
+      <p>
+        A weboldallal, a hírlevéllel vagy a hozzászólásokkal kapcsolatos
+        észrevételt, panaszt a{" "}
+        <a href={`mailto:${CONTROLLER.email}`}>{CONTROLLER.email}</a> címre
+        küldheted. A panaszra legkésőbb 30 napon belül érdemben válaszolunk.
+        Fogyasztói jogvita esetén a lakóhelyed szerint illetékes békéltető
+        testülethez fordulhatsz (a testületek listája:{" "}
+        <a href="https://bekeltetes.hu" rel="noreferrer" target="_blank">
+          bekeltetes.hu
+        </a>
+        ), illetve a fogyasztóvédelmi hatósághoz (a kormányhivatalok
+        fogyasztóvédelmi osztályai). A külső webshopokban és jegyértékesítőknél
+        történt vásárlás miatti panaszt az adott szolgáltatónál kell bejelenteni.
+      </p>
+
+      <h2>10. Irányadó jog</h2>
+      <p>
+        E feltételekre a magyar jog az irányadó. A feltételek magyar nyelven
+        készültek; nem minősülnek írásbeli szerződésnek, iktatásra nem
+        kerülnek, magatartási kódexnek nem vetjük alá magunkat.
+      </p>
+
+      <h2>11. Módosítás</h2>
+      <p>
+        A feltételeket indokolt esetben (új funkció, jogszabályváltozás)
+        módosíthatjuk. A hatályos szöveg mindig ezen az oldalon olvasható, a
+        hatálybalépés napját és a verziót a lap tetején jelezzük. A hírlevél
+        feltételeinek lényeges változásáról a feliratkozókat e-mailben is
+        értesítjük; a módosítás a már feliratkozottakra a közléstől számított 15
+        nap elteltével alkalmazandó, ez idő alatt bármikor leiratkozhatsz.
+      </p>
     </LegalPage>
   );
 }

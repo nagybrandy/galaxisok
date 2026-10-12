@@ -1,8 +1,9 @@
 // src/components/skeleton-image.tsx
-// Native img. Lazy-load wrappers can stick at opacity 0 after the gate.
+// Optimized Next.js image with stable fill sizing and priority support.
 
 "use client";
 
+import Image from "next/image";
 import type { MouseEventHandler } from "react";
 
 import { cn } from "@/lib/utils";
@@ -28,16 +29,20 @@ export function SkeletonImage({
   fill = false,
   width,
   height,
+  sizes,
+  unoptimized = false,
   onClick,
 }: SkeletonImageProps) {
   return (
-    <img
+    <Image
       src={src}
       alt={alt}
+      fill={fill}
       width={fill ? undefined : width}
       height={fill ? undefined : height}
-      fetchPriority={priority ? "high" : "auto"}
-      decoding="async"
+      sizes={sizes}
+      priority={priority}
+      unoptimized={unoptimized}
       className={cn(fill && "absolute inset-0 h-full w-full", className)}
       onClick={onClick}
     />

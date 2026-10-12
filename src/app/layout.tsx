@@ -1,5 +1,5 @@
 // src/app/layout.tsx
-// Root chrome: Oswald for display, EB Garamond for literary body copy.
+// Root chrome: Oswald for display text, EB Garamond for literary body copy.
 
 import type { Metadata, Viewport } from "next";
 import { EB_Garamond, Oswald } from "next/font/google";
@@ -37,6 +37,15 @@ const garamond = EB_Garamond({
   weight: ["400", "500", "600"],
   style: ["normal", "italic"],
 });
+
+const themeInitScript = `
+  try {
+    const savedTheme = localStorage.getItem("galaxisok-theme");
+    document.documentElement.dataset.theme = savedTheme === "dark" ? "dark" : "light";
+  } catch {
+    document.documentElement.dataset.theme = "light";
+  }
+`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl()),
@@ -95,10 +104,13 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="hu"
+      suppressHydrationWarning
       className={`${oswald.variable} ${garamond.variable} h-full antialiased`}
     >
       <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
         <link rel="preload" href={HERO_IMAGE} as="image" type="image/jpeg" />
+        <link rel="preload" href="/paper-background-loop.jpg" as="image" type="image/jpeg" />
       </head>
       <body className="site-body relative flex min-h-dvh flex-col font-sans">
         <NightAtmosphere />

@@ -27,10 +27,12 @@ export default async function KoncertekPage() {
       <main className={INNER_PAGE_TOUR}>
         <ConcertCalendarProvider>
           <div className="concerts-head">
-            <h1 className="page-title page-title-lg text-glow">Koncertek</h1>
-            {concerts.length > 0 ? (
-              <AddAllConcertsLink concerts={concerts} />
-            ) : null}
+            <div className="concerts-head-title">
+              <h1 className="page-title page-title-lg text-glow">Koncertek</h1>
+              {concerts.length > 0 ? (
+                <AddAllConcertsLink concerts={concerts} />
+              ) : null}
+            </div>
           </div>
           {concerts.length === 0 ? (
             <p className="text-white/55">

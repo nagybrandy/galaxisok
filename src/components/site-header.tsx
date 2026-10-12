@@ -12,6 +12,7 @@ import { Logo } from "./logo";
 import { MobileMenu } from "./mobile-menu";
 import { SiteNav } from "./site-nav";
 import { SocialLinks } from "./social-links";
+import { ThemeToggle } from "./theme-toggle";
 
 type SiteHeaderProps = {
   tone?: "light" | "dark";
@@ -45,6 +46,9 @@ export function SiteHeader({
         <MobileMenu links={links} open={menuOpen} onOpenChange={setMenuOpen} />
         <SiteNav tone={tone} links={links} className="hidden lg:flex" />
         <SocialLinks tone={tone} className="hidden xl:flex" />
+        <div className="hidden lg:block">
+          <ThemeToggle />
+        </div>
       </div>
     </header>
   );

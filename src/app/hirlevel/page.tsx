@@ -13,17 +13,17 @@ export const metadata: Metadata = {
 };
 
 export default function HirlevelPage() {
-  const embedUrl = process.env.NEXT_PUBLIC_MAILCHIMP_EMBED_URL;
-
   return (
     <PageShell>
       <main className={INNER_PAGE_CENTER}>
-        <div className="flex w-full max-w-xl flex-col items-center">
-          <h1 className="page-title page-title-lg text-glow">Hírlevél</h1>
-          <p className="mt-6 font-[family-name:var(--font-fuse)] font-normal text-white/60">
+        <div className="newsletter-panel">
+          <h1 className="page-title page-title-lg newsletter-title text-glow">
+            Hírlevél
+          </h1>
+          <p className="newsletter-intro">
             Koncertek, lemezek, hírek — csak akkor írunk, ha van mit.
           </p>
-          <NewsletterForm embedUrl={embedUrl} />
+          <NewsletterForm />
         </div>
       </main>
     </PageShell>

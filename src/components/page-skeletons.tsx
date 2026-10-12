@@ -22,7 +22,7 @@ export function BlogPageSkeleton() {
             {Array.from({ length: 4 }, (_, index) => (
               <li key={index} className="blog-list-item py-8 first:pt-0 sm:py-10">
                 <div className="flex flex-row items-stretch gap-3 sm:gap-5">
-                  <Bone className="w-28 shrink-0 self-stretch rounded-xl sm:w-44" />
+                  <Bone className="w-28 shrink-0 self-stretch rounded-[2px] sm:w-44" />
                   <div className="flex min-w-0 flex-1 flex-col">
                     <div className="flex items-center gap-3">
                       <Bone className="size-8 rounded-full sm:size-9" />
@@ -60,7 +60,7 @@ export function PostPageSkeleton() {
             <Bone className="mt-2 h-2.5 w-20" />
           </div>
         </div>
-        <Bone className="mt-8 aspect-[16/10] w-full rounded-xl" />
+        <Bone className="mt-8 aspect-[16/10] w-full rounded-[2px]" />
         <Bone className="mt-8 h-3 w-full" />
         <Bone className="mt-3 h-3 w-full" />
         <Bone className="mt-3 h-3 w-5/6" />
@@ -75,8 +75,10 @@ export function ConcertsPageSkeleton() {
     <PageShell>
       <main className={INNER_PAGE_TOUR}>
         <div className="concerts-head">
-          <Bone className="h-8 w-40 sm:h-12" />
-          <Bone className="size-9 shrink-0" />
+          <div className="concerts-head-title">
+            <Bone className="h-8 w-40 sm:h-12" />
+            <Bone className="absolute top-1/2 left-[calc(100%+0.75rem)] size-9 -translate-y-1/2" />
+          </div>
         </div>
         <ul className="concert-list">
           {Array.from({ length: 4 }, (_, index) => (

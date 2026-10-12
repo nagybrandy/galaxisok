@@ -32,6 +32,7 @@ export const PREFETCH_ROUTES = [
   "/hirlevel",
   "/aszf",
   "/adatkezeles",
+  "/sutik",
 ] as const;
 
 export function shouldPrefetchRoute(href: string): boolean {

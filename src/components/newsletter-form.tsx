@@ -1,86 +1,187 @@
 // src/components/newsletter-form.tsx
-// Email field plus a required ÁSZF accept, so subscribe cannot skip the terms.
+// Email field plus required ÁSZF accept; submits into WordPress → Mailchimp.
 
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState, type FormEvent } from "react";
 
-import { EmbedGate } from "@/components/embed-gate";
+type SubmitState =
+  | { kind: "idle" }
+  | { kind: "loading" }
+  | { kind: "success"; message: string }
+  | { kind: "error"; message: string };
 
-type NewsletterFormProps = {
-  embedUrl?: string;
-};
-
-export function NewsletterForm({ embedUrl }: NewsletterFormProps) {
+export function NewsletterForm() {
   const [accepted, setAccepted] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const startedAtRef = useRef(0);
+  const [state, setState] = useState<SubmitState>({ kind: "idle" });
+
+  function markStarted() {
+    if (startedAtRef.current === 0) {
+      startedAtRef.current = Date.now();
+    }
+  }
+
+  async function onSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    markStarted();
+    if (!accepted || state.kind === "loading") {
+      return;
+    }
+
+    setState({ kind: "loading" });
+
+    try {
+      const response = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          email,
+          aszf: accepted,
+          startedAt: startedAtRef.current,
+          company: "",
+        }),
+      });
+      const payload = (await response.json().catch(() => null)) as {
+        message?: string;
+      } | null;
+
+      if (!response.ok) {
+        setState({
+          kind: "error",
+          message:
+            payload?.message ||
+            "A feliratkozás nem sikerült. Próbáld újra később.",
+        });
+        return;
+      }
+
+      setState({
+        kind: "success",
+        message:
+          payload?.message ||
+          "Köszönjük! Nézd meg a postaládádat, és erősítsd meg a feliratkozást.",
+      });
+      setName("");
+      setEmail("");
+      setAccepted(false);
+      startedAtRef.current = 0;
+    } catch {
+      setState({
+        kind: "error",
+        message: "Nem sikerült elküldeni. Próbáld újra később.",
+      });
+    }
+  }
 
   return (
-    <form
-      className="mt-8 w-full text-left"
-      action={embedUrl && accepted ? undefined : "#"}
-      method="post"
-      onSubmit={(event) => {
-        if (!accepted) {
-          event.preventDefault();
-        }
-      }}
-    >
-      <div className="flex flex-col gap-3 sm:flex-row">
-        <label className="sr-only" htmlFor="email">
-          Email
-        </label>
-        <input
-          id="email"
-          name="email"
-          type="email"
-          required
-          placeholder="email@cim.hu"
-          className="h-12 flex-1 border border-white/20 bg-transparent px-4 text-center text-white outline-none placeholder:text-white/30 focus:border-white"
-        />
+    <form className="newsletter-form" onSubmit={onSubmit}>
+      <div className="newsletter-fields">
+        <div className="newsletter-input-wrap">
+          <label className="sr-only" htmlFor="name">
+            Név vagy becenév
+          </label>
+          <input
+            id="name"
+            name="name"
+            type="text"
+            required
+            minLength={2}
+            maxLength={60}
+            autoComplete="nickname"
+            value={name}
+            onFocus={markStarted}
+            onChange={(event) => {
+              markStarted();
+              setName(event.target.value);
+            }}
+            placeholder="Név vagy becenév"
+            className="newsletter-input"
+            disabled={state.kind === "loading"}
+          />
+          <label className="sr-only" htmlFor="email">
+            Email
+          </label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            required
+            autoComplete="email"
+            value={email}
+            onFocus={markStarted}
+            onChange={(event) => {
+              markStarted();
+              setEmail(event.target.value);
+            }}
+            placeholder="email@cim.hu"
+            className="newsletter-input"
+            disabled={state.kind === "loading"}
+          />
+          <input
+            type="text"
+            name="company"
+            tabIndex={-1}
+            autoComplete="off"
+            aria-hidden
+            className="sr-only"
+            defaultValue=""
+          />
+        </div>
         <button
           type="submit"
-          className="h-12 bg-white px-6 text-[11px] tracking-[0.24em] text-[#050b1c] uppercase hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-40"
-          disabled={!accepted}
+          className="concert-ticket newsletter-submit"
+          disabled={!accepted || state.kind === "loading"}
         >
-          Feliratkozom
+          {state.kind === "loading" ? "Küldés…" : "Feliratkozom"}
         </button>
       </div>
-      <label className="mt-4 flex items-start gap-2.5 text-[11px] leading-5 text-white/55">
+      <label className="newsletter-consent">
         <input
           type="checkbox"
           name="aszf"
           required
           checked={accepted}
-          onChange={(event) => setAccepted(event.target.checked)}
-          className="mt-0.5 size-3.5 shrink-0 accent-white"
+          onChange={(event) => {
+            markStarted();
+            setAccepted(event.target.checked);
+          }}
+          className="newsletter-checkbox"
         />
-        <span>Elfogadom az ÁSZF-et és az adatkezelési tájékoztatót.</span>
+        <span>
+          Hozzájárulok, hogy a Galaxisok a megadott e-mail-címemre hírlevelet
+          küldjön. Az adatkezelési tájékoztatót megismertem.
+        </span>
       </label>
-      <p className="mt-2 text-[11px] leading-5 tracking-[0.04em] text-white/45">
-        A feliratkozáshoz el kell fogadnod az{" "}
-        <Link href="/aszf" className="text-white/70 underline underline-offset-4 hover:text-white">
-          ÁSZF
-        </Link>
-        -et és az{" "}
+      <p className="newsletter-legal">
+        A feliratkozást egy megerősítő e-mailben kell jóváhagynod. A
+        hozzájárulásod bármikor visszavonhatod a levelek alján lévő
+        leiratkozó linkkel. Részletek:{" "}
         <Link
           href="/adatkezeles"
           className="text-white/70 underline underline-offset-4 hover:text-white"
         >
-          adatkezelési tájékoztatót
+          adatkezelési tájékoztató
+        </Link>{" "}
+        és{" "}
+        <Link href="/aszf" className="text-white/70 underline underline-offset-4 hover:text-white">
+          ÁSZF
         </Link>
         .
       </p>
-      {embedUrl && accepted ? (
-        <div className="mt-8">
-          <EmbedGate label="hírlevél">
-            <iframe
-              title="Galaxisok hírlevél feliratkozás"
-              src={embedUrl}
-              className="h-[420px] w-full border border-white/10 bg-transparent"
-            />
-          </EmbedGate>
-        </div>
+      {state.kind === "success" ? (
+        <p className="newsletter-feedback is-success" role="status">
+          {state.message}
+        </p>
+      ) : null}
+      {state.kind === "error" ? (
+        <p className="newsletter-feedback is-error" role="alert">
+          {state.message}
+        </p>
       ) : null}
     </form>
   );

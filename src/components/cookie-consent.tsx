@@ -3,91 +3,99 @@
 
 "use client";
 
+import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 
 import {
+  CONSENT_CHANGED_EVENT,
   CONSENT_OPEN_EVENT,
-  DEFAULT_CONSENT,
-  readConsent,
+  parseConsent,
+  readConsentRaw,
   writeConsent,
-  type ConsentChoice,
+  type ConsentInput,
 } from "@/lib/consent";
+
+// Server snapshot: nothing is known yet, so nothing renders before hydration.
+const NOT_READY = undefined;
+
+function subscribe(onChange: () => void) {
+  window.addEventListener(CONSENT_CHANGED_EVENT, onChange);
+  window.addEventListener("storage", onChange);
+  return () => {
+    window.removeEventListener(CONSENT_CHANGED_EVENT, onChange);
+    window.removeEventListener("storage", onChange);
+  };
+}
 
 export function CookieConsent() {
   const pathname = usePathname();
-  const [ready, setReady] = useState(false);
+  const raw = useSyncExternalStore(subscribe, readConsentRaw, () => NOT_READY);
+  const stored = useMemo(() => (raw === NOT_READY ? null : parseConsent(raw)), [raw]);
   const [open, setOpen] = useState(false);
-  const [banner, setBanner] = useState(false);
   const [embeds, setEmbeds] = useState(false);
-  const [analytics, setAnalytics] = useState(false);
 
   useEffect(() => {
-    const stored = readConsent();
-    if (stored) {
-      setEmbeds(stored.embeds);
-      setAnalytics(stored.analytics);
-      setBanner(false);
-    } else {
-      setBanner(true);
-    }
-    setReady(true);
-
     const onOpen = () => {
-      const current = readConsent() ?? DEFAULT_CONSENT;
-      setEmbeds(current.embeds);
-      setAnalytics(current.analytics);
+      setEmbeds(Boolean(parseConsent(readConsentRaw())?.embeds));
       setOpen(true);
-      setBanner(false);
     };
 
     window.addEventListener(CONSENT_OPEN_EVENT, onOpen);
     return () => window.removeEventListener(CONSENT_OPEN_EVENT, onOpen);
   }, []);
 
-  function save(choice: ConsentChoice) {
-    writeConsent(choice);
-    setEmbeds(choice.embeds);
-    setAnalytics(choice.analytics);
-    setOpen(false);
-    setBanner(false);
+  function openSettings() {
+    setEmbeds(Boolean(stored?.embeds));
+    setOpen(true);
   }
 
-  if (!ready || pathname === "/kapu") {
+  function save(choice: ConsentInput) {
+    writeConsent(choice);
+    setOpen(false);
+  }
+
+  if (raw === NOT_READY || pathname === "/kapu") {
     return null;
   }
+
+  const banner = stored === null && !open;
 
   return (
     <>
       {banner ? (
-        <div className="cookie-banner fixed inset-x-0 bottom-0 z-50 border-t border-white/15 bg-[#050b1c]/95 px-5 py-4 backdrop-blur-md sm:px-8">
-          <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 md:flex-row md:items-center md:justify-between md:gap-8">
-            <p className="min-w-0 font-[family-name:var(--font-fuse)] text-sm leading-6 font-normal text-white/70 md:max-w-xl">
-              Sütiket használunk a belépéshez. A hírlevél beágyazásához külön
-              engedély kell.{" "}
-              <a href="/adatkezeles" className="underline underline-offset-4">
-                Részletek
-              </a>
+        <div
+          className="cookie-banner"
+          role="region"
+          aria-label="Sütik és beágyazott tartalmak"
+        >
+          <div className="cookie-banner-inner">
+            <p className="cookie-copy">
+              Az oldal csak a működéshez szükséges adatokat tárolja a
+              böngésződben, látogatottságot nem mérünk. A blogban beágyazott
+              videók és lejátszók (YouTube, Spotify, Bandcamp) külső sütiket
+              használnak, ezek csak a hozzájárulásoddal töltődnek be.{" "}
+              <Link href="/sutik">Süti tájékoztató</Link>
             </p>
-            <div className="flex shrink-0 flex-col gap-2 sm:flex-row sm:flex-nowrap sm:items-center">
+            <div className="cookie-actions">
               <button
                 type="button"
-                className="h-10 shrink-0 px-3 text-[11px] tracking-[0.16em] whitespace-nowrap text-white/70 uppercase hover:text-white"
-                onClick={() => setOpen(true)}
+                className="cookie-action cookie-action-plain"
+                onClick={openSettings}
               >
                 Beállítások
               </button>
               <button
                 type="button"
-                className="h-10 shrink-0 border border-white/20 px-3 text-[11px] tracking-[0.16em] whitespace-nowrap uppercase hover:border-white"
-                onClick={() => save({ necessary: true, embeds: false, analytics: false })}
+                className="cookie-action cookie-action-outline"
+                onClick={() => save({ embeds: false, analytics: false })}
               >
-                Csak szükséges
+                Elutasítom
               </button>
               <button
                 type="button"
-                className="h-10 shrink-0 bg-white px-4 text-[11px] tracking-[0.16em] whitespace-nowrap text-[#050b1c] uppercase hover:bg-white/90"
-                onClick={() => save({ necessary: true, embeds: true, analytics: true })}
+                className="cookie-action cookie-action-primary"
+                onClick={() => save({ embeds: true, analytics: false })}
               >
                 Elfogadom
               </button>
@@ -97,53 +105,61 @@ export function CookieConsent() {
       ) : null}
 
       {open ? (
-        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 p-5 sm:items-center">
-          <div className="w-full max-w-lg border border-white/15 bg-[#050b1c] p-6">
-            <h2 className="font-[family-name:var(--font-display)] text-2xl tracking-[0.18em] uppercase">
-              Sütik
+        <div className="cookie-modal-backdrop">
+          <div
+            className="cookie-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="cookie-settings-title"
+          >
+            <h2 id="cookie-settings-title" className="cookie-title">
+              Sütik és beágyazások
             </h2>
-            <ul className="mt-6 space-y-4 font-[family-name:var(--font-fuse)] text-sm font-normal text-white/70">
+            <ul className="cookie-options">
               <li>
-                <p className="text-white">Szükséges</p>
-                <p className="mt-1">Belépés, a választásaid mentése. Ezeket nem lehet kikapcsolni.</p>
+                <p className="cookie-option-title">Szükséges</p>
+                <p>
+                  A süti-választásod és a világos/sötét mód mentése a saját
+                  böngésződben. Ezek nélkül az oldal nem működik, nem lehet
+                  kikapcsolni őket.
+                </p>
               </li>
-              <li className="flex items-start justify-between gap-4">
+              <li className="cookie-option-row">
                 <div>
-                  <p className="text-white">Beágyazások</p>
-                  <p className="mt-1">Hírlevél iframe. A zene a Bandcampen, a merch a B Side shopban nyílik.</p>
+                  <p className="cookie-option-title">Beágyazott tartalmak</p>
+                  <p>
+                    A blogbejegyzésekbe ágyazott YouTube-videók, Spotify- és
+                    Bandcamp-lejátszók. Ezek a szolgáltatók saját sütiket
+                    helyezhetnek el. Kikapcsolva csak egy gomb jelenik meg a
+                    helyükön.
+                  </p>
                 </div>
                 <input
                   type="checkbox"
                   checked={embeds}
                   onChange={(event) => setEmbeds(event.target.checked)}
-                  className="mt-1 size-4 accent-white"
-                />
-              </li>
-              <li className="flex items-start justify-between gap-4">
-                <div>
-                  <p className="text-white">Statisztika</p>
-                  <p className="mt-1">Későbbi, névtelen látogatottsági mérés. Most még nem fut.</p>
-                </div>
-                <input
-                  type="checkbox"
-                  checked={analytics}
-                  onChange={(event) => setAnalytics(event.target.checked)}
-                  className="mt-1 size-4 accent-white"
+                  className="cookie-checkbox"
+                  aria-label="Beágyazott tartalmak engedélyezése"
                 />
               </li>
             </ul>
-            <div className="mt-8 flex flex-wrap justify-end gap-2">
+            <p className="cookie-note">
+              Látogatottságmérést és hirdetési sütiket nem használunk. A
+              választásod bármikor módosíthatod a lábléc Sütik linkjén.{" "}
+              <Link href="/sutik">Részletek</Link>
+            </p>
+            <div className="cookie-modal-actions">
               <button
                 type="button"
-                className="h-10 px-4 text-[11px] tracking-[0.2em] text-white/60 uppercase hover:text-white"
+                className="cookie-action cookie-action-plain"
                 onClick={() => setOpen(false)}
               >
                 Mégse
               </button>
               <button
                 type="button"
-                className="h-10 bg-white px-4 text-[11px] tracking-[0.2em] text-[#050b1c] uppercase hover:bg-white/90"
-                onClick={() => save({ necessary: true, embeds, analytics })}
+                className="cookie-action cookie-action-primary"
+                onClick={() => save({ embeds, analytics: false })}
               >
                 Mentés
               </button>

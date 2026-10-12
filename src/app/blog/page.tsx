@@ -1,5 +1,5 @@
 // src/app/blog/page.tsx
-// Centered WordPress feed: five posts per page, separated by a rule.
+// Centered WordPress feed with one compact post per row.
 
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -44,11 +44,14 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
               <>
                 <ul className="blog-list">
                   {posts.map((post) => (
-                    <li key={post.id} className="blog-list-item py-8 first:pt-0 last:pb-0 sm:py-10">
+                    <li
+                      key={post.id}
+                      className="blog-list-item py-8 first:pt-0 last:pb-0 sm:py-10"
+                    >
                       <Link
                         href={`/blog/${post.slug}`}
                         prefetch={false}
-                        className="blog-post-teaser block"
+                        className="blog-post-teaser block font-[family-name:var(--font-display)]"
                       >
                         <div className="flex flex-row items-stretch gap-3 overflow-hidden sm:gap-5">
                           {post.image ? (
@@ -60,7 +63,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                             />
                           ) : (
                             <div
-                              className="w-28 shrink-0 self-stretch rounded-xl bg-white/5 sm:w-44"
+                              className="w-28 shrink-0 self-stretch rounded-[2px] bg-white/5 sm:w-44"
                               aria-hidden
                             />
                           )}

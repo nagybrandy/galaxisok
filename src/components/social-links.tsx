@@ -71,7 +71,6 @@ export function SocialLinks({
               tone === "light" ? "text-white/80" : "text-foreground",
             )}
           >
-            <span className="social-link-sparks" aria-hidden />
             <SocialIcon
               kind={social.kind}
               className={cn("social-link-icon", iconClass(social.kind, layout))}
