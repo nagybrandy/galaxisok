@@ -25,28 +25,45 @@ function isStaticAsset(pathname: string): boolean {
   );
 }
 
+const NOINDEX = "noindex, nofollow";
+
+// Only the .hu domain may be indexed; vercel.app and local hosts are duplicates.
+function withRobots(response: NextResponse, host: string): NextResponse {
+  if (!isLiveHuHost(host)) {
+    response.headers.set("X-Robots-Tag", NOINDEX);
+  }
+  return response;
+}
+
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
-
-  if (isStaticAsset(pathname) || isPublicGatePath(pathname)) {
-    return NextResponse.next();
-  }
-
   const host = request.headers.get("host") ?? "";
 
+  if (isStaticAsset(pathname) || isPublicGatePath(pathname)) {
+    return withRobots(NextResponse.next(), host);
+  }
+
   if (isLiveHuHost(host) && pathname !== "/coming-soon") {
+    // Keep crawlers out until the real site replaces the placeholder.
+    if (pathname === "/robots.txt") {
+      return new NextResponse("User-agent: *\nDisallow: /\n", {
+        headers: { "Content-Type": "text/plain; charset=utf-8" },
+      });
+    }
     const comingSoon = request.nextUrl.clone();
     comingSoon.pathname = "/coming-soon";
     comingSoon.search = "";
-    return NextResponse.rewrite(comingSoon);
+    const placeholder = NextResponse.rewrite(comingSoon);
+    placeholder.headers.set("X-Robots-Tag", NOINDEX);
+    return placeholder;
   }
 
   if (!shouldProtectHost(host)) {
-    return NextResponse.next();
+    return withRobots(NextResponse.next(), host);
   }
 
   if (request.cookies.get(GATE_COOKIE)?.value === gateToken()) {
-    return NextResponse.next();
+    return withRobots(NextResponse.next(), host);
   }
 
   const kapu = request.nextUrl.clone();
@@ -55,7 +72,7 @@ export function proxy(request: NextRequest) {
   const redirect = NextResponse.redirect(kapu);
   redirect.headers.set("Cache-Control", "no-store, no-cache, must-revalidate");
   redirect.headers.set("x-middleware-cache", "no-cache");
-  return redirect;
+  return withRobots(redirect, host);
 }
 
 export const proxyConfig = {

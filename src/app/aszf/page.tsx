@@ -15,6 +15,7 @@ import { BANDCAMP_MUSIC_URL, MERCH_URL, SITE_NAME } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Általános szerződési feltételek",
+  alternates: { canonical: "/aszf" },
   description:
     "A Galaxisok weboldalának, hírlevelének és hozzászólásainak használati feltételei, impresszum.",
 };

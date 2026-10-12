@@ -36,6 +36,8 @@ export function isPublicGatePath(pathname: string): boolean {
   return (
     pathname === "/kapu" ||
     pathname.startsWith("/kapu/") ||
+    pathname === "/robots.txt" ||
+    pathname === "/sitemap.xml" ||
     pathname.startsWith("/api/gate") ||
     pathname.startsWith("/api/revalidate") ||
     pathname.startsWith("/api/fohir") ||

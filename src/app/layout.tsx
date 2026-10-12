@@ -22,6 +22,19 @@ import {
   SITE_NAME,
   siteUrl,
 } from "@/lib/site";
+import { BAND_EMAIL, SOCIALS } from "@/lib/socials";
+
+// Organisation data for search engines: the band, its site and official profiles.
+const musicGroupJsonLd = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "MusicGroup",
+  name: SITE_NAME,
+  url: siteUrl(),
+  description: SITE_DESCRIPTION,
+  image: `${siteUrl()}${HERO_IMAGE}`,
+  email: BAND_EMAIL,
+  sameAs: SOCIALS.map((social) => social.href),
+});
 
 import "./globals.css";
 
@@ -55,6 +68,7 @@ export const metadata: Metadata = {
   },
   description: SITE_DESCRIPTION,
   applicationName: SITE_NAME,
+  alternates: { canonical: "/" },
   icons: {
     icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
     apple: [{ url: "/apple-icon.png" }],
@@ -109,6 +123,10 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: musicGroupJsonLd }}
+        />
         <link rel="preload" href={HERO_IMAGE} as="image" type="image/jpeg" />
         <link rel="preload" href="/paper-background-loop.jpg" as="image" type="image/jpeg" />
       </head>

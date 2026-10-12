@@ -16,6 +16,7 @@ import { SITE_NAME, WORDPRESS_PUBLIC_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Adatkezelési tájékoztató",
+  alternates: { canonical: "/adatkezeles" },
   description:
     "Adatkezelési tájékoztató a Galaxisok weboldalához: hírlevél, hozzászólások, sütik, jogok.",
 };

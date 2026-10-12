@@ -29,6 +29,8 @@ add_filter('wp_robots', 'galaxisok_wp_robots');
 add_filter('robots_txt', 'galaxisok_robots_txt', 999, 2);
 add_filter('wpseo_robots', 'galaxisok_yoast_robots');
 add_filter('wpseo_robots_array', 'galaxisok_yoast_robots_array');
+// The Next.js site relays visitor comments without a WordPress login.
+add_filter('rest_allow_anonymous_comments', '__return_true');
 add_filter('wp_sitemaps_enabled', '__return_false');
 add_filter('wpseo_sitemap_index', '__return_false');
 add_filter('wpseo_enable_xml_sitemap_transient_caching', '__return_false');

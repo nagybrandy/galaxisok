@@ -12,6 +12,7 @@ import { CONTROLLER, EMBED_PROVIDERS } from "@/lib/legal";
 
 export const metadata: Metadata = {
   title: "Süti tájékoztató",
+  alternates: { canonical: "/sutik" },
   description:
     "Milyen sütiket és böngészőben tárolt adatokat használ a Galaxisok weboldala, és hogyan állíthatod be.",
 };

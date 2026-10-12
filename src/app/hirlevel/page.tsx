@@ -9,6 +9,7 @@ import { PageShell } from "@/components/page-shell";
 
 export const metadata: Metadata = {
   title: "Hírlevél",
+  alternates: { canonical: "/hirlevel" },
   description: "Iratkozz fel a Galaxisok híreire.",
 };
 

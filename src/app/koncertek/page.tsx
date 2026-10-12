@@ -16,6 +16,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Koncertek",
+  alternates: { canonical: "/koncertek" },
   description: "A Galaxisok közelgő koncertjei.",
 };
 

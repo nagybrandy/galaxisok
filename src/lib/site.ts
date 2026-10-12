@@ -45,6 +45,11 @@ export function shouldPrefetchRoute(href: string): boolean {
   );
 }
 
+// Canonical origin for metadata, sitemap and JSON-LD. Production builds point
+// at the .hu domain even when served from a vercel.app host.
 export function siteUrl(): string {
-  return process.env.NEXT_PUBLIC_SITE_URL ?? DEV_SITE_URL;
+  if (process.env.NEXT_PUBLIC_SITE_URL) {
+    return process.env.NEXT_PUBLIC_SITE_URL;
+  }
+  return process.env.VERCEL_ENV === "production" ? LIVE_SITE_URL : DEV_SITE_URL;
 }

@@ -14,6 +14,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Rólunk",
+  alternates: { canonical: "/rolunk" },
   description: ABOUT_LEAD,
 };
 

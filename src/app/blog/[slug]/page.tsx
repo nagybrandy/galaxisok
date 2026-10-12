@@ -12,7 +12,12 @@ import { PostBody } from "@/components/post-body";
 import { PostBreadcrumb } from "@/components/post-breadcrumb";
 import { SkeletonImage } from "@/components/skeleton-image";
 import { getApprovedComments } from "@/lib/comments";
-import { formatHuNumericDate, getPostBySlug } from "@/lib/wordpress";
+import { SITE_NAME, siteUrl } from "@/lib/site";
+import {
+  type BlogPost,
+  formatHuNumericDate,
+  getPostBySlug,
+} from "@/lib/wordpress";
 
 type BlogPostPageProps = {
   params: Promise<{ slug: string }>;
@@ -32,15 +37,47 @@ export async function generateMetadata({
     return { title: "Bejegyzés" };
   }
 
+  const description = post.seoDescription || post.excerpt || post.title;
+
   return {
-    title: post.title,
-    description: post.seoDescription || post.excerpt || post.title,
-    openGraph: post.image
-      ? {
-          images: [{ url: post.image.src }],
-        }
-      : undefined,
+    title: post.seoTitle || post.title,
+    description,
+    alternates: { canonical: `/blog/${post.slug}` },
+    openGraph: {
+      type: "article",
+      title: post.seoTitle || post.title,
+      description,
+      url: `/blog/${post.slug}`,
+      publishedTime: post.date,
+      authors: post.author?.name ? [post.author.name] : undefined,
+      images: post.image ? [{ url: post.image.src, alt: post.image.alt }] : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.seoTitle || post.title,
+      description,
+      images: post.image ? [post.image.src] : undefined,
+    },
   };
+}
+
+function postJsonLd(post: BlogPost): string {
+  const base = siteUrl();
+  return JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.seoDescription || post.excerpt || undefined,
+    datePublished: post.date,
+    url: `${base}/blog/${post.slug}`,
+    mainEntityOfPage: `${base}/blog/${post.slug}`,
+    image: post.image ? [post.image.src] : undefined,
+    author: post.author?.name
+      ? { "@type": "Person", name: post.author.name }
+      : { "@type": "MusicGroup", name: SITE_NAME },
+    publisher: { "@type": "MusicGroup", name: SITE_NAME, url: base },
+    inLanguage: "hu",
+  });
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
@@ -55,6 +92,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
   return (
     <PageShell>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: postJsonLd(post) }}
+      />
       <article className="relative z-[1] mx-auto w-full max-w-5xl flex-1 px-5 pb-16 pt-8 sm:px-8 sm:pt-10">
         <div className="post-toolbar">
           <PostBreadcrumb title={post.title} />

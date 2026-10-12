@@ -13,6 +13,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Kontakt",
+  alternates: { canonical: "/kontakt" },
   description: "Galaxisok — booking, levél, sajtó.",
 };
 

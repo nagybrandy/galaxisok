@@ -18,6 +18,7 @@ export const maxDuration = 30;
 
 export const metadata: Metadata = {
   title: "Blog",
+  alternates: { canonical: "/blog" },
   description: "Hírek és bejegyzések a Galaxisoktól.",
 };
 
