@@ -39,17 +39,18 @@ export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const host = request.headers.get("host") ?? "";
 
+  // Keep crawlers out of the .hu domain until the real site replaces the placeholder.
+  if (isLiveHuHost(host) && pathname === "/robots.txt") {
+    return new NextResponse("User-agent: *\nDisallow: /\n", {
+      headers: { "Content-Type": "text/plain; charset=utf-8" },
+    });
+  }
+
   if (isStaticAsset(pathname) || isPublicGatePath(pathname)) {
     return withRobots(NextResponse.next(), host);
   }
 
   if (isLiveHuHost(host) && pathname !== "/coming-soon") {
-    // Keep crawlers out until the real site replaces the placeholder.
-    if (pathname === "/robots.txt") {
-      return new NextResponse("User-agent: *\nDisallow: /\n", {
-        headers: { "Content-Type": "text/plain; charset=utf-8" },
-      });
-    }
     const comingSoon = request.nextUrl.clone();
     comingSoon.pathname = "/coming-soon";
     comingSoon.search = "";

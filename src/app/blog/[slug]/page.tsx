@@ -40,7 +40,8 @@ export async function generateMetadata({
   const description = post.seoDescription || post.excerpt || post.title;
 
   return {
-    title: post.seoTitle || post.title,
+    // A Yoast title already carries the site name, so skip the layout template.
+    title: post.seoTitle ? { absolute: post.seoTitle } : post.title,
     description,
     alternates: { canonical: `/blog/${post.slug}` },
     openGraph: {
