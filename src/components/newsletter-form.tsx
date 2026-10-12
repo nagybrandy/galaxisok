@@ -132,6 +132,23 @@ export function NewsletterForm() {
             defaultValue=""
           />
         </div>
+        <label className="newsletter-consent">
+          <input
+            type="checkbox"
+            name="aszf"
+            required
+            checked={accepted}
+            onChange={(event) => {
+              markStarted();
+              setAccepted(event.target.checked);
+            }}
+            className="newsletter-checkbox"
+          />
+          <span>
+            Hozzájárulok, hogy a Galaxisok a megadott e-mail-címemre hírlevelet
+            küldjön. Az adatkezelési tájékoztatót megismertem.
+          </span>
+        </label>
         <button
           type="submit"
           className="concert-ticket newsletter-submit"
@@ -140,23 +157,6 @@ export function NewsletterForm() {
           {state.kind === "loading" ? "Küldés…" : "Feliratkozom"}
         </button>
       </div>
-      <label className="newsletter-consent">
-        <input
-          type="checkbox"
-          name="aszf"
-          required
-          checked={accepted}
-          onChange={(event) => {
-            markStarted();
-            setAccepted(event.target.checked);
-          }}
-          className="newsletter-checkbox"
-        />
-        <span>
-          Hozzájárulok, hogy a Galaxisok a megadott e-mail-címemre hírlevelet
-          küldjön. Az adatkezelési tájékoztatót megismertem.
-        </span>
-      </label>
       <p className="newsletter-legal">
         A feliratkozást egy megerősítő e-mailben kell jóváhagynod. A
         hozzájárulásod bármikor visszavonhatod a levelek alján lévő

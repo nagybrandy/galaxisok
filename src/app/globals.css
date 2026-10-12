@@ -2835,7 +2835,7 @@ body:has(.cookie-banner) .home-spotlight {
   display: flex;
   align-items: flex-start;
   gap: 0.65rem;
-  margin-top: 1rem;
+  margin-top: 0.25rem;
   color: var(--site-text-70);
   font-family: var(--font-fuse), ui-serif, Georgia, serif;
   font-size: 0.8125rem;
