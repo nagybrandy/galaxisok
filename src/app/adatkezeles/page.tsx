@@ -50,10 +50,9 @@ export default function AdatkezelesPage() {
       </dl>
       <p>
         Adatvédelmi tisztviselő kijelölésére a GDPR 37. cikke alapján nem vagyunk
-        kötelesek. Adatvédelmi kérdéssel a fenti e-mail-címen fordulhatsz hozzánk.
-        A zenekar saját címe (
-        <a href={`mailto:${CONTROLLER.bandEmail}`}>{CONTROLLER.bandEmail}</a>)
-        booking- és sajtómegkeresésre szolgál. A BSIDE shop (shop.bsidemusic.hu)
+        kötelesek. Adatvédelmi kérdéssel a fenti e-mail-címen fordulhatsz hozzánk;
+        ugyanez a cím szolgál booking- és sajtómegkeresésre is. A BSIDE shop
+        (shop.bsidemusic.hu)
         vásárlóinak adatait a webshop saját adatvédelmi tájékoztatója szerint
         kezeljük; ez a tájékoztató csak a galaxisok.hu-ra vonatkozik.
       </p>

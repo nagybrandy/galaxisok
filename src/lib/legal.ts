@@ -16,9 +16,8 @@ export const CONTROLLER = {
   address: "7623 Pécs, Semmelweis utca 28. 3. em. 7.",
   registration:
     "Cégjegyzékszám: 02-09-087116 (Pécsi Törvényszék Cégbírósága) · Adószám: 14218042-2-02",
-  email: "bsidemusichu@gmail.com",
-  privacyEmail: "bsidemusichu@gmail.com",
-  bandEmail: BAND_EMAIL,
+  email: BAND_EMAIL,
+  privacyEmail: BAND_EMAIL,
 } as const;
 
 export const SHOP_URL = "https://shop.bsidemusic.hu";

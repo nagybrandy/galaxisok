@@ -68,6 +68,6 @@ export const SOCIALS: SocialLink[] = [
   },
 ];
 
-export const BAND_EMAIL = "galaxisokmail@gmail.com";
+export const BAND_EMAIL = "bsidemusichu@gmail.com";
 export const BAND_PHONE = "+36 30 000 0000";
 export const BAND_PHONE_HREF = "tel:+36300000000";

@@ -132,7 +132,7 @@ function galaxisok_site_pages(): array
         ],
         'kontakt' => [
             'title' => 'Kontakt',
-            'content' => '<h2>Levél</h2><p><a href="mailto:galaxisokmail@gmail.com">galaxisokmail@gmail.com</a></p><h2>Booking</h2><p><a href="mailto:galaxisokmail@gmail.com">galaxisokmail@gmail.com</a></p><h2>Telefon</h2><p><a href="tel:+36300000000">+36 30 000 0000</a></p>',
+            'content' => '<h2>Levél</h2><p><a href="mailto:bsidemusichu@gmail.com">bsidemusichu@gmail.com</a></p><h2>Booking</h2><p><a href="mailto:bsidemusichu@gmail.com">bsidemusichu@gmail.com</a></p><h2>Telefon</h2><p><a href="tel:+36300000000">+36 30 000 0000</a></p>',
             'icon' => 'dashicons-email-alt',
             'position' => 5,
         ],

@@ -52,11 +52,6 @@ export default function AszfPage() {
         <dd>
           <a href={`mailto:${CONTROLLER.email}`}>{CONTROLLER.email}</a>
         </dd>
-        <dt>Zenekar</dt>
-        <dd>
-          <a href={`mailto:${CONTROLLER.bandEmail}`}>{CONTROLLER.bandEmail}</a>{" "}
-          (booking, sajtó)
-        </dd>
       </dl>
 
       <h2>2. Tárhelyszolgáltatók</h2>
