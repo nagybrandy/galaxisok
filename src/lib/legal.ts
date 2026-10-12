@@ -8,18 +8,22 @@ export const LEGAL_VERSION = "2.0";
 export const LEGAL_UPDATED_ISO = "2026-10-12";
 export const LEGAL_UPDATED_LABEL = "2026. október 12.";
 
-// Fill these in before the pages go live on galaxisok.hu. Eker tv. 4. §
-// requires the service provider's name, seat and e-mail; GDPR Art. 13 the
-// controller's identity. A band is not a legal person, so name the person
-// or company that actually runs the site (e.g. a member or the label).
+// The label runs the site (Eker tv. 4. § service provider, GDPR Art. 13
+// controller). Company data matches the webshop ÁSZF at shop.bsidemusic.hu.
 export const CONTROLLER = {
-  name: "[Adatkezelő / szolgáltató neve]",
-  representative: "[Képviselő neve]",
-  address: "[Székhely vagy lakcím]",
-  registration: "[Nyilvántartási szám / adószám, ha van]",
-  email: BAND_EMAIL,
-  privacyEmail: BAND_EMAIL,
+  name: "BSIDEMUSIC Kft.",
+  representative: "Tóth Barbara, ügyvezető",
+  address: "7623 Pécs, Semmelweis utca 28. 3. em. 7.",
+  registration:
+    "Cégjegyzékszám: 02-09-087116 (Pécsi Törvényszék Cégbírósága) · Adószám: 14218042-2-02",
+  email: "bsidemusichu@gmail.com",
+  privacyEmail: "bsidemusichu@gmail.com",
+  bandEmail: BAND_EMAIL,
 } as const;
+
+export const SHOP_URL = "https://shop.bsidemusic.hu";
+export const SHOP_TERMS_URL = `${SHOP_URL}/aszf`;
+export const SHOP_PRIVACY_URL = `${SHOP_URL}/adatvedelmi-tajekoztato`;
 
 export type Processor = {
   name: string;
@@ -40,12 +44,12 @@ export const PROCESSORS: Processor[] = [
     policyUrl: "https://vercel.com/legal/privacy-policy",
   },
   {
-    name: "Tárhelypark Kft.",
-    role: "A WordPress tartalomkezelő (admin.galaxisok.hu) és a hirlevel@galaxisok.hu postafiók tárhelye.",
-    address: "1132 Budapest, Victor Hugo utca 18–22.",
+    name: "Websupport Magyarország Kft. (Magyar Hosting / Tárhelypark)",
+    role: "A WordPress tartalomkezelő (admin.galaxisok.hu), a galaxisok.hu domain és a hirlevel@galaxisok.hu postafiók tárhelye.",
+    address: "1119 Budapest, Fehérvári út 97–99.",
     country: "Magyarország",
     transfer: "Nincs harmadik országba továbbítás.",
-    policyUrl: "https://www.tarhelypark.hu/adatvedelem/",
+    policyUrl: "https://www.mhosting.hu/adatkezelesi-tajekoztato/",
   },
   {
     name: "The Rocket Science Group LLC (Mailchimp, Intuit Inc.)",
@@ -91,9 +95,10 @@ export const EXTERNAL_SITES: ThirdParty[] = [
     policyUrl: "https://bandcamp.com/privacy",
   },
   {
-    name: "B Side Music webshop (shop.bsidemusic.hu)",
-    purpose: "Merch vásárlása.",
-    policyUrl: "https://shop.bsidemusic.hu/",
+    name: "BSIDE shop (shop.bsidemusic.hu)",
+    purpose:
+      "Merch vásárlása. A webshopot szintén a BSIDEMUSIC Kft. üzemelteti, saját ÁSZF-fel és adatvédelmi tájékoztatóval.",
+    policyUrl: SHOP_PRIVACY_URL,
   },
   {
     name: "Jegyértékesítő partnerek",

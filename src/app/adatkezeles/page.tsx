@@ -51,6 +51,11 @@ export default function AdatkezelesPage() {
       <p>
         Adatvédelmi tisztviselő kijelölésére a GDPR 37. cikke alapján nem vagyunk
         kötelesek. Adatvédelmi kérdéssel a fenti e-mail-címen fordulhatsz hozzánk.
+        A zenekar saját címe (
+        <a href={`mailto:${CONTROLLER.bandEmail}`}>{CONTROLLER.bandEmail}</a>)
+        booking- és sajtómegkeresésre szolgál. A BSIDE shop (shop.bsidemusic.hu)
+        vásárlóinak adatait a webshop saját adatvédelmi tájékoztatója szerint
+        kezeljük; ez a tájékoztató csak a galaxisok.hu-ra vonatkozik.
       </p>
 
       <h2>2. Alapelvek</h2>
@@ -156,7 +161,8 @@ export default function AdatkezelesPage() {
         <dt>Címzett</dt>
         <dd>
           A hozzászólások a WordPress tartalomkezelőnkben ({WORDPRESS_PUBLIC_URL})
-          tárolódnak, amelynek tárhelyét a Tárhelypark Kft. biztosítja.
+          tárolódnak, amelynek tárhelyét a Websupport Magyarország Kft. (Magyar
+          Hosting) biztosítja.
         </dd>
       </dl>
 

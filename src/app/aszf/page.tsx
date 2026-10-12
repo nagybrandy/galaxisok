@@ -5,7 +5,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { LegalPage } from "@/components/legal-page";
-import { CONTROLLER, PROCESSORS } from "@/lib/legal";
+import {
+  CONTROLLER,
+  PROCESSORS,
+  SHOP_PRIVACY_URL,
+  SHOP_TERMS_URL,
+} from "@/lib/legal";
 import { BANDCAMP_MUSIC_URL, MERCH_URL, SITE_NAME } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -16,7 +21,7 @@ export const metadata: Metadata = {
 
 const hosts = PROCESSORS.filter(
   (processor) =>
-    processor.name.startsWith("Vercel") || processor.name.startsWith("Tárhelypark"),
+    processor.name.startsWith("Vercel") || processor.name.startsWith("Websupport"),
 );
 
 export default function AszfPage() {
@@ -47,6 +52,11 @@ export default function AszfPage() {
         <dd>
           <a href={`mailto:${CONTROLLER.email}`}>{CONTROLLER.email}</a>
         </dd>
+        <dt>Zenekar</dt>
+        <dd>
+          <a href={`mailto:${CONTROLLER.bandEmail}`}>{CONTROLLER.bandEmail}</a>{" "}
+          (booking, sajtó)
+        </dd>
       </dl>
 
       <h2>2. Tárhelyszolgáltatók</h2>
@@ -67,14 +77,23 @@ export default function AszfPage() {
         A weboldal a zenekar híreit, blogbejegyzéseit, koncertlistáját és
         elérhetőségeit mutatja, hírlevél-feliratkozást és a bejegyzésekhez
         hozzászólást tesz lehetővé. A weboldal használata ingyenes, regisztráció
-        nem szükséges. A weboldalon nem történik értékesítés: a zene a Bandcampen
-        (<a href={BANDCAMP_MUSIC_URL}>{BANDCAMP_MUSIC_URL}</a>), a merch a B Side
-        Music webshopjában (<a href={MERCH_URL}>{MERCH_URL}</a>), a koncertjegy a
-        koncertlistából nyíló jegyértékesítő partnereknél vásárolható meg. Ezekre
-        a vásárlásokra az adott szolgáltató saját általános szerződési feltételei,
-        fizetési, szállítási, elállási és panaszkezelési szabályai vonatkoznak;
-        fogyasztói jogaidat velük szemben gyakorolhatod. Mi ezekben a
-        jogviszonyokban nem vagyunk fél.
+        nem szükséges. Ezen a weboldalon nem történik értékesítés. A merch a
+        Szolgáltató saját webshopjában, a BSIDE shopban (
+        <a href={MERCH_URL}>{MERCH_URL}</a>) vásárolható meg; az ottani
+        vásárlásra a webshop saját{" "}
+        <a href={SHOP_TERMS_URL} rel="noreferrer" target="_blank">
+          általános szerződési feltételei
+        </a>{" "}
+        és{" "}
+        <a href={SHOP_PRIVACY_URL} rel="noreferrer" target="_blank">
+          adatvédelmi tájékoztatója
+        </a>{" "}
+        vonatkoznak, az elállási, szállítási és panaszkezelési szabályokkal
+        együtt. A zene a Bandcampen (
+        <a href={BANDCAMP_MUSIC_URL}>{BANDCAMP_MUSIC_URL}</a>), a koncertjegy a
+        koncertlistából nyíló jegyértékesítő partnereknél vásárolható meg; ezekre
+        az adott szolgáltató saját feltételei érvényesek, és fogyasztói jogaidat
+        velük szemben gyakorolhatod.
       </p>
 
       <h2>4. Hírlevél</h2>
@@ -161,8 +180,9 @@ export default function AszfPage() {
           bekeltetes.hu
         </a>
         ), illetve a fogyasztóvédelmi hatósághoz (a kormányhivatalok
-        fogyasztóvédelmi osztályai). A külső webshopokban és jegyértékesítőknél
-        történt vásárlás miatti panaszt az adott szolgáltatónál kell bejelenteni.
+        fogyasztóvédelmi osztályai). A BSIDE shopban történt vásárlás miatti
+        panaszra a webshop ÁSZF-je, a Bandcampen és a jegyértékesítőknél történt
+        vásárlásra az adott szolgáltató panaszkezelése vonatkozik.
       </p>
 
       <h2>10. Irányadó jog</h2>

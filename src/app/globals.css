@@ -2910,11 +2910,23 @@ body:has(.cookie-banner) .home-spotlight {
   margin: 0 auto;
   padding: 1rem 1.15rem 1rem 1.35rem;
   border: 1px solid color-mix(in srgb, var(--site-text) 18%, transparent);
-  background: rgba(254, 250, 224, 0.96);
+  background-color: var(--site-bg);
   background-image: url("/paper-background.jpg");
   background-position: center;
   background-size: cover;
   box-shadow: 3px 6px 16px rgba(42, 36, 32, 0.18);
+}
+
+/* Dark mode: keep the paper grain but let the night background show through. */
+html[data-theme="dark"] .cookie-banner-inner,
+html[data-theme="dark"] .cookie-modal {
+  background-blend-mode: soft-light;
+  filter: contrast(1.1) saturate(0.82);
+  box-shadow: 3px 6px 20px rgba(0, 0, 0, 0.55);
+}
+
+html[data-theme="dark"] .cookie-modal-backdrop {
+  background: rgba(2, 5, 14, 0.7);
 }
 
 .cookie-copy {
