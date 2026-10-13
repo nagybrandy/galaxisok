@@ -1881,6 +1881,16 @@ html[data-theme="dark"] .night-atmosphere {
   border-color: var(--site-link);
 }
 
+@media (max-width: 639px) {
+  .comment-identity input {
+    height: 3rem;
+  }
+
+  .comment-message textarea {
+    min-height: 10rem;
+  }
+}
+
 .comment-identity small,
 .comment-message small {
   display: block;
@@ -2876,6 +2886,16 @@ body:has(.cookie-banner) .home-spotlight {
 @media (max-width: 639px) {
   .newsletter-panel {
     transform: translateY(-1rem);
+  }
+
+  /* Finger-sized fields; 16px text keeps iOS from zooming on focus. */
+  .newsletter-input {
+    height: 3rem;
+    font-size: 1rem;
+  }
+
+  .newsletter-submit {
+    height: 3rem;
   }
 
   .newsletter-title {

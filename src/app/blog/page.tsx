@@ -59,14 +59,14 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                         prefetch={false}
                         className="blog-post-teaser block font-[family-name:var(--font-display)]"
                       >
-                        <div className="relative flex flex-row items-stretch gap-3 overflow-hidden sm:gap-5">
+                        <div className="relative flex flex-col gap-3 overflow-hidden sm:flex-row sm:items-stretch sm:gap-5">
                           <CommentCount
                             count={
                               post.commentCount ??
                               fallbackCounts.get(post.id) ??
                               0
                             }
-                            className="absolute top-0 right-0 text-white/55"
+                            className="absolute top-0 right-0 z-[1] text-white/55 max-sm:rounded-sm max-sm:bg-background/85 max-sm:px-1.5 max-sm:py-0.5"
                           />
                           {post.image ? (
                             <PostCover
@@ -77,12 +77,12 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                             />
                           ) : (
                             <div
-                              className="w-28 shrink-0 self-stretch rounded-[2px] bg-white/5 sm:w-44"
+                              className="hidden w-28 shrink-0 self-stretch rounded-[2px] bg-white/5 sm:block sm:w-44"
                               aria-hidden
                             />
                           )}
                           <div className="flex min-w-0 flex-1 flex-col">
-                            <div className="flex items-center gap-3 pr-8">
+                            <div className="flex items-center gap-3 sm:pr-8">
                               {post.author?.avatar ? (
                                 <span className="relative inline-block size-8 overflow-hidden rounded-full sm:size-9">
                                   <SkeletonImage

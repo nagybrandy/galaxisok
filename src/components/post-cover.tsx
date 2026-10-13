@@ -37,15 +37,15 @@ export function PostCover({
   return (
     <div
       className={cn(
-        "teaser-cover relative w-28 shrink-0 self-stretch overflow-hidden rounded-[2px] bg-black/40",
-        "sm:w-44 lg:w-52",
+        "teaser-cover relative aspect-[16/10] w-full shrink-0 overflow-hidden rounded-[2px] bg-black/40",
+        "sm:aspect-auto sm:w-44 sm:self-stretch lg:w-52",
       )}
     >
       <SkeletonImage
         src={src}
         alt={alt}
         fill
-        sizes="(min-width: 1024px) 13rem, (min-width: 640px) 11rem, 7rem"
+        sizes="(min-width: 1024px) 13rem, (min-width: 640px) 11rem, 100vw"
         className="object-cover object-[center_28%]"
       />
     </div>

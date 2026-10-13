@@ -21,8 +21,8 @@ export function BlogPageSkeleton() {
           <ul className="blog-list">
             {Array.from({ length: 4 }, (_, index) => (
               <li key={index} className="blog-list-item py-8 first:pt-0 sm:py-10">
-                <div className="flex flex-row items-stretch gap-3 sm:gap-5">
-                  <Bone className="w-28 shrink-0 self-stretch rounded-[2px] sm:w-44" />
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-stretch sm:gap-5">
+                  <Bone className="aspect-[16/10] w-full shrink-0 rounded-[2px] sm:aspect-auto sm:w-44 sm:self-stretch" />
                   <div className="flex min-w-0 flex-1 flex-col">
                     <div className="flex items-center gap-3">
                       <Bone className="size-8 rounded-full sm:size-9" />
