@@ -161,22 +161,43 @@ function isEmptyWpResult(result: unknown): boolean {
   return false;
 }
 
+class WpEmptyResult extends Error {
+  constructor() {
+    super("WordPress returned no data");
+  }
+}
+
+// Caches successful WordPress answers only. A null or empty result throws
+// inside the cached scope, so Next keeps serving the last good value instead
+// of storing the failure; the caller then gets one uncached fresh attempt.
 function cacheWp<Args extends unknown[], Result>(
   key: string,
   fn: (...args: Args) => Promise<Result>,
 ) {
-  const cached = unstable_cache(fn, [key], {
-    revalidate: WP_CACHE_SECONDS,
-    tags: [WORDPRESS_CACHE_TAG],
-  });
+  const cached = unstable_cache(
+    async (...args: Args): Promise<Result> => {
+      const result = await fn(...args);
+      if (result === null || isEmptyWpResult(result)) {
+        throw new WpEmptyResult();
+      }
+      return result;
+    },
+    [key],
+    {
+      revalidate: WP_CACHE_SECONDS,
+      tags: [WORDPRESS_CACHE_TAG],
+    },
+  );
 
   return async (...args: Args): Promise<Result> => {
-    const result = await cached(...args);
-    if (!isEmptyWpResult(result)) {
-      return result;
+    try {
+      return await cached(...args);
+    } catch (error) {
+      if (!(error instanceof WpEmptyResult)) {
+        throw error;
+      }
+      return fn(...args);
     }
-
-    return fn(...args);
   };
 }
 
