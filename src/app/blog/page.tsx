@@ -59,7 +59,15 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                         prefetch={false}
                         className="blog-post-teaser block font-[family-name:var(--font-display)]"
                       >
-                        <div className="flex flex-row items-stretch gap-3 overflow-hidden sm:gap-5">
+                        <div className="relative flex flex-row items-stretch gap-3 overflow-hidden sm:gap-5">
+                          <CommentCount
+                            count={
+                              post.commentCount ??
+                              fallbackCounts.get(post.id) ??
+                              0
+                            }
+                            className="absolute top-0 right-0 text-white/55"
+                          />
                           {post.image ? (
                             <PostCover
                               src={post.image.src}
@@ -74,7 +82,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                             />
                           )}
                           <div className="flex min-w-0 flex-1 flex-col">
-                            <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-3 pr-8">
                               {post.author?.avatar ? (
                                 <span className="relative inline-block size-8 overflow-hidden rounded-full sm:size-9">
                                   <SkeletonImage
@@ -104,14 +112,6 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                             <h2 className="blog-post-title mt-2 line-clamp-2 text-lg font-normal tracking-tight sm:text-2xl">
                               {post.title}
                             </h2>
-                            <CommentCount
-                              count={
-                                post.commentCount ??
-                                fallbackCounts.get(post.id) ??
-                                0
-                              }
-                              className="mt-1 text-white/40"
-                            />
                             <div className="blog-teaser-excerpt">
                               <p className="line-clamp-3 text-sm leading-6 text-white/60 sm:text-base">
                                 {post.excerpt || "\u00a0"}

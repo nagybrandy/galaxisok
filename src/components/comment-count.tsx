@@ -1,5 +1,5 @@
 // src/components/comment-count.tsx
-// "3 hozzászólás" line under a post title; optionally links to the comments.
+// Speech bubble plus the approved comment count; optionally links to the comments.
 
 import { MessageCircle } from "lucide-react";
 
@@ -11,34 +11,35 @@ type CommentCountProps = {
   className?: string;
 };
 
-export function commentCountLabel(count: number): string {
-  if (count === 0) {
-    return "Nincs hozzászólás";
-  }
-
-  return `${count} hozzászólás`;
-}
-
 export function CommentCount({ count, href, className }: CommentCountProps) {
-  const label = commentCountLabel(count);
+  const label = `${count} hozzászólás`;
   const classes = cn(
-    "comment-count inline-flex items-center gap-1.5 font-[family-name:var(--font-display)] text-[11px] tracking-[0.16em] uppercase whitespace-nowrap",
+    "comment-count inline-flex items-center gap-1 font-[family-name:var(--font-display)] text-xs tracking-[0.08em] whitespace-nowrap",
     className,
+  );
+  const body = (
+    <>
+      <MessageCircle className="size-3.5" aria-hidden />
+      <span>{count}</span>
+    </>
   );
 
   if (href) {
     return (
-      <a href={href} className={cn(classes, "hover:underline")}>
-        <MessageCircle className="size-3.5" aria-hidden />
-        <span>{label}</span>
+      <a
+        href={href}
+        className={cn(classes, "hover:underline")}
+        aria-label={label}
+        title={label}
+      >
+        {body}
       </a>
     );
   }
 
   return (
-    <span className={classes}>
-      <MessageCircle className="size-3.5" aria-hidden />
-      <span>{label}</span>
+    <span className={classes} aria-label={label} title={label} role="img">
+      {body}
     </span>
   );
 }
