@@ -13,7 +13,7 @@ type CommentCountProps = {
 
 export function commentCountLabel(count: number): string {
   if (count === 0) {
-    return "Még nincs hozzászólás";
+    return "Nincs hozzászólás";
   }
 
   return `${count} hozzászólás`;
@@ -22,7 +22,7 @@ export function commentCountLabel(count: number): string {
 export function CommentCount({ count, href, className }: CommentCountProps) {
   const label = commentCountLabel(count);
   const classes = cn(
-    "comment-count inline-flex items-center gap-1.5 font-[family-name:var(--font-display)] text-[11px] tracking-[0.16em] uppercase",
+    "comment-count inline-flex items-center gap-1.5 font-[family-name:var(--font-display)] text-[11px] tracking-[0.16em] uppercase whitespace-nowrap",
     className,
   );
 
