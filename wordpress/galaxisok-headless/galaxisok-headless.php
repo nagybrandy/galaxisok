@@ -34,6 +34,8 @@ add_filter('rest_allow_anonymous_comments', '__return_true');
 add_filter('wp_sitemaps_enabled', '__return_false');
 add_filter('wpseo_sitemap_index', '__return_false');
 add_filter('wpseo_enable_xml_sitemap_transient_caching', '__return_false');
+add_action('init', 'galaxisok_schedule_comment_cleanup');
+add_action('galaxisok_purge_old_comments', 'galaxisok_purge_old_comments');
 
 function galaxisok_theme_supports(): void
 {
@@ -510,4 +512,36 @@ function galaxisok_yoast_robots_array(array $robots): array
         'index' => 'noindex',
         'follow' => 'nofollow',
     ];
+}
+
+function galaxisok_schedule_comment_cleanup(): void
+{
+    if (wp_next_scheduled('galaxisok_purge_old_comments')) {
+        return;
+    }
+
+    wp_schedule_event(time() + DAY_IN_SECONDS, 'daily', 'galaxisok_purge_old_comments');
+}
+
+function galaxisok_purge_old_comments(): void
+{
+    $cutoff = gmdate('Y-m-d H:i:s', time() - (30 * DAY_IN_SECONDS));
+
+    foreach (['hold', 'spam'] as $status) {
+        $comments = get_comments([
+            'status' => $status,
+            'number' => 200,
+            'date_query' => [
+                [
+                    'column' => 'comment_date_gmt',
+                    'before' => $cutoff,
+                    'inclusive' => true,
+                ],
+            ],
+        ]);
+
+        foreach ($comments as $comment) {
+            wp_delete_comment((int) $comment->comment_ID, true);
+        }
+    }
 }
