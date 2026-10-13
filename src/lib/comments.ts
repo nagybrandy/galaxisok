@@ -146,6 +146,52 @@ export async function getApprovedComments(
   }
 }
 
+/**
+ * Approved comment count per post for posts the plugin did not annotate.
+ * One request per page of 100 comments; a band blog never needs more than a few.
+ */
+export async function getCommentCounts(
+  postIds: number[],
+): Promise<Map<number, number>> {
+  const counts = new Map<number, number>(postIds.map((id) => [id, 0]));
+  if (postIds.length === 0) {
+    return counts;
+  }
+
+  const base = `${wordpressUrl()}/wp-json/wp/v2/comments?post=${postIds.join(",")}&status=approve&per_page=${COMMENT_PAGE_SIZE}&_fields=id,post`;
+
+  try {
+    for (let page = 1; page <= 5; page += 1) {
+      const response = await fetch(`${base}&page=${page}`, {
+        cache: "no-store",
+        headers: {
+          Accept: "application/json",
+          "User-Agent": "Galaxisok/1.0",
+        },
+        signal: AbortSignal.timeout(10_000),
+      });
+
+      if (!response.ok) {
+        break;
+      }
+
+      const rows = (await response.json()) as Array<{ post: number }>;
+      for (const row of rows) {
+        counts.set(row.post, (counts.get(row.post) ?? 0) + 1);
+      }
+
+      const totalPages = Number(response.headers.get("X-WP-TotalPages") ?? 1);
+      if (page >= totalPages || rows.length < COMMENT_PAGE_SIZE) {
+        break;
+      }
+    }
+  } catch {
+    // WordPress unreachable: keep the zeros rather than failing the page.
+  }
+
+  return counts;
+}
+
 export async function submitComment(
   comment: NewBlogComment,
 ): Promise<CommentSubmissionResult> {

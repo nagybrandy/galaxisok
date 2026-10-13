@@ -6,11 +6,13 @@ import Link from "next/link";
 
 import { BlogListFade } from "@/components/blog-list-fade";
 import { BlogPagination } from "@/components/blog-pagination";
+import { CommentCount } from "@/components/comment-count";
 import { INNER_PAGE_BLOG } from "@/components/page-heading";
 import { PageShell } from "@/components/page-shell";
 import { PostCover } from "@/components/post-cover";
 import { SkeletonImage } from "@/components/skeleton-image";
 import { parseBlogPage } from "@/lib/blog";
+import { getCommentCounts } from "@/lib/comments";
 import { formatHuDate, getPostsPage } from "@/lib/wordpress";
 
 export const dynamic = "force-dynamic";
@@ -30,6 +32,9 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   const { oldal } = await searchParams;
   const page = parseBlogPage(oldal);
   const { posts, totalPages } = await getPostsPage(undefined, page);
+  // Older plugin builds do not send comment_count; count those posts here.
+  const uncounted = posts.filter((post) => post.commentCount === null);
+  const fallbackCounts = await getCommentCounts(uncounted.map((post) => post.id));
 
   return (
     <PageShell>
@@ -99,6 +104,14 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                             <h2 className="blog-post-title mt-2 line-clamp-2 text-lg font-normal tracking-tight sm:text-2xl">
                               {post.title}
                             </h2>
+                            <CommentCount
+                              count={
+                                post.commentCount ??
+                                fallbackCounts.get(post.id) ??
+                                0
+                              }
+                              className="mt-1 text-white/40"
+                            />
                             <div className="blog-teaser-excerpt">
                               <p className="line-clamp-3 text-sm leading-6 text-white/60 sm:text-base">
                                 {post.excerpt || "\u00a0"}

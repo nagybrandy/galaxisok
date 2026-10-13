@@ -36,6 +36,8 @@ add_filter('wpseo_sitemap_index', '__return_false');
 add_filter('wpseo_enable_xml_sitemap_transient_caching', '__return_false');
 add_action('init', 'galaxisok_schedule_comment_cleanup');
 add_action('galaxisok_purge_old_comments', 'galaxisok_purge_old_comments');
+// The Next.js site shows the approved comment count under each post title.
+add_action('rest_api_init', 'galaxisok_register_comment_count_field');
 
 function galaxisok_theme_supports(): void
 {
@@ -544,4 +546,19 @@ function galaxisok_purge_old_comments(): void
             wp_delete_comment((int) $comment->comment_ID, true);
         }
     }
+}
+
+function galaxisok_register_comment_count_field(): void
+{
+    register_rest_field('post', 'comment_count', [
+        'get_callback' => static function (array $post): int {
+            return (int) get_comments_number((int) $post['id']);
+        },
+        'schema' => [
+            'description' => 'Approved comment count.',
+            'type' => 'integer',
+            'context' => ['view', 'embed'],
+            'readonly' => true,
+        ],
+    ]);
 }

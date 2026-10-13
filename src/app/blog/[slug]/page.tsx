@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
+import { CommentCount } from "@/components/comment-count";
 import { CommentsSection } from "@/components/comments-section";
 import { PageShell } from "@/components/page-shell";
 import { PostBackButton } from "@/components/post-back-button";
@@ -90,6 +91,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   }
 
   const comments = await getApprovedComments(post.id);
+  const commentCount = post.commentCount ?? comments.length;
 
   return (
     <PageShell>
@@ -124,6 +126,14 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           <p className="font-[family-name:var(--font-display)] text-sm font-light text-white/55">
             {post.author?.name ?? "Galaxisok"}
           </p>
+          <span className="text-white/30" aria-hidden>
+            ·
+          </span>
+          <CommentCount
+            count={commentCount}
+            href="#comments-title"
+            className="text-white/55"
+          />
         </div>
         {post.image ? (
           <div className="post-hero mb-8">

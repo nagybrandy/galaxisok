@@ -54,6 +54,8 @@ type WpPost = {
   content: WpRendered;
   featured_media: number;
   categories?: number[];
+  // Approved comment count, added by the galaxisok-headless plugin.
+  comment_count?: number;
   yoast_head_json?: WpYoast;
   meta?: {
     fohir_url?: string;
@@ -105,6 +107,8 @@ export type BlogPost = {
   categories: BlogCategory[];
   seoTitle?: string;
   seoDescription?: string;
+  // null when the WordPress plugin does not report it; see getCommentCounts.
+  commentCount: number | null;
   image: {
     src: string;
     alt: string;
@@ -327,6 +331,8 @@ function mapPost(post: WpPost): BlogPost {
     seoDescription: post.yoast_head_json?.description
       ? decodeEntities(stripHtml(post.yoast_head_json.description))
       : undefined,
+    commentCount:
+      typeof post.comment_count === "number" ? post.comment_count : null,
     image: mapImage(media, title),
   };
 }
