@@ -3,7 +3,6 @@
 
 import type { Metadata, Viewport } from "next";
 import { EB_Garamond, Oswald } from "next/font/google";
-import { headers } from "next/headers";
 import { Suspense } from "react";
 
 import { CookieConsent } from "@/components/cookie-consent";
@@ -15,7 +14,6 @@ import { PersistentFooter, PersistentHeader } from "@/components/persistent-chro
 import { PersistentHero } from "@/components/persistent-hero";
 import { RoutePrefetcher } from "@/components/route-prefetcher";
 import { ScrollToTop } from "@/components/scroll-to-top";
-import { isLiveHuHost } from "@/lib/gate";
 import {
   HERO_IMAGE,
   SITE_DESCRIPTION,
@@ -98,23 +96,7 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
-export default async function RootLayout({ children }: LayoutProps<"/">) {
-  const host = (await headers()).get("host") ?? "";
-  const comingSoon = isLiveHuHost(host);
-
-  if (comingSoon) {
-    return (
-      <html
-        lang="hu"
-        className={`${oswald.variable} ${garamond.variable} h-full antialiased`}
-      >
-        <body className="flex min-h-dvh flex-col bg-background font-sans text-foreground">
-          {children}
-        </body>
-      </html>
-    );
-  }
-
+export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="hu"

@@ -1,5 +1,5 @@
 // src/proxy.ts
-// Blocks tesztoldal pages until the gate cookie is set. Never intercepts CSS/JS.
+// Password-gates preview hosts and marks every non-.hu host noindex. Never intercepts CSS/JS.
 
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
@@ -39,24 +39,8 @@ export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const host = request.headers.get("host") ?? "";
 
-  // Keep crawlers out of the .hu domain until the real site replaces the placeholder.
-  if (isLiveHuHost(host) && pathname === "/robots.txt") {
-    return new NextResponse("User-agent: *\nDisallow: /\n", {
-      headers: { "Content-Type": "text/plain; charset=utf-8" },
-    });
-  }
-
   if (isStaticAsset(pathname) || isPublicGatePath(pathname)) {
     return withRobots(NextResponse.next(), host);
-  }
-
-  if (isLiveHuHost(host) && pathname !== "/coming-soon") {
-    const comingSoon = request.nextUrl.clone();
-    comingSoon.pathname = "/coming-soon";
-    comingSoon.search = "";
-    const placeholder = NextResponse.rewrite(comingSoon);
-    placeholder.headers.set("X-Robots-Tag", NOINDEX);
-    return placeholder;
   }
 
   if (!shouldProtectHost(host)) {
