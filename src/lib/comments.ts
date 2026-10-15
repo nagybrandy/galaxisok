@@ -63,6 +63,15 @@ function commentAuthorization(): string | null {
   return `Basic ${Buffer.from(`${username}:${applicationPassword}`).toString("base64")}`;
 }
 
+function commentText(html: string): string {
+  // WordPress sometimes replaces emoji with an image whose alt is the character.
+  const withEmoji = html.replace(
+    /<img\b[^>]*\balt\s*=\s*["']([^"']*)["'][^>]*>/gi,
+    (_, alt: string) => alt,
+  );
+  return stripHtml(withEmoji);
+}
+
 function mapComment(comment: WpComment): BlogComment {
   return {
     id: comment.id,
@@ -73,7 +82,7 @@ function mapComment(comment: WpComment): BlogComment {
     date: comment.date_gmt.endsWith("Z")
       ? comment.date_gmt
       : `${comment.date_gmt}Z`,
-    content: stripHtml(comment.content.rendered),
+    content: commentText(comment.content.rendered),
   };
 }
 

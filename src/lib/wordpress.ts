@@ -217,12 +217,13 @@ function sleep(ms: number) {
 }
 
 function decodeEntities(value: string): string {
+  const character = (code: number) =>
+    code >= 0 && code <= 0x10ffff ? String.fromCodePoint(code) : "";
+
   return value
-    .replace(/&#(\d+);/g, (_, code: string) =>
-      String.fromCharCode(Number(code)),
-    )
+    .replace(/&#(\d+);/g, (_, code: string) => character(Number(code)))
     .replace(/&#x([0-9a-f]+);/gi, (_, code: string) =>
-      String.fromCharCode(Number.parseInt(code, 16)),
+      character(Number.parseInt(code, 16)),
     )
     .replace(/&amp;/g, "&")
     .replace(/&quot;/g, '"')

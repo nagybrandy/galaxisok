@@ -1540,7 +1540,8 @@ html[data-theme="dark"] .night-atmosphere {
   margin-top: 5.5rem;
   padding-top: 3rem;
   border-top: 1px solid var(--site-text-18);
-  font-family: var(--font-fuse), ui-serif, Georgia, "Times New Roman", serif;
+  /* Emoji fonts first: the Garamond fallback face claims every character and would hide them. */
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", var(--font-fuse), ui-serif, Georgia, "Times New Roman", serif;
 }
 
 .comments-heading,
@@ -1726,7 +1727,7 @@ html[data-theme="dark"] .night-atmosphere {
 .comment-author {
   margin: 0;
   color: var(--site-text);
-  font-family: var(--font-display), ui-serif, Georgia, serif;
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", var(--font-display), ui-serif, Georgia, serif;
   font-size: 1.05rem;
   font-weight: 600;
 }
@@ -1854,7 +1855,7 @@ html[data-theme="dark"] .night-atmosphere {
   outline: none;
   color: var(--site-text);
   background: rgba(254, 250, 224, 0.35);
-  font-family: var(--font-fuse), ui-serif, Georgia, serif;
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", var(--font-fuse), ui-serif, Georgia, serif;
   font-size: 1rem;
   transition: border-color 160ms ease;
 }
