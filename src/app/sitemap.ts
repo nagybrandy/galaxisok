@@ -6,7 +6,8 @@ import type { MetadataRoute } from "next";
 import { siteUrl } from "@/lib/site";
 import { getPosts } from "@/lib/wordpress";
 
-export const revalidate = 3600;
+// Generated on request. A slow WordPress during the build must not fail the deploy.
+export const dynamic = "force-dynamic";
 
 type StaticRoute = {
   path: string;
@@ -28,7 +29,12 @@ const STATIC_ROUTES: StaticRoute[] = [
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = siteUrl();
-  const posts = await getPosts();
+  let posts: Awaited<ReturnType<typeof getPosts>> = [];
+  try {
+    posts = await getPosts();
+  } catch {
+    posts = [];
+  }
 
   return [
     ...STATIC_ROUTES.map((route) => ({
