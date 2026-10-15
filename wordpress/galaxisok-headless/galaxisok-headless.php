@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Galaxisok Headless
  * Description: Koncertek, galéria, REST mezők, és a WP front átirányítása a galaxisok.hu-ra.
- * Version: 1.7.0
+ * Version: 1.7.1
  * Author: Galaxisok
  */
 
@@ -559,21 +559,15 @@ function galaxisok_notify_rest_comment(WP_Comment $comment, WP_REST_Request $req
         return;
     }
 
-    // Mail runs after the REST response is sent. The moderator lookup does a
-    // reverse DNS query, which must not hold the visitor's form request open.
-    add_action('shutdown', static function () use ($comment_id): void {
-        if (function_exists('fastcgi_finish_request')) {
-            fastcgi_finish_request();
-        }
+    // Send in this request. Deferring until after fastcgi_finish_request()
+    // dropped the mail on this host, so nobody was notified.
+    if (function_exists('wp_new_comment_notify_moderator')) {
+        wp_new_comment_notify_moderator($comment_id);
+    }
 
-        if (function_exists('wp_new_comment_notify_moderator')) {
-            wp_new_comment_notify_moderator($comment_id);
-        }
-
-        if (function_exists('wp_new_comment_notify_postauthor')) {
-            wp_new_comment_notify_postauthor($comment_id);
-        }
-    });
+    if (function_exists('wp_new_comment_notify_postauthor')) {
+        wp_new_comment_notify_postauthor($comment_id);
+    }
 }
 
 function galaxisok_schedule_comment_cleanup(): void
