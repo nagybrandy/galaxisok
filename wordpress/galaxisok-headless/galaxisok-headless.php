@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Galaxisok Headless
  * Description: Koncertek, galéria, REST mezők, és a WP front átirányítása a galaxisok.hu-ra.
- * Version: 1.5.0
+ * Version: 1.6.0
  * Author: Galaxisok
  */
 
@@ -36,6 +36,12 @@ add_filter('wpseo_sitemap_index', '__return_false');
 add_filter('wpseo_enable_xml_sitemap_transient_caching', '__return_false');
 add_action('init', 'galaxisok_schedule_comment_cleanup');
 add_action('galaxisok_purge_old_comments', 'galaxisok_purge_old_comments');
+add_action('init', 'galaxisok_comment_notification_settings');
+add_filter('comment_moderation_recipients', 'galaxisok_comment_notification_recipients');
+add_filter('comment_notification_recipients', 'galaxisok_comment_notification_recipients');
+// REST creates go through wp_insert_comment(), which never fires comment_post,
+// so WordPress would otherwise skip the moderation and author emails.
+add_action('rest_after_insert_comment', 'galaxisok_notify_rest_comment', 10, 3);
 // The Next.js site shows the approved comment count under each post title.
 add_action('rest_api_init', 'galaxisok_register_comment_count_field');
 
@@ -514,6 +520,55 @@ function galaxisok_yoast_robots_array(array $robots): array
         'index' => 'noindex',
         'follow' => 'nofollow',
     ];
+}
+
+function galaxisok_comment_notification_settings(): void
+{
+    if ((string) get_option('comments_notify') !== '1') {
+        update_option('comments_notify', '1');
+    }
+
+    if ((string) get_option('moderation_notify') !== '1') {
+        update_option('moderation_notify', '1');
+    }
+}
+
+function galaxisok_comment_notification_recipients(array $emails): array
+{
+    $emails[] = 'szabo.benedek.mail@gmail.com';
+    $emails = array_filter($emails, static function ($email): bool {
+        return is_string($email) && is_email($email);
+    });
+
+    return array_values(array_unique($emails));
+}
+
+function galaxisok_notify_rest_comment(WP_Comment $comment, WP_REST_Request $request, bool $creating): void
+{
+    if (!$creating) {
+        return;
+    }
+
+    $comment_id = (int) $comment->comment_ID;
+    if ($comment_id < 1) {
+        return;
+    }
+
+    // Mail runs after the REST response is sent. The moderator lookup does a
+    // reverse DNS query, which must not hold the visitor's form request open.
+    add_action('shutdown', static function () use ($comment_id): void {
+        if (function_exists('fastcgi_finish_request')) {
+            fastcgi_finish_request();
+        }
+
+        if (function_exists('wp_new_comment_notify_moderator')) {
+            wp_new_comment_notify_moderator($comment_id);
+        }
+
+        if (function_exists('wp_new_comment_notify_postauthor')) {
+            wp_new_comment_notify_postauthor($comment_id);
+        }
+    });
 }
 
 function galaxisok_schedule_comment_cleanup(): void

@@ -48,6 +48,13 @@ Mit tartalmaz a jelenlegi szerveren lévőhöz képest:
   - Napi WP-cron (`galaxisok_purge_old_comments`): a 30 napnál régebbi,
     jóvá nem hagyott és spam hozzászólásokat törli – ez a 3. pont
     „30 napon belül törlés” tétele, nem kell külön plugin.
+  - Hozzászólás-értesítő: a weboldal REST-en küldi a kommentet, a WordPress
+    pedig csak a klasszikus `comment_post` ágon küldene levelet. A bővítmény
+    a REST-es létrehozás után meghívja ugyanazt a moderálási és szerzői
+    értesítőt. Címzettek: a WP admin e-mail, a poszt szerzője, és
+    `szabo.benedek.mail@gmail.com`. Amíg ez a verzió (1.6.0) nincs fent,
+    az új kommentekről nem megy ki levél. A már beérkezett kommentekről
+    utólag sem küld.
 
 Ellenőrzés: `curl -s https://admin.galaxisok.hu/wp-json/galaxisok/v1` →
 JSON, benne a `newsletter` route.

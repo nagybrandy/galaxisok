@@ -205,15 +205,14 @@ export async function submitComment(
     const body: Record<string, string | number> = {
       post: comment.postId,
       parent: comment.parentId ?? 0,
+      author_name: comment.authorName,
+      author_email: comment.authorEmail,
       content: comment.content,
     };
 
     if (authorization) {
       headers.Authorization = authorization;
       body.status = "hold";
-    } else {
-      body.author_name = comment.authorName;
-      body.author_email = comment.authorEmail;
     }
 
     const response = await fetch(`${wordpressUrl()}/wp-json/wp/v2/comments`, {
