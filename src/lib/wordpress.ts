@@ -206,8 +206,9 @@ function cacheWp<Args extends unknown[], Result>(
 }
 
 function wordpressUrl(): string {
-  const raw = process.env.WORDPRESS_URL ?? DEFAULT_WORDPRESS_URL;
-  return raw.replace(/\/$/, "");
+  // An empty value is set in production, and ?? would keep it.
+  const raw = process.env.WORDPRESS_URL?.trim();
+  return (raw || DEFAULT_WORDPRESS_URL).replace(/\/$/, "");
 }
 
 function sleep(ms: number) {
