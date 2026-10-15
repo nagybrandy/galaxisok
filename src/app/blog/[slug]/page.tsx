@@ -4,6 +4,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 
 import { CommentCount } from "@/components/comment-count";
 import { CommentsSection } from "@/components/comments-section";
@@ -12,7 +13,7 @@ import { PostBackButton } from "@/components/post-back-button";
 import { PostBody } from "@/components/post-body";
 import { PostBreadcrumb } from "@/components/post-breadcrumb";
 import { SkeletonImage } from "@/components/skeleton-image";
-import { getApprovedComments } from "@/lib/comments";
+import { getApprovedComments, type BlogComment } from "@/lib/comments";
 import { SITE_NAME, siteUrl } from "@/lib/site";
 import {
   type BlogPost,
@@ -82,6 +83,29 @@ function postJsonLd(post: BlogPost): string {
   });
 }
 
+function CommentsFallback() {
+  return (
+    <section className="comments-section" aria-busy="true" aria-labelledby="comments-title">
+      <div className="comments-heading">
+        <div>
+          <p className="comments-kicker">Beszélgessünk</p>
+          <h2 id="comments-title">Hozzászólások</h2>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+async function PostComments({
+  postId,
+  comments,
+}: {
+  postId: number;
+  comments: Promise<BlogComment[]>;
+}) {
+  return <CommentsSection postId={postId} initialComments={await comments} />;
+}
+
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug } = await params;
   const post = await getPostBySlug(slug);
@@ -90,8 +114,9 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     notFound();
   }
 
-  const comments = await getApprovedComments(post.id);
-  const commentCount = post.commentCount ?? comments.length;
+  // Start this before the article renders, so the list is not stuck behind the page.
+  const comments = getApprovedComments(post.id);
+  const commentCount = post.commentCount ?? 0;
 
   return (
     <PageShell>
@@ -151,7 +176,9 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           </div>
         ) : null}
         <PostBody html={post.content} />
-        <CommentsSection postId={post.id} initialComments={comments} />
+        <Suspense fallback={<CommentsFallback />}>
+          <PostComments postId={post.id} comments={comments} />
+        </Suspense>
       </article>
     </PageShell>
   );

@@ -1537,8 +1537,8 @@ html[data-theme="dark"] .night-atmosphere {
 }
 
 .comments-section {
-  margin-top: 5.5rem;
-  padding-top: 3rem;
+  margin-top: 2.25rem;
+  padding-top: 1.15rem;
   border-top: 1px solid var(--site-text-18);
   /* Emoji fonts first: the Garamond fallback face claims every character and would hide them. */
   font-family: "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", var(--font-fuse), ui-serif, Georgia, "Times New Roman", serif;
@@ -1660,11 +1660,11 @@ html[data-theme="dark"] .night-atmosphere {
 
 .comments-empty {
   display: flex;
-  min-height: 9rem;
   align-items: center;
   justify-content: center;
   gap: 0.8rem;
-  margin-top: 2rem;
+  margin-top: 0.85rem;
+  padding: 0.85rem 0;
   border-top: 1px dashed var(--site-text-18);
   border-bottom: 1px dashed var(--site-text-18);
   color: var(--site-text-55);
@@ -1685,7 +1685,7 @@ html[data-theme="dark"] .night-atmosphere {
 }
 
 .comment-list {
-  margin-top: 2.25rem;
+  margin-top: 0.65rem;
 }
 
 .comment-replies {
@@ -1698,7 +1698,7 @@ html[data-theme="dark"] .night-atmosphere {
 
 .comment-paper {
   position: relative;
-  padding: 1.4rem 0.2rem 1.25rem;
+  padding: 0.7rem 0.15rem 0.55rem;
   border-top: 1px solid var(--site-text-14);
 }
 
@@ -1754,7 +1754,7 @@ html[data-theme="dark"] .night-atmosphere {
 }
 
 .comment-content {
-  margin: 1rem 0 0;
+  margin: 0.35rem 0 0;
   color: var(--site-text-78);
   font-size: 1.05rem;
   font-weight: 400;
@@ -1767,7 +1767,7 @@ html[data-theme="dark"] .night-atmosphere {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
-  margin-top: 1rem;
+  margin-top: 0.35rem;
 }
 
 .comment-actions button,
@@ -1813,8 +1813,8 @@ html[data-theme="dark"] .night-atmosphere {
 
 .comment-form {
   position: relative;
-  margin-top: 4.5rem;
-  padding: clamp(1.4rem, 4vw, 2.5rem);
+  margin-top: 1.75rem;
+  padding: 1.15rem 1.2rem;
   border: 1px solid var(--site-text-18);
   background: color-mix(in srgb, var(--site-bg) 68%, transparent);
   box-shadow: 0 8px 28px color-mix(in srgb, var(--site-text) 7%, transparent);
@@ -1828,7 +1828,7 @@ html[data-theme="dark"] .night-atmosphere {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
-  margin-top: 2rem;
+  margin-top: 0.9rem;
 }
 
 .comment-identity label,

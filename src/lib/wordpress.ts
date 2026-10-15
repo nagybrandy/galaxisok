@@ -13,12 +13,19 @@ type WpRendered = {
   protected?: boolean;
 };
 
+type WpMediaSize = {
+  source_url?: string;
+  width?: number;
+  height?: number;
+};
+
 type WpMedia = {
   source_url: string;
   alt_text?: string;
   media_details?: {
     width?: number;
     height?: number;
+    sizes?: Record<string, WpMediaSize>;
   };
 };
 
@@ -250,11 +257,20 @@ function mapImage(media: WpMedia | undefined, fallbackAlt: string) {
     return null;
   }
 
+  // The original upload can be a multi-megabyte PNG. The hero only needs the large rendition.
+  const sizes = media.media_details?.sizes;
+  const sized =
+    sizes?.large?.source_url && (sizes.large.width ?? 0) >= 800
+      ? sizes.large
+      : sizes?.medium_large?.source_url
+        ? sizes.medium_large
+        : null;
+
   return {
-    src: media.source_url,
+    src: sized?.source_url || media.source_url,
     alt: media.alt_text || fallbackAlt,
-    width: media.media_details?.width || 1600,
-    height: media.media_details?.height || 900,
+    width: sized?.width || media.media_details?.width || 1600,
+    height: sized?.height || media.media_details?.height || 900,
   };
 }
 
