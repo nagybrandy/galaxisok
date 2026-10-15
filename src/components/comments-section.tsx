@@ -4,9 +4,7 @@
 "use client";
 
 import {
-  Check,
   ChevronDown,
-  Copy,
   LoaderCircle,
   MessageCircle,
   RefreshCw,
@@ -66,15 +64,6 @@ function CommentItem({
   onReply,
 }: CommentItemProps) {
   const children = replies.get(comment.id) ?? [];
-  const [copied, setCopied] = useState(false);
-
-  async function copyLink() {
-    const url = `${window.location.origin}${window.location.pathname}#comment-${comment.id}`;
-    await navigator.clipboard.writeText(url);
-    window.history.replaceState(null, "", `#comment-${comment.id}`);
-    setCopied(true);
-    window.setTimeout(() => setCopied(false), 1_600);
-  }
 
   return (
     <li
@@ -104,10 +93,6 @@ function CommentItem({
           <button type="button" onClick={() => onReply(comment)}>
             <Reply aria-hidden />
             Válasz
-          </button>
-          <button type="button" onClick={copyLink}>
-            {copied ? <Check aria-hidden /> : <Copy aria-hidden />}
-            {copied ? "Másolva" : "Link másolása"}
           </button>
         </footer>
       </article>
