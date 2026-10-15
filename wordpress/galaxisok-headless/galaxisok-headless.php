@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Galaxisok Headless
  * Description: Koncertek, galéria, REST mezők, és a WP front átirányítása a galaxisok.hu-ra.
- * Version: 1.6.0
+ * Version: 1.7.0
  * Author: Galaxisok
  */
 
@@ -11,6 +11,7 @@ if (!defined('ABSPATH')) {
 }
 
 require_once __DIR__ . '/includes/newsletter.php';
+require_once __DIR__ . '/includes/comment-reply-mail.php';
 
 add_action('after_setup_theme', 'galaxisok_theme_supports');
 add_action('init', 'galaxisok_register_types');
@@ -453,6 +454,10 @@ function galaxisok_redirect_public_front(): void
     }
 
     if (defined('REST_REQUEST') && REST_REQUEST) {
+        return;
+    }
+
+    if (isset($_GET['galaxisok_comment_unsubscribe'])) {
         return;
     }
 

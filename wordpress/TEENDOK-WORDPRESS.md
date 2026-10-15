@@ -55,6 +55,10 @@ Mit tartalmaz a jelenlegi szerveren lévőhöz képest:
     `szabo.benedek.mail@gmail.com`. Amíg ez a verzió (1.6.0) nincs fent,
     az új kommentekről nem megy ki levél. A már beérkezett kommentekről
     utólag sem küld.
+  - Válasz-értesítő (1.7.0): ha egy jóváhagyott hozzászólásra válasz
+    érkezik, és azt is jóváhagyjátok, a szülő hozzászólás e-mail-címe
+    kap egy levelet. A levél alján le lehet iratkozni. Jóváhagyás előtt
+    nem megy ki, hogy a spam ne írjon idegeneknek.
 
 Ellenőrzés: `curl -s https://admin.galaxisok.hu/wp-json/galaxisok/v1` →
 JSON, benne a `newsletter` route.
