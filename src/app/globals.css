@@ -1540,8 +1540,8 @@ html[data-theme="dark"] .night-atmosphere {
   margin-top: 2.25rem;
   padding-top: 1.15rem;
   border-top: 1px solid var(--site-text-18);
-  /* Emoji fonts first: the Garamond fallback face claims every character and would hide them. */
-  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", var(--font-fuse), ui-serif, Georgia, "Times New Roman", serif;
+  /* Text font first, then emoji. An emoji font first makes every space as wide as an emoji. */
+  font-family: "EB Garamond", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", var(--font-fuse), ui-serif, Georgia, "Times New Roman", serif;
 }
 
 .comments-heading,
@@ -1727,7 +1727,9 @@ html[data-theme="dark"] .night-atmosphere {
 .comment-author {
   margin: 0;
   color: var(--site-text);
-  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", var(--font-display), ui-serif, Georgia, serif;
+  font-family: "Oswald", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", var(--font-display), ui-serif, Georgia, serif;
+  letter-spacing: normal;
+  word-spacing: normal;
   font-size: 1.05rem;
   font-weight: 600;
 }
@@ -1758,7 +1760,11 @@ html[data-theme="dark"] .night-atmosphere {
   color: var(--site-text-78);
   font-size: 1.05rem;
   font-weight: 400;
-  line-height: 1.65;
+  line-height: 1.55;
+  letter-spacing: normal;
+  word-spacing: normal;
+  text-align: left;
+  text-justify: auto;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
 }
@@ -1855,7 +1861,9 @@ html[data-theme="dark"] .night-atmosphere {
   outline: none;
   color: var(--site-text);
   background: rgba(254, 250, 224, 0.35);
-  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", var(--font-fuse), ui-serif, Georgia, serif;
+  font-family: "EB Garamond", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", var(--font-fuse), ui-serif, Georgia, serif;
+  letter-spacing: normal;
+  word-spacing: normal;
   font-size: 1rem;
   transition: border-color 160ms ease;
 }
